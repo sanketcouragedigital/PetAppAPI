@@ -115,7 +115,7 @@ if (isset($_POST['method'])) {
         if(isset($_FILES['uploaded_file'])){
             $image_tmp = $_FILES['uploaded_file']['tmp_name'];
             $image_name = $_FILES['uploaded_file']['name'];
-            $target_path = "../pet_images/".basename($image_name);
+            $target_path = "pet_images/".basename($image_name);
         }
         $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $petBreedOrigin);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
