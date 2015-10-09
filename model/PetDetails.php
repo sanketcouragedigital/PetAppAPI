@@ -4,7 +4,14 @@ class PetDetails
 {
 	private $image_tmp;
     private $target_path;
-    private $petBreedOrigin;
+    private $categoryOfPet;
+    private $breedOfPet;
+    private $ageOfPet;
+    private $genderOfPet;
+    private $descriptionOfPet;
+    private $adoptionOfPet;
+    private $giveAwayOfPet;
+    private $priceOfPet;
 
     public function setImageTemporaryName($image_tmp) {
         $this->image_tmp = $image_tmp;
@@ -22,18 +29,81 @@ class PetDetails
         return $this->target_path;
     }
 
-    public function setPetBreedOrigin($petBreedOrigin) {
-        $this->petBreedOrigin = $petBreedOrigin;
+    public function setCategoryOfPet($categoryOfPet) {
+        $this->categoryOfPet = $categoryOfPet;
     }
     
-    public function getPetBreedOrigin() {
-        return $this->petBreedOrigin;
+    public function getCategoryOfPet() {
+        return $this->categoryOfPet;
     }
 
-    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $petBreedOrigin) {
+    public function setBreedOfPet($breedOfPet) {
+        $this->breedOfPet = $breedOfPet;
+    }
+    
+    public function getBreedOfPet() {
+        return $this->breedOfPet;
+    }
+
+    public function setAgeOfPet($ageOfPet) {
+        $this->ageOfPet = $ageOfPet;
+    }
+    
+    public function getAgeOfPet() {
+        return $this->ageOfPet;
+    }
+
+    public function setGenderOfPet($genderOfPet) {
+        $this->genderOfPet = $genderOfPet;
+    }
+    
+    public function getGenderOfPet() {
+        return $this->genderOfPet;
+    }
+
+    public function setDescriptionOfPet($descriptionOfPet) {
+        $this->descriptionOfPet = $descriptionOfPet;
+    }
+    
+    public function getDescriptionOfPet() {
+        return $this->descriptionOfPet;
+    }
+
+    public function setAdoptionOfPet($adoptionOfPet) {
+        $this->adoptionOfPet = $adoptionOfPet;
+    }
+    
+    public function getAdoptionOfPet() {
+        return $this->adoptionOfPet;
+    }
+
+    public function setGiveAwayOfPet($giveAwayOfPet) {
+        $this->giveAwayOfPet = $giveAwayOfPet;
+    }
+    
+    public function getGiveAwayOfPet() {
+        return $this->giveAwayOfPet;
+    }
+
+    public function setPriceOfPet($priceOfPet) {
+        $this->priceOfPet = $priceOfPet;
+    }
+    
+    public function getPriceOfPet() {
+        return $this->priceOfPet;
+    }
+
+    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet) {
         $this->setImageTemporaryName($image_tmp);
         $this->setTargetPathOfImage($target_path);
-        $this->setPetBreedOrigin($petBreedOrigin);
+        $this->setCategoryOfPet($categoryOfPet);
+        $this->setBreedOfPet($breedOfPet);
+        $this->setAgeOfPet($ageOfPet);
+        $this->setGenderOfPet($genderOfPet);
+        $this->setDescriptionOfPet($descriptionOfPet);
+        $this->setAdoptionOfPet($adoptionOfPet);
+        $this->setGiveAwayOfPet($giveAwayOfPet);
+        $this->setPriceOfPet($priceOfPet);
     }
 
     public function savingPetDetails() {

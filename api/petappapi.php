@@ -1,5 +1,6 @@
 <?php
 require_once '../model/PetDetails.php';
+require_once '../model/PetCategories.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -111,13 +112,20 @@ if (isset($_POST['method'])) {
         $objPetDetails = new PetDetails();
         $image_tmp = "";
         $target_path = "";
-        $petBreedOrigin = $_POST['petBreedOrigin'];
-        if(isset($_FILES['uploaded_file'])){
-            $image_tmp = $_FILES['uploaded_file']['tmp_name'];
-            $image_name = $_FILES['uploaded_file']['name'];
+        $categoryOfPet = $_POST['categoryOfPet'];
+        $breedOfPet = $_POST['breedOfPet'];
+        $ageOfPet = $_POST['ageOfPet'];
+        $genderOfPet = $_POST['genderOfPet'];
+        $descriptionOfPet = $_POST['descriptionOfPet'];
+        $adoptionOfPet = $_POST['adoptionOfPet'];
+        $giveAwayOfPet = $_POST['giveAwayOfPet'];
+        $priceOfPet = $_POST['priceOfPet'];
+        if(isset($_FILES['petImage'])){
+            $image_tmp = $_FILES['petImage']['tmp_name'];
+            $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $petBreedOrigin);
+        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -128,6 +136,21 @@ else if (isset($_GET['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetDetails = new PetDetails();
         $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails();
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetCategories = new PetCategories();
+        $response['showPetCategoriesResponse'] = $fetchPetCategories -> showingPetCategories();
+        deliver_response($_GET['format'], $response, false);
+    }
+    if (strcasecmp($_GET['method'], 'showPetBreedsAsPerPetCategory') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetBreedsAsPerPetCategory = new PetCategories();
+        $petCategory = $_GET['petCategory'];
+        $response['showPetBreedsResponse'] = $fetchPetBreedsAsPerPetCategory -> showingPetBreeds($petCategory);
         deliver_response($_GET['format'], $response, false);
     }
 }
