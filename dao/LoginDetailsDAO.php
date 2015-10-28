@@ -32,6 +32,7 @@ class LoginDetailsDAO
     
     public function emailDetail($LoginDetails) {
            try {
+                $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
                 $sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."'";        
                 $isValidating = mysqli_query($this->con, $sql);
                 $count=mysqli_num_rows($isValidating);
@@ -51,9 +52,10 @@ class LoginDetailsDAO
     public function savingRandomNo($LoginDetails) {
         try {              
                     $sql = "UPDATE userDetails SET activationcode='".$LoginDetails->getRandomNoForUser()."' WHERE email='".$LoginDetails->getEmail()."'";                     
-                   // $isUpdate = mysqli_query($this->con, $sql);
-                    //if ($isUpdate) {
-                      if (mysqli_affected_rows($this->con) >= 1) {
+                    $isUpdate = mysqli_query($this->con, $sql);
+                    if ($isUpdate) {
+                    //$count = mysqli_affected_rows($this->con);
+                    //if ($count==1) {
                         $this->data = "RANDOM_NO_SUCCESSFULLY_UPDATED";
                     } else {
                         $this->data = "RANDOM_NO_NOT_UPDATED";
