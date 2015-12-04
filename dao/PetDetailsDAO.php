@@ -24,7 +24,7 @@ class PetDetailsDAO
                          '".$petDetail->getBreedOfPet()."',
                          '".$petDetail->getAgeOfPet()."',
                          '".$petDetail->getGenderOfPet()."',
-                         '".$petDetail->getDescriptionOfPet()."',
+                         '".$petDetail->getDescriptionOfPet()."',   
                          '".$petDetail->getAdoptionOfPet()."',
                          '".$petDetail->getGiveAwayOfPet()."',
                          '".$petDetail->getPriceOfPet()."'
@@ -45,15 +45,52 @@ class PetDetailsDAO
         return $this->data;
     }
     
-    public function showDetail() {
+    public function showDetail($pageWiseData) {
         $sql = "SELECT * FROM petapp";
         
         try {
-            $select = mysqli_query($this->con, $sql);
-            $this->data=array();
-            while ($rowdata = mysqli_fetch_assoc($select)) {
-                $this->data[]=$rowdata;
+            $result = mysqli_query($this->con, $sql);
+            $count = mysqli_fetch_row($result);
+            $numOfRows = count($count);
+            
+            $rowsPerPage = 10;
+            $totalPages = ceil($numOfRows / $rowsPerPage);
+            
+            $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
+            
+            if (is_numeric($pageWiseData->getCurrentPage())) {
+                $currentPage = (int) $pageWiseData->getCurrentPage();
             }
+            
+            if ($currentPage >= 1 && $currentPage <= $totalPages) {
+                $offset = ($currentPage - 1) * $rowsPerPage;
+            
+                $sql = "SELECT * FROM petapp ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
+                $result = mysqli_query($this->con, $sql);
+                
+                $this->data=array();
+                while ($rowdata = mysqli_fetch_assoc($result)) {
+                    $this->data[]=$rowdata;
+                }
+            }
+            
+            
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+
+    public function showRefreshListDetail($DateOfPost) {
+        
+        
+        try {
+            $sql = "SELECT * FROM petapp WHERE post_date > '".$DateOfPost->getPostDate()."'";
+            $result = mysqli_query($this->con, $sql);   
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($result)) {
+                $this->data[]=$rowdata;
+            }            
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }

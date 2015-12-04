@@ -12,6 +12,8 @@ class PetDetails
     private $adoptionOfPet;
     private $giveAwayOfPet;
     private $priceOfPet;
+    private $postDate;
+    private $currentPage;
 
     public function setImageTemporaryName($image_tmp) {
         $this->image_tmp = $image_tmp;
@@ -92,6 +94,22 @@ class PetDetails
     public function getPriceOfPet() {
         return $this->priceOfPet;
     }
+    
+    public function setCurrentPage($currentPage) {
+        $this->currentPage = $currentPage;
+    }
+    
+    public function getCurrentPage() {
+        return $this->currentPage;
+    }
+
+    public function setPostDate($postDate) {
+        $this->postDate = $postDate;
+    }
+    
+    public function getPostDate() {
+        return $this->postDate;
+    }
 
     public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet) {
         $this->setImageTemporaryName($image_tmp);
@@ -112,9 +130,17 @@ class PetDetails
         return $returnPetDetailSaveSuccessMessage;
     }
 	
-    public function showingPetDetails() {
+    public function showingPetDetails($currentPage) {
         $showPetDetailsDAO = new PetDetailsDAO();
+        $this->setCurrentPage($currentPage);
         $returnShowPetDetails = $showPetDetailsDAO->showDetail($this);
+        return $returnShowPetDetails;
+    }
+    
+    public function showingRefreshPetDetails($date) {
+        $showPetRefreshListDetailsDAO = new PetDetailsDAO();
+        $this->setPostDate($date);
+        $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetail($this);
         return $returnShowPetDetails;
     }
 }

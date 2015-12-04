@@ -1,7 +1,8 @@
 <?php
 require_once '../model/PetDetails.php';
+require_once '../model/UsersDetails.php';
+require_once '../model/LoginDetails.php';
 require_once '../model/PetCategories.php';
-
 
 function deliver_response($format, $api_response, $isSaveQuery) {
 
@@ -104,9 +105,57 @@ if ($authentication_required) {
 // --- Step 3: Process Request
 
 // Switch based on incoming method
+$checkmethod = $_SERVER['REQUEST_METHOD'];
+$var = file_get_contents("php://input");
+$string = json_decode($var, TRUE);
+$method = $string['method'];
 
-if (isset($_POST['method'])) {
-    if (strcasecmp($_POST['method'], 'savePetDetails') == 0) {
+if (isset($_POST['method']) || $checkmethod == 'POST') {
+	if(strcasecmp($method,'userRegistration') == 0){
+		$response['code'] = 1;
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objuserDetails = new UsersDetails();
+		$name = $string['name'];
+		$buildingname= $string['buildingname'];
+		$area= $string['area'];
+		$city= $string['city'];
+		$mobileno= $string['mobileno'];
+		$email= $string['email'];
+		$password= $string['confirmpassword'];
+		$objuserDetails->mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);
+	
+		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingUsersDetails();
+		//deliver_response($format[1],$response,false);
+        deliver_response($string['format'],$response,false);
+	}
+    else if(strcasecmp($method,'userLogin') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new LoginDetails();
+        $email= $string['email'];
+        $password= $string['confirmpassword'];
+        $response['loginDetailsResponse'] = $objuserDetails ->CheckingUsersDetails($email,$password);
+        deliver_response($string['format'],$response,false);
+    } 
+    else if(strcasecmp($method,'setNewPassword') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new LoginDetails();
+        $activationCode= $string['code'];
+        $newPassword= $string['password'];
+        $email= $string['email'];
+        $response['setNewPasswordResponse'] = $objuserDetails -> SettingNewPassword($activationCode,$newPassword,$email);
+            deliver_response($string['format'],$response,false);
+    } 
+    else if(strcasecmp($method,'checkemail') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new LoginDetails();
+        $email= $string['email'];
+        $response['checkemailResponse'] = $objuserDetails -> CheckingEmail($email);
+        deliver_response($string['format'],$response,false);
+    }  
+    else if (strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objPetDetails = new PetDetails();
@@ -135,22 +184,31 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetDetails = new PetDetails();
-        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails();
+        $currentPage = $_GET['currentPage'];
+        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-    if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetCategories = new PetCategories();
         $response['showPetCategoriesResponse'] = $fetchPetCategories -> showingPetCategories();
         deliver_response($_GET['format'], $response, false);
     }
-    if (strcasecmp($_GET['method'], 'showPetBreedsAsPerPetCategory') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetBreedsAsPerPetCategory') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetBreedsAsPerPetCategory = new PetCategories();
         $petCategory = $_GET['petCategory'];
         $response['showPetBreedsResponse'] = $fetchPetBreedsAsPerPetCategory -> showingPetBreeds($petCategory);
+        deliver_response($_GET['format'], $response, false);
+    }
+    else if (strcasecmp($_GET['method'], 'showPetSwipeRefreshList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetRefreshListDetails = new PetDetails();
+        $date = $_GET['date'];
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
 }
