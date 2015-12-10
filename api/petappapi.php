@@ -3,7 +3,7 @@ require_once '../model/PetDetails.php';
 require_once '../model/UsersDetails.php';
 require_once '../model/LoginDetails.php';
 require_once '../model/PetCategories.php';
-
+require_once '../model/PetMetDetails.php';
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -178,13 +178,52 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
+	else if (strcasecmp($_POST['method'], 'savePetMetDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objPetDetails = new PetMetDetails();
+        $image_tmp = "";
+        $target_path = "";
+        $categoryOfPet = $_POST['categoryOfPet'];
+        $breedOfPet = $_POST['breedOfPet'];
+        $ageOfPet = $_POST['ageOfPet'];
+        $genderOfPet = $_POST['genderOfPet'];
+		date_default_timezone_set('Asia/Kolkata');
+		$currentDateTime = date("Y-m-d H:i:s");
+		$post_date=$currentDateTime;
+        $descriptionOfPet = $_POST['descriptionOfPet'];
+        if(isset($_FILES['petImage'])){
+            $image_tmp = $_FILES['petImage']['tmp_name'];
+            $image_name = $_FILES['petImage']['name'];
+            $target_path = "../pet_images/".basename($image_name);
+        }
+        $objPetDetails->mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $post_date);
+        $response['savePetDetailsResponse'] = $objPetDetails -> savingPetMetDetails();
+        deliver_response($_POST['format'], $response, true);
+    }    
 }
 else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchPetDetails = new PetDetails();
+        $fetchPetDetails = new PetMetDetails();
         $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails();
+        deliver_response($_GET['format'], $response, false);
+    }
+	if (strcasecmp($_GET['method'], 'showPetMetDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetDetails = new PetMetDetails();
+        $currentPage = $_GET['currentPage'];
+        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetMetDetails($currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'showPetMetSwipeRefreshList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetRefreshListDetails = new PetMetDetails();
+        $date = $_GET['date'];
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
     if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
