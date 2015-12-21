@@ -10,7 +10,6 @@ class PetDetails
     private $genderOfPet;
     private $descriptionOfPet;
     private $adoptionOfPet;
-    private $giveAwayOfPet;
     private $priceOfPet;
     private $postDate;
     private $currentPage;
@@ -79,14 +78,6 @@ class PetDetails
         return $this->adoptionOfPet;
     }
 
-    public function setGiveAwayOfPet($giveAwayOfPet) {
-        $this->giveAwayOfPet = $giveAwayOfPet;
-    }
-    
-    public function getGiveAwayOfPet() {
-        return $this->giveAwayOfPet;
-    }
-
     public function setPriceOfPet($priceOfPet) {
         $this->priceOfPet = $priceOfPet;
     }
@@ -111,7 +102,7 @@ class PetDetails
         return $this->postDate;
     }
 
-    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet, $postDate) {
+    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate) {
         $this->setImageTemporaryName($image_tmp);
         $this->setTargetPathOfImage($target_path);
         $this->setCategoryOfPet($categoryOfPet);
@@ -120,7 +111,6 @@ class PetDetails
         $this->setGenderOfPet($genderOfPet);
         $this->setDescriptionOfPet($descriptionOfPet);
         $this->setAdoptionOfPet($adoptionOfPet);
-        $this->setGiveAwayOfPet($giveAwayOfPet);
         $this->setPriceOfPet($priceOfPet);
 		$this->setPostDate($postDate);
     }

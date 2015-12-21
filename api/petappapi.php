@@ -4,6 +4,7 @@ require_once '../model/UsersDetails.php';
 require_once '../model/LoginDetails.php';
 require_once '../model/PetCategories.php';
 require_once '../model/PetMetDetails.php';
+require_once '../model/FilterPetList.php';
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -155,6 +156,14 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['checkemailResponse'] = $objuserDetails -> CheckingEmail($email);
         deliver_response($string['format'],$response,false);
     }  
+    else if(strcasecmp($method,'filterCategoryWiseBreed') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objfilterBreeds = new FilterPetList();
+        $filterSelectedCategories = $string['filterSelectedCategories'];
+        $response['filterBreedsCategoryWise'] = $objfilterBreeds -> filterCategoryBreeds($filterSelectedCategories);
+        deliver_response($string['format'],$response,false);
+    }
     else if (strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -167,7 +176,6 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $genderOfPet = $_POST['genderOfPet'];
         $descriptionOfPet = $_POST['descriptionOfPet'];
         $adoptionOfPet = $_POST['adoptionOfPet'];
-        $giveAwayOfPet = $_POST['giveAwayOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
 		date_default_timezone_set('Asia/Kolkata');
 		$postDate = date("Y-m-d H:i:s");
@@ -176,7 +184,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet, $postDate);
+        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
