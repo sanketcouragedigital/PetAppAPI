@@ -48,8 +48,7 @@ class PetMetDetailsDAO
         
         try {
             $result = mysqli_query($this->con, $sql);
-            $count = mysqli_fetch_row($result);
-            $numOfRows = count($count);
+            $numOfRows = mysqli_num_rows($result);
             
             $rowsPerPage = 10;
             $totalPages = ceil($numOfRows / $rowsPerPage);
