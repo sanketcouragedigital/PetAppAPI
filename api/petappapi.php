@@ -169,12 +169,14 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $giveAwayOfPet = $_POST['giveAwayOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
+		date_default_timezone_set('Asia/Kolkata');
+		$postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['petImage'])){
             $image_tmp = $_FILES['petImage']['tmp_name'];
             $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet);
+        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $giveAwayOfPet, $priceOfPet, $postDate);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -189,15 +191,14 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $ageOfPet = $_POST['ageOfPet'];
         $genderOfPet = $_POST['genderOfPet'];
 		date_default_timezone_set('Asia/Kolkata');
-		$currentDateTime = date("Y-m-d H:i:s");
-		$post_date=$currentDateTime;
+		$postDate = date("Y-m-d H:i:s");
         $descriptionOfPet = $_POST['descriptionOfPet'];
         if(isset($_FILES['petImage'])){
             $image_tmp = $_FILES['petImage']['tmp_name'];
             $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $post_date);
+        $objPetDetails->mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetMetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -206,11 +207,20 @@ else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchPetDetails = new PetMetDetails();
-        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails();
+        $fetchPetDetails = new PetDetails();
+        $currentPage = $_GET['currentPage'];
+        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails($currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }	
+    else if (strcasecmp($_GET['method'], 'showPetSwipeRefreshList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetRefreshListDetails = new PetDetails();
+        $date = $_GET['date'];
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
-	if (strcasecmp($_GET['method'], 'showPetMetDetails') == 0) {
+	else if (strcasecmp($_GET['method'], 'showPetMetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetDetails = new PetMetDetails();
@@ -226,14 +236,14 @@ else if (isset($_GET['method'])) {
         $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
-    if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetCategories = new PetCategories();
         $response['showPetCategoriesResponse'] = $fetchPetCategories -> showingPetCategories();
         deliver_response($_GET['format'], $response, false);
     }
-    if (strcasecmp($_GET['method'], 'showPetBreedsAsPerPetCategory') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetBreedsAsPerPetCategory') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetBreedsAsPerPetCategory = new PetCategories();

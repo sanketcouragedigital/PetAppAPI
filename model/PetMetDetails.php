@@ -9,7 +9,7 @@ class PetMetDetails
     private $ageOfPet;
     private $genderOfPet;
     private $descriptionOfPet;
-	private $post_date;
+	private $postDate;
 	private $currentPage;
 
     public function setImageTemporaryName($image_tmp) {
@@ -68,12 +68,12 @@ class PetMetDetails
         return $this->descriptionOfPet;
     }
 	
-		public function setPost_date($post_date) {
-        $this->post_date = $post_date;
+		public function setPostDate($postDate) {
+        $this->postDate = $postDate;
     }
     
-    public function getPost_date() {
-        return $this->post_date;
+    public function getPostDate() {
+        return $this->postDate;
     }
 	public function setCurrentPage($currentPage) {
         $this->currentPage = $currentPage;
@@ -83,7 +83,7 @@ class PetMetDetails
         return $this->currentPage;
     }
 	
-    public function mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$post_date ) {
+    public function mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$postDate ) {
         $this->setImageTemporaryName($image_tmp);
         $this->setTargetPathOfImage($target_path);
         $this->setCategoryOfPet($categoryOfPet);
@@ -91,7 +91,7 @@ class PetMetDetails
         $this->setAgeOfPet($ageOfPet);
         $this->setGenderOfPet($genderOfPet);
         $this->setDescriptionOfPet($descriptionOfPet);
-		$this->setPost_date($post_date);
+		$this->setPostDate($postDate);
     }
 
     public function savingPetMetDetails() {
@@ -109,7 +109,7 @@ class PetMetDetails
     
     public function showingRefreshPetMetDetails($date) {
         $showPetRefreshListDetailsDAO = new PetMetDetailsDAO();
-        $this->setPost_date($date);
+        $this->setPostDate($date);
         $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetail($this);
         return $returnShowPetDetails;
     }

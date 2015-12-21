@@ -25,7 +25,7 @@ class PetMetDetailsDAO
                          '".$petMetDetail->getAgeOfPet()."',
                          '".$petMetDetail->getGenderOfPet()."',
                          '".$petMetDetail->getDescriptionOfPet()."',
-						'".$petMetDetail->getPost_date()."' 
+						'".$petMetDetail->getPostDate()."' 
 						)";
         
                 $isInserted = mysqli_query($this->con, $sql);
@@ -82,7 +82,7 @@ class PetMetDetailsDAO
         
         
         try {
-            $sql = "SELECT * FROM petmet WHERE post_date > '".$DateOfPost->getPost_date()."'";
+            $sql = "SELECT * FROM petmet WHERE post_date > '".$DateOfPost->getPostDate()."'";
             $result = mysqli_query($this->con, $sql);   
             $this->data=array();
             while ($rowdata = mysqli_fetch_assoc($result)) {
