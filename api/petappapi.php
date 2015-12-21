@@ -5,6 +5,9 @@ require_once '../model/LoginDetails.php';
 require_once '../model/PetCategories.php';
 require_once '../model/PetMetDetails.php';
 require_once '../model/FilterPetList.php';
+require_once '../model/ClinicDetails.php';
+
+
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -257,6 +260,14 @@ else if (isset($_GET['method'])) {
         $fetchPetBreedsAsPerPetCategory = new PetCategories();
         $petCategory = $_GET['petCategory'];
         $response['showPetBreedsResponse'] = $fetchPetBreedsAsPerPetCategory -> showingPetBreeds($petCategory);
+        deliver_response($_GET['format'], $response, false);
+    }
+     else if (strcasecmp($_GET['method'], 'showClinicDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchClinicDetails = new ClinicDetails();
+        $currentPage = $_GET['currentPage'];
+        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicDetails($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
 }
