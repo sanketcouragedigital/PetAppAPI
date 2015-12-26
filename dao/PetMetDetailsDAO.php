@@ -44,7 +44,18 @@ class PetMetDetailsDAO
     }
     
     public function showDetail($pageWiseData) {
-        $sql = "SELECT * FROM petmet";
+		
+		$sqlAddress="SELECT latitude,longitude FROM userDetails WHERE email='".$pageWiseData->getEmail()."' ";
+		$latlong = mysqli_query($this->con, $sqlAddress);
+		
+		$latLongValue = mysqli_fetch_row($latlong);
+		$latitude = $latLongValue[0];
+		$longitude = $latLongValue[1];
+        $sql = "SELECT pm.image_path, pm.pet_category, pm.pet_breed,pm.pet_age,pm.pet_gender,pm.pet_description,pm.post_date,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+                FROM petmet pm
+                INNER JOIN userDetails ud
+                ON pm.email = ud.email
+                HAVING distance < 5 ORDER BY distance";
         
         try {
             $result = mysqli_query($this->con, $sql);
@@ -62,7 +73,12 @@ class PetMetDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT * FROM petmet ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
+                $sql = "SELECT pm.image_path, pm.pet_category, pm.pet_breed,pm.pet_age,pm.pet_gender,pm.pet_description,pm.post_date,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+						FROM petmet pm
+						INNER JOIN userDetails ud
+						ON pm.email = ud.email
+						HAVING distance < 5 ORDER BY distance
+						ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();

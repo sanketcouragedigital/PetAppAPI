@@ -83,6 +83,13 @@ class PetMetDetails
         return $this->currentPage;
     }
 	
+	 public function setEmail($email) {
+        $this->email = $email;
+    }
+    
+    public function getEmail() {
+        return $this->email;
+    }
     public function mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$postDate ) {
         $this->setImageTemporaryName($image_tmp);
         $this->setTargetPathOfImage($target_path);
@@ -100,9 +107,10 @@ class PetMetDetails
         return $returnPetMetDetailSaveSuccessMessage;
     }
 	
-   public function showingPetMetDetails($currentPage) {
+   public function showingPetMetDetails($currentPage,$email) {
         $showPetDetailsDAO = new PetMetDetailsDAO();
         $this->setCurrentPage($currentPage);
+		$this->setEmail($email);
         $returnShowPetDetails = $showPetDetailsDAO->showDetail($this);
         return $returnShowPetDetails;
     }

@@ -235,8 +235,9 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetDetails = new PetMetDetails();
+		$email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
-        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetMetDetails($currentPage);
+        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetMetDetails($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'showPetMetSwipeRefreshList') == 0) {
@@ -262,12 +263,24 @@ else if (isset($_GET['method'])) {
         $response['showPetBreedsResponse'] = $fetchPetBreedsAsPerPetCategory -> showingPetBreeds($petCategory);
         deliver_response($_GET['format'], $response, false);
     }
-     else if (strcasecmp($_GET['method'], 'showClinicDetails') == 0) {
+    else if (strcasecmp($_GET['method'], 'ClinicByCurrentLocation') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchClinicDetails = new ClinicDetails();
+		$latitude = $_GET['latitude'];
+        $longitude = $_GET['longitude'];
+		$email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
-        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicDetails($currentPage);
+        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByCurrentLocation($currentPage,$latitude,$longitude,$email);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'ClinicByAddress') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchClinicDetails = new ClinicDetails();
+		$email=$_GET['email'];
+        $currentPage = $_GET['currentPage'];
+        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByAddress($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
 }
