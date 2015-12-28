@@ -228,8 +228,7 @@ else if (isset($_GET['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetRefreshListDetails = new PetDetails();
         $date = $_GET['date'];
-		$email=$_GET['email'];
-        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date,$email);
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'showPetMetDetails') == 0) {
