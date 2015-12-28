@@ -64,7 +64,11 @@ class PetDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT * FROM petapp ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
+                $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                        FROM petapp p
+                        INNER JOIN userDetails ud
+                        ON p.email = ud.email
+                        ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();
@@ -84,7 +88,11 @@ class PetDetailsDAO
         
         
         try {
-            $sql = "SELECT * FROM petapp WHERE post_date > '".$DateOfPost->getPostDate()."'";
+            $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                    FROM petapp p
+                    INNER JOIN userDetails ud
+                    ON p.email = ud.email 
+                    WHERE post_date > '".$DateOfPost->getPostDate()."'";
             $result = mysqli_query($this->con, $sql);   
             $this->data=array();
             while ($rowdata = mysqli_fetch_assoc($result)) {

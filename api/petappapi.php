@@ -5,6 +5,7 @@ require_once '../model/LoginDetails.php';
 require_once '../model/PetCategories.php';
 require_once '../model/PetMetDetails.php';
 require_once '../model/FilterPetList.php';
+require_once '../model/FilterPetMetList.php';
 require_once '../model/ClinicDetails.php';
 
 
@@ -190,7 +191,31 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
-    }    
+    }
+    else if(strcasecmp($method,'filterPetList') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objFilter = new FilterPetList();
+        $filterSelectedCategories = $string['filterSelectedCategories'];
+        $filterSelectedBreeds = $string['filterSelectedBreeds'];
+        $filterSelectedAge = $string['filterSelectedAge'];
+        $filterSelectedGender = $string['filterSelectedGender'];
+        $filterSelectedAdoptionAndPrice = $string['filterSelectedAdoptionAndPrice'];
+        $response['showPetDetailsResponse'] = $objFilter -> filterPetLists($filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice);
+        deliver_response($string['format'],$response,false);
+    }
+    else if(strcasecmp($method,'filterPetMetList') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objFilter = new FilterPetMetList();
+        $email = $string['email'];
+        $filterSelectedCategories = $string['filterSelectedCategories'];
+        $filterSelectedBreeds = $string['filterSelectedBreeds'];
+        $filterSelectedAge = $string['filterSelectedAge'];
+        $filterSelectedGender = $string['filterSelectedGender'];
+        $response['showPetMetDetailsResponse'] = $objFilter -> filterPetMetLists($email, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender);
+        deliver_response($string['format'],$response,false);
+    }
 	else if (strcasecmp($_POST['method'], 'savePetMetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -237,7 +262,7 @@ else if (isset($_GET['method'])) {
         $fetchPetDetails = new PetMetDetails();
 		$email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
-        $response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetMetDetails($currentPage,$email);
+        $response['showPetMetDetailsResponse'] = $fetchPetDetails -> showingPetMetDetails($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'showPetMetSwipeRefreshList') == 0) {
@@ -246,7 +271,7 @@ else if (isset($_GET['method'])) {
         $fetchPetRefreshListDetails = new PetMetDetails();
         $date = $_GET['date'];
 		$email=$_GET['email'];
-        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date,$email);
+        $response['showPetMetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date,$email);
         deliver_response($_GET['format'], $response, false);
     }
     else if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {

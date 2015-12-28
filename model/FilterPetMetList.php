@@ -1,13 +1,21 @@
 <?php
-require_once '../dao/FilterPetListDAO.php';
-class FilterPetList
+require_once '../dao/FilterPetMetListDAO.php';
+class FilterPetMetList
 {
+    private $email;
     private $filterSelectedCategories;
     private $filterSelectedBreeds;
     private $filterSelectedAge;
     private $filterSelectedGender;
-    private $filterSelectedAdoptionAndPrice;
 
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+    
+    public function getEmail() {
+        return $this->email;
+    }
+    
     public function setFilterSelectedCategories($filterSelectedCategories) {
         $this->filterSelectedCategories = $filterSelectedCategories;
     }
@@ -40,30 +48,15 @@ class FilterPetList
         return $this->filterSelectedGender;
     }
     
-    public function setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice) {
-        $this->filterSelectedAdoptionAndPrice = $filterSelectedAdoptionAndPrice;
-    }
-    
-    public function getFilterSelectedAdoptionAndPrice() {
-        return $this->filterSelectedAdoptionAndPrice;
-    }
-
-    public function filterCategoryBreeds($filterSelectedCategories) {
-        $showfilterCategoryBreedsDAO = new FilterPetListDAO();
-        $this->setFilterSelectedCategories($filterSelectedCategories);
-        $returnShowPetBreedsCategoryWise = $showfilterCategoryBreedsDAO->showBreedsCategoryWise($this);
-        return $returnShowPetBreedsCategoryWise;
-    }
-    
-    public function filterPetLists($filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
-        $showFilterPetListDAO = new FilterPetListDAO();
+    public function filterPetMetLists($email, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender) {
+        $showFilterPetMetListDAO = new FilterPetMetListDAO();
+        $this->setEmail($email);
         $this->setFilterSelectedCategories($filterSelectedCategories);
         $this->setFilterSelectedBreeds($filterSelectedBreeds);
         $this->setFilterSelectedAge($filterSelectedAge);
         $this->setFilterSelectedGender($filterSelectedGender);
-        $this->setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice);
-        $returnShowPetList = $showFilterPetListDAO->showFilteredPetList($this);
-        return $returnShowPetList;
+        $returnShowPetMetList = $showFilterPetMetListDAO->showFilteredPetMetList($this);
+        return $returnShowPetMetList;
     }
 }
 ?>
