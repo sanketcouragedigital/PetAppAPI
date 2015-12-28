@@ -15,8 +15,8 @@ class ClinicDetailsDAO
     }
     
     
-    public function showByCurrentLocation($pageWiseData) {
-        $sql = "SELECT clinic_name,clinic_address,doctor_name,contact,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLatitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+    public function showByCurrentLocation($latlong) {
+        $sql = "SELECT clinic_name,clinic_address,doctor_name,contact,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 				FROM petclinic
 				HAVING distance < 5 ORDER BY distance";
         
@@ -30,14 +30,14 @@ class ClinicDetailsDAO
             
             $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
             
-            if (is_numeric($pageWiseData->getCurrentPage())) {
-                $currentPage = (int) $pageWiseData->getCurrentPage();
+            if (is_numeric($latlong->getCurrentPage())) {
+                $currentPage = (int) $latlong->getCurrentPage();
             }
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT clinic_name,clinic_address,doctor_name,contact,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLatitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+                $sql = "SELECT clinic_name,clinic_address,doctor_name,contact,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 						FROM petclinic
 						HAVING distance < 5 ORDER BY distance
 						LIMIT $offset, $rowsPerPage";
@@ -89,6 +89,7 @@ class ClinicDetailsDAO
                 $sql = "SELECT clinic_name,clinic_address,doctor_name,contact,email,clinic_image,city,area,(3959 * acos( cos( radians('$latitude') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 							FROM petclinic
 							HAVING distance < 5 ORDER BY distance LIMIT $offset, $rowsPerPage";
+							
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();

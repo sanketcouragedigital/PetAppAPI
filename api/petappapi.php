@@ -295,9 +295,8 @@ else if (isset($_GET['method'])) {
         $fetchClinicDetails = new ClinicDetails();
 		$latitude = $_GET['latitude'];
         $longitude = $_GET['longitude'];
-		$email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
-        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByCurrentLocation($currentPage,$latitude,$longitude,$email);
+        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByCurrentLocation($currentPage,$latitude,$longitude);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'ClinicByAddress') == 0) {

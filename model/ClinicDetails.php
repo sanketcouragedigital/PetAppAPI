@@ -42,12 +42,11 @@ class ClinicDetails
     }
     
   
-    public function showingClinicByCurrentLocation($currentPage,$email) {
+    public function showingClinicByCurrentLocation($currentPage,$latitude,$longitude) {
         $showClinicDetailsDAO = new ClinicDetailsDAO();
         $this->setCurrentPage($currentPage);
 		$this->setLatitude($latitude);
 		$this->setLongitude($longitude);
-		$this->setEmail($email);
         $returnShowClinicDetails = $showClinicDetailsDAO->showByCurrentLocation($this);
         return $returnShowClinicDetails;
     } 
