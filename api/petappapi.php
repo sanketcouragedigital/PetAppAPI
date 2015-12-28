@@ -228,7 +228,8 @@ else if (isset($_GET['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetRefreshListDetails = new PetDetails();
         $date = $_GET['date'];
-        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
+		$email=$_GET['email'];
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date,$email);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'showPetMetDetails') == 0) {
@@ -245,7 +246,8 @@ else if (isset($_GET['method'])) {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetRefreshListDetails = new PetMetDetails();
         $date = $_GET['date'];
-        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date);
+		$email=$_GET['email'];
+        $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetMetDetails($date,$email);
         deliver_response($_GET['format'], $response, false);
     }
     else if (strcasecmp($_GET['method'], 'showPetCategories') == 0) {

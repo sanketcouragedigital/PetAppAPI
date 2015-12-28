@@ -115,9 +115,10 @@ class PetMetDetails
         return $returnShowPetDetails;
     }
     
-    public function showingRefreshPetMetDetails($date) {
+    public function showingRefreshPetMetDetails($date,$email) {
         $showPetRefreshListDetailsDAO = new PetMetDetailsDAO();
         $this->setPostDate($date);
+		$this->setEmail($email);
         $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetail($this);
         return $returnShowPetDetails;
     }

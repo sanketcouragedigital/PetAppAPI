@@ -70,15 +70,14 @@ class PetMetDetailsDAO
                 $currentPage = (int) $pageWiseData->getCurrentPage();
             }
             
-            if ($currentPage >= 1 && $currentPage <= $totalPages) {
+            if ($currentPage >= 1 && $currentPag <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
                 $sql = "SELECT pm.image_path, pm.pet_category, pm.pet_breed,pm.pet_age,pm.pet_gender,pm.pet_description,pm.post_date,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
 						FROM petmet pm
 						INNER JOIN userDetails ud
 						ON pm.email = ud.email
-						HAVING distance < 5 ORDER BY distance
-						ORDER BY post_date DESC LIMIT $offset, $rowsPerPage";
+						HAVING distance < 5 ORDER BY distance, post_date DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();
@@ -94,10 +93,18 @@ class PetMetDetailsDAO
         return $this->data;
     }
 	 public function showRefreshListDetail($DateOfPost) {
-        
+        $sqlAddress="SELECT latitude,longitude FROM userDetails WHERE email='".$DateOfPost->getEmail()."' ";
+		$latlong = mysqli_query($this->con, $sqlAddress);
+		
+		$latLongValue = mysqli_fetch_row($latlong);
+		$latitude = $latLongValue[0];
+		$longitude = $latLongValue[1];
         
         try {
-            $sql = "SELECT * FROM petmet WHERE post_date > '".$DateOfPost->getPostDate()."'";
+            $sql = "SELECT pm.image_path, pm.pet_category, pm.pet_breed,pm.pet_age,pm.pet_gender,pm.pet_description,pm.post_date,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+						FROM petmet pm
+						INNER JOIN userDetails ud
+						ON pm.email = ud.email WHERE post_date > '".$DateOfPost->getPostDate()."' ";
             $result = mysqli_query($this->con, $sql);   
             $this->data=array();
             while ($rowdata = mysqli_fetch_assoc($result)) {
