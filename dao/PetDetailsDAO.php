@@ -17,7 +17,7 @@ class PetDetailsDAO
     public function saveDetail($petDetail) {
         try {
             if(move_uploaded_file($petDetail->getImageTemporaryName(), $petDetail->getTargetPathOfImage())) {
-                $sql = "INSERT INTO petapp(image_path, pet_category, pet_breed, pet_age, pet_gender, pet_description, pet_adoption, pet_price, post_date)
+                $sql = "INSERT INTO petapp(image_path, pet_category, pet_breed, pet_age, pet_gender, pet_description, pet_adoption, pet_price, post_date, email)
                         VALUES 
                         ('".$petDetail->getTargetPathOfImage()."',
                          '".$petDetail->getCategoryOfPet()."',
@@ -27,7 +27,8 @@ class PetDetailsDAO
                          '".$petDetail->getDescriptionOfPet()."',   
                          '".$petDetail->getAdoptionOfPet()."',
                          '".$petDetail->getPriceOfPet()."',
-						 '".$petDetail->getPostDate()."'
+						 '".$petDetail->getPostDate()."',
+						 '".$petDetail->getEmail()."'
                          )";
         
                 $isInserted = mysqli_query($this->con, $sql);

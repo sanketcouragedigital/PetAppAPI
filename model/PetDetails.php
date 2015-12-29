@@ -13,6 +13,7 @@ class PetDetails
     private $priceOfPet;
     private $postDate;
     private $currentPage;
+    private $email;
 
     public function setImageTemporaryName($image_tmp) {
         $this->image_tmp = $image_tmp;
@@ -101,8 +102,16 @@ class PetDetails
     public function getPostDate() {
         return $this->postDate;
     }
+    
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+    
+    public function getEmail() {
+        return $this->email;
+    }
 
-    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate) {
+    public function mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email) {
         $this->setImageTemporaryName($image_tmp);
         $this->setTargetPathOfImage($target_path);
         $this->setCategoryOfPet($categoryOfPet);
@@ -113,6 +122,7 @@ class PetDetails
         $this->setAdoptionOfPet($adoptionOfPet);
         $this->setPriceOfPet($priceOfPet);
 		$this->setPostDate($postDate);
+        $this->setEmail($email);
     }
 
     public function savingPetDetails() {

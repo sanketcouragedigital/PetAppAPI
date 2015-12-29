@@ -181,6 +181,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $descriptionOfPet = $_POST['descriptionOfPet'];
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
+        $email = $_POST['email'];
 		date_default_timezone_set('Asia/Kolkata');
 		$postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['petImage'])){
@@ -188,7 +189,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate);
+        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }
@@ -226,6 +227,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $breedOfPet = $_POST['breedOfPet'];
         $ageOfPet = $_POST['ageOfPet'];
         $genderOfPet = $_POST['genderOfPet'];
+        $email = $_POST['email'];
 		date_default_timezone_set('Asia/Kolkata');
 		$postDate = date("Y-m-d H:i:s");
         $descriptionOfPet = $_POST['descriptionOfPet'];
@@ -234,7 +236,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $image_name = $_FILES['petImage']['name'];
             $target_path = "../pet_images/".basename($image_name);
         }
-        $objPetDetails->mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate);
+        $objPetDetails->mapIncomingPetMetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate, $email);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetMetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
