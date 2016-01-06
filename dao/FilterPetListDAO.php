@@ -63,16 +63,28 @@ class FilterPetListDAO
                     foreach($adoptionAndPrices as $adoptionAndPrice) {
                         $adoptionAndPrice = trim($adoptionAndPrice);
                         if($adoptionAndPrice == "For Adoption"){
-                            $sql = "SELECT * FROM petapp WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
+                            $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                                    FROM petapp p
+                                    INNER JOIN userDetails ud
+                                    ON p.email = ud.email
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
                         }
                         else if($adoptionAndPrice == "50000 Onwards") {
-                            $sql = "SELECT * FROM petapp WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_price >= 50000 ";
+                            $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                                    FROM petapp p
+                                    INNER JOIN userDetails ud
+                                    ON p.email = ud.email 
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_price >= 50000 ";
                         }
                         else {
                             $splitPrice = explode("-", $adoptionAndPrice);
                             $minPrice = trim($splitPrice[0]);
                             $maxPrice = trim($splitPrice[1]);
-                            $sql = "SELECT * FROM petapp WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_price BETWEEN '$minPrice' AND '$maxPrice' ";
+                            $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                                    FROM petapp p
+                                    INNER JOIN userDetails ud
+                                    ON p.email = ud.email
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN '$minAge' AND '$maxAge' AND pet_gender='$gender' AND pet_price BETWEEN '$minPrice' AND '$maxPrice' ";
                         }
             
                         try {
