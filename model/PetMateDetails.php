@@ -110,7 +110,7 @@ class PetMateDetails
     }
 	
    public function showingPetMateDetails($currentPage, $email) {
-        $showPateDetailsDAO = new PetMateDetailsDAO();
+        $showPetDetailsDAO = new PetMateDetailsDAO();
         $this->setCurrentPage($currentPage);
 		$this->setEmail($email);
         $returnShowPetMateDetails = $showPetDetailsDAO->showDetail($this);

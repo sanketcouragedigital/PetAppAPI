@@ -71,7 +71,7 @@ class PetMateDetailsDAO
                 $currentPage = (int) $pageWiseData->getCurrentPage();
             }
             
-            if ($currentPage >= 1 && $currentPag <= $totalPages) {
+            if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
                 $sql = "SELECT pm.image_path, pm.pet_category, pm.pet_breed,pm.pet_age,pm.pet_gender,pm.pet_description,pm.post_date,ud.name,ud.email,ud.mobileno,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
