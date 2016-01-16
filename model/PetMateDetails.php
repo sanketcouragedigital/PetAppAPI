@@ -2,8 +2,12 @@
 require_once '../dao/PetMateDetailsDAO.php';
 class PetMateDetails
 {
-	private $image_tmp;
-    private $target_path;
+	private $first_image_tmp;
+    private $second_image_tmp;
+    private $third_image_tmp;
+    private $first_image_target_path;
+    private $second_image_target_path;
+    private $third_image_target_path;
     private $categoryOfPet;
     private $breedOfPet;
     private $ageOfPet;
@@ -13,20 +17,52 @@ class PetMateDetails
 	private $currentPage;
     private $email;
 
-    public function setImageTemporaryName($image_tmp) {
-        $this->image_tmp = $image_tmp;
+    public function setFirstImageTemporaryName($first_image_tmp) {
+        $this->first_image_tmp = $first_image_tmp;
     }
     
-    public function getImageTemporaryName() {
-        return $this->image_tmp;
+    public function getFirstImageTemporaryName() {
+        return $this->first_image_tmp;
+    }
+    
+    public function setSecondImageTemporaryName($second_image_tmp) {
+        $this->second_image_tmp = $second_image_tmp;
+    }
+    
+    public function getSecondImageTemporaryName() {
+        return $this->second_image_tmp;
+    }
+    
+    public function setThirdImageTemporaryName($third_image_tmp) {
+        $this->third_image_tmp = $third_image_tmp;
+    }
+    
+    public function getThirdImageTemporaryName() {
+        return $this->third_image_tmp;
     }
 
-    public function setTargetPathOfImage($target_path) {
-        $this->target_path = $target_path;
+    public function setTargetPathOfFirstImage($first_image_target_path) {
+        $this->first_image_target_path = $first_image_target_path;
     }
     
-    public function getTargetPathOfImage() {
-        return $this->target_path;
+    public function getTargetPathOfFirstImage() {
+        return $this->first_image_target_path;
+    }
+    
+    public function setTargetPathOfSecondImage($second_image_target_path) {
+        $this->second_image_target_path = $second_image_target_path;
+    }
+    
+    public function getTargetPathOfSecondImage() {
+        return $this->second_image_target_path;
+    }
+    
+    public function setTargetPathOfThirdImage($third_image_target_path) {
+        $this->third_image_target_path = $third_image_target_path;
+    }
+    
+    public function getTargetPathOfThirdImage() {
+        return $this->third_image_target_path;
     }
 
     public function setCategoryOfPet($categoryOfPet) {
@@ -91,9 +127,13 @@ class PetMateDetails
     public function getEmail() {
         return $this->email;
     }
-    public function mapIncomingPetMateDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$postDate, $email) {
-        $this->setImageTemporaryName($image_tmp);
-        $this->setTargetPathOfImage($target_path);
+    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$postDate, $email) {
+        $this->setFirstImageTemporaryName($first_image_tmp);
+        $this->setSecondImageTemporaryName($second_image_tmp);
+        $this->setThirdImageTemporaryName($third_image_tmp);
+        $this->setTargetPathOfFirstImage($first_image_target_path);
+        $this->setTargetPathOfSecondImage($second_image_target_path);
+        $this->setTargetPathOfThirdImage($third_image_target_path);
         $this->setCategoryOfPet($categoryOfPet);
         $this->setBreedOfPet($breedOfPet);
         $this->setAgeOfPet($ageOfPet);

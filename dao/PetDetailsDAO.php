@@ -2,8 +2,7 @@
 
 require_once 'BaseDAO.php';
 class PetDetailsDAO
-{
-    
+{    
     private $con;
     private $msg;
     private $data;
@@ -16,29 +15,40 @@ class PetDetailsDAO
     
     public function saveDetail($petDetail) {
         try {
-            if(move_uploaded_file($petDetail->getImageTemporaryName(), $petDetail->getTargetPathOfImage())) {
-                $sql = "INSERT INTO petapp(image_path, pet_category, pet_breed, pet_age, pet_gender, pet_description, pet_adoption, pet_price, post_date, email)
-                        VALUES 
-                        ('".$petDetail->getTargetPathOfImage()."',
-                         '".$petDetail->getCategoryOfPet()."',
-                         '".$petDetail->getBreedOfPet()."',
-                         '".$petDetail->getAgeOfPet()."',
-                         '".$petDetail->getGenderOfPet()."',
-                         '".$petDetail->getDescriptionOfPet()."',   
-                         '".$petDetail->getAdoptionOfPet()."',
-                         '".$petDetail->getPriceOfPet()."',
-						 '".$petDetail->getPostDate()."',
-						 '".$petDetail->getEmail()."'
-                         )";
-        
+            $status = 0;
+            $petsTempNames = array($petDetail->getFirstImageTemporaryName(), $petDetail->getSecondImageTemporaryName(), $petDetail->getThirdImageTemporaryName());
+            $petsTargetPaths = array($petDetail->getTargetPathOfFirstImage(), $petDetail->getTargetPathOfSecondImage(), $petDetail->getTargetPathOfThirdImage());
+            foreach ($petsTempNames as $index => $petsTempName) {
+                if(move_uploaded_file($petsTempName, $petsTargetPaths[$index])) {
+                    $status = 1;
+                }
+            }            
+            if($status = 1) {
+                $sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age, pet_gender, pet_description, pet_adoption, pet_price, post_date, email)
+                                VALUES 
+                                ('".$petDetail->getTargetPathOfFirstImage()."',
+                                 '".$petDetail->getTargetPathOfSecondImage()."',
+                                 '".$petDetail->getTargetPathOfThirdImage()."',
+                                 '".$petDetail->getCategoryOfPet()."',
+                                 '".$petDetail->getBreedOfPet()."',
+                                 '".$petDetail->getAgeOfPet()."',
+                                 '".$petDetail->getGenderOfPet()."',
+                                 '".$petDetail->getDescriptionOfPet()."',   
+                                 '".$petDetail->getAdoptionOfPet()."',
+                                 '".$petDetail->getPriceOfPet()."',
+                                 '".$petDetail->getPostDate()."',
+                                 '".$petDetail->getEmail()."'
+                                 )";
+                
                 $isInserted = mysqli_query($this->con, $sql);
                 if ($isInserted) {
                     $this->data = "PET_DETAILS_SAVED";
                 } else {
                     $this->data = "ERROR";
                 }
-            } else {
-                $this->data = "ERROR_UPLOAD_FILE";
+            }
+            else {
+                $this->data = "ERROR";
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
@@ -65,7 +75,7 @@ class PetDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                         FROM petapp p
                         INNER JOIN userDetails ud
                         ON p.email = ud.email
@@ -89,7 +99,7 @@ class PetDetailsDAO
         
         
         try {
-            $sql = "SELECT p.image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+            $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                     FROM petapp p
                     INNER JOIN userDetails ud
                     ON p.email = ud.email 

@@ -196,8 +196,12 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objPetDetails = new PetDetails();
-        $image_tmp = "";
-        $target_path = "";
+        $first_image_tmp = "";
+        $first_image_target_path = "";
+        $second_image_tmp = "";
+        $second_image_target_path = "";
+        $third_image_tmp = "";
+        $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageOfPet = $_POST['ageOfPet'];
@@ -206,14 +210,24 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
         $email = $_POST['email'];
-		date_default_timezone_set('Asia/Kolkata');
-		$postDate = date("Y-m-d H:i:s");
-        if(isset($_FILES['petImage'])){
-            $image_tmp = $_FILES['petImage']['tmp_name'];
-            $image_name = $_FILES['petImage']['name'];
-            $target_path = "../pet_images/".basename($image_name);
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
+        if(isset($_FILES['firstPetImage'])){
+            $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
+            $first_image_name = $_FILES['firstPetImage']['name'];
+            $first_image_target_path = "../pet_images/".basename($first_image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
+        if(isset($_FILES['secondPetImage'])){
+            $second_image_tmp = $_FILES['secondPetImage']['tmp_name'];
+            $second_image_name = $_FILES['secondPetImage']['name'];
+            $second_image_target_path = "../pet_images/".basename($second_image_name);
+        }
+        if(isset($_FILES['thirdPetImage'])){
+            $third_image_tmp = $_FILES['thirdPetImage']['tmp_name'];
+            $third_image_name = $_FILES['thirdPetImage']['name'];
+            $third_image_target_path = "../pet_images/".basename($third_image_name);
+        }
+        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -221,22 +235,36 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objPetDetails = new PetMateDetails();
-        $image_tmp = "";
-        $target_path = "";
+        $first_image_tmp = "";
+        $first_image_target_path = "";
+        $second_image_tmp = "";
+        $second_image_target_path = "";
+        $third_image_tmp = "";
+        $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageOfPet = $_POST['ageOfPet'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
-		date_default_timezone_set('Asia/Kolkata');
-		$postDate = date("Y-m-d H:i:s");
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
         $descriptionOfPet = $_POST['descriptionOfPet'];
-        if(isset($_FILES['petImage'])){
-            $image_tmp = $_FILES['petImage']['tmp_name'];
-            $image_name = $_FILES['petImage']['name'];
-            $target_path = "../pet_mate_images/".basename($image_name);
+        if(isset($_FILES['firstPetImage'])){
+            $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
+            $first_image_name = $_FILES['firstPetImage']['name'];
+            $first_image_target_path = "../pet_mate_images/".basename($first_image_name);
         }
-        $objPetDetails->mapIncomingPetMateDetailsParams($image_tmp, $target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate, $email);
+        if(isset($_FILES['secondPetImage'])){
+            $second_image_tmp = $_FILES['secondPetImage']['tmp_name'];
+            $second_image_name = $_FILES['secondPetImage']['name'];
+            $second_image_target_path = "../pet_mate_images/".basename($second_image_name);
+        }
+        if(isset($_FILES['thirdPetImage'])){
+            $third_image_tmp = $_FILES['thirdPetImage']['tmp_name'];
+            $third_image_name = $_FILES['thirdPetImage']['name'];
+            $third_image_target_path = "../pet_mate_images/".basename($third_image_name);
+        }
+        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate, $email);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
     }    
