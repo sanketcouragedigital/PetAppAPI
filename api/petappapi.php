@@ -172,11 +172,26 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objFilter = new FilterPetList();
-        $filterSelectedCategories = $string['filterSelectedCategories'];
-        $filterSelectedBreeds = $string['filterSelectedBreeds'];
-        $filterSelectedAge = $string['filterSelectedAge'];
-        $filterSelectedGender = $string['filterSelectedGender'];
-        $filterSelectedAdoptionAndPrice = $string['filterSelectedAdoptionAndPrice'];
+        $filterSelectedCategories = "";
+        $filterSelectedBreeds = "";
+        $filterSelectedAge = "";
+        $filterSelectedGender = "";
+        $filterSelectedAdoptionAndPrice = "";
+        if(!empty($string['filterSelectedCategories'])) {
+            $filterSelectedCategories = $string['filterSelectedCategories'];
+        }
+        if(!empty($string['filterSelectedBreeds'])) {
+            $filterSelectedBreeds = $string['filterSelectedBreeds'];
+        }
+        if(!empty($string['filterSelectedAge'])) {
+            $filterSelectedAge = $string['filterSelectedAge'];
+        }
+        if(!empty($string['filterSelectedGender'])) {
+            $filterSelectedGender = $string['filterSelectedGender'];
+        }
+        if(!empty($string['filterSelectedAdoptionAndPrice'])) {
+            $filterSelectedAdoptionAndPrice = $string['filterSelectedAdoptionAndPrice'];
+        }
         $response['showPetDetailsResponse'] = $objFilter -> filterPetLists($filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice);
         deliver_response($string['format'],$response,false);
     }
@@ -185,10 +200,22 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objFilter = new FilterPetMateList();
         $email = $string['email'];
-        $filterSelectedCategories = $string['filterSelectedCategories'];
-        $filterSelectedBreeds = $string['filterSelectedBreeds'];
-        $filterSelectedAge = $string['filterSelectedAge'];
-        $filterSelectedGender = $string['filterSelectedGender'];
+        $filterSelectedCategories = "";
+        $filterSelectedBreeds = "";
+        $filterSelectedAge = "";
+        $filterSelectedGender = "";
+        if(!empty($string['filterSelectedCategories'])) {
+            $filterSelectedCategories = $string['filterSelectedCategories'];
+        }
+        if(!empty($string['filterSelectedBreeds'])) {
+            $filterSelectedBreeds = $string['filterSelectedBreeds'];
+        }
+        if(!empty($string['filterSelectedAge'])) {
+            $filterSelectedAge = $string['filterSelectedAge'];
+        }
+        if(!empty($string['filterSelectedGender'])) {
+            $filterSelectedGender = $string['filterSelectedGender'];
+        }
         $response['showPetMateDetailsResponse'] = $objFilter -> filterPetMateLists($email, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender);
         deliver_response($string['format'],$response,false);
     }
@@ -210,8 +237,8 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
         $email = $_POST['email'];
-        date_default_timezone_set('Asia/Kolkata');
-        $postDate = date("Y-m-d H:i:s");
+		date_default_timezone_set('Asia/Kolkata');
+		$postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
             $first_image_name = $_FILES['firstPetImage']['name'];
@@ -246,8 +273,8 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $ageOfPet = $_POST['ageOfPet'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
-        date_default_timezone_set('Asia/Kolkata');
-        $postDate = date("Y-m-d H:i:s");
+		date_default_timezone_set('Asia/Kolkata');
+		$postDate = date("Y-m-d H:i:s");
         $descriptionOfPet = $_POST['descriptionOfPet'];
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
