@@ -8,6 +8,7 @@ require_once '../model/FilterPetList.php';
 require_once '../model/FilterPetMateList.php';
 require_once '../model/ClinicDetails.php';
 require_once '../model/PetServices.php';
+require_once '../model/Feedback.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -220,6 +221,17 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['showPetMateDetailsResponse'] = $objFilter -> filterPetMateLists($email, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender);
         deliver_response($string['format'],$response,false);
     }
+    else if(strcasecmp($method,'userFeedback') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserFeedback = new FeedBack();
+        $email = $string['email'];
+        $feedback = $string['feedback'];
+        $objuserFeedback->mapIncomingFeedbackParams($email,$feedback);
+    
+        $response['saveFeedbackResponse'] = $objuserFeedback -> sendFeedbackEmailToAdmin();
+        deliver_response($string['format'],$response,false);
+    }
     else if (strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -366,8 +378,7 @@ else if (isset($_GET['method'])) {
         $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByAddress($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
-	//pet  services
-	else if (strcasecmp($_GET['method'], 'showPetShelter') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetShelter') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetServices = new PetServices();
@@ -375,7 +386,7 @@ else if (isset($_GET['method'])) {
         $response['showPetShelterResponse'] = $fetchPetServices -> showingPetShelter($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showPetStores') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetStores') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetServices = new PetServices();
@@ -383,7 +394,7 @@ else if (isset($_GET['method'])) {
         $response['showPetStoresResponse'] = $fetchPetServices -> showingStores($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showPetGroomer') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetGroomer') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetServices = new PetServices();
@@ -391,7 +402,7 @@ else if (isset($_GET['method'])) {
         $response['showPetGroomerResponse'] = $fetchPetServices -> showingGroomer($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showPetTrainer') == 0) {
+    else if (strcasecmp($_GET['method'], 'showPetTrainer') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetServices = new PetServices();
