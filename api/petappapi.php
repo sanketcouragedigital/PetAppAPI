@@ -9,6 +9,7 @@ require_once '../model/FilterPetMateList.php';
 require_once '../model/ClinicDetails.php';
 require_once '../model/PetServices.php';
 require_once '../model/Feedback.php';
+require_once '../model/MyListing.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -408,6 +409,42 @@ else if (isset($_GET['method'])) {
         $fetchPetServices = new PetServices();
         $currentPage = $_GET['currentPage'];
         $response['showPetTrainerResponse'] = $fetchPetServices -> showingTrainer($currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'showMyListingPetList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetList = new MyListing();
+        $currentPage = $_GET['currentPage'];
+		$email=$_GET['email'];
+        $response['showMyListingPetListResponse'] = $fetchMyListingPetList -> showingMyListingPetList($currentPage,$email);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'showMyListingPetMateList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetMateList = new MyListing();
+        $currentPage = $_GET['currentPage'];
+		$email=$_GET['email'];
+        $response['showMyListingPetMateListResponse'] = $fetchMyListingPetMateList -> showingMyListingPetMateList($currentPage,$email);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'deleteMyListingPetList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetList = new MyListing();
+        $id = $_GET['id'];
+		$email=$_GET['email'];
+        $response['deleteMyListingPetListResponse'] = $fetchMyListingPetList -> deletingMyListingPetList($id,$email);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'deleteMyListingPetMateList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetMateList = new MyListing();
+        $id = $_GET['id'];
+		$email=$_GET['email'];
+        $response['deleteMyListingPetMateListResponse'] = $fetchMyListingPetMateList -> deletingMyListingPetMateList($id,$email);
         deliver_response($_GET['format'], $response, false);
     }
 }
