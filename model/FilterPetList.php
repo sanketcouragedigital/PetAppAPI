@@ -2,12 +2,21 @@
 require_once '../dao/FilterPetListDAO.php';
 class FilterPetList
 {
+    private $currentPage;
     private $filterSelectedCategories;
     private $filterSelectedBreeds;
     private $filterSelectedAge;
     private $filterSelectedGender;
     private $filterSelectedAdoptionAndPrice;
 
+    public function setCurrentPage($currentPage) {
+        $this->currentPage = $currentPage;
+    }
+    
+    public function getCurrentPage() {
+        return $this->currentPage;
+    }
+    
     public function setFilterSelectedCategories($filterSelectedCategories) {
         $this->filterSelectedCategories = $filterSelectedCategories;
     }
@@ -55,8 +64,9 @@ class FilterPetList
         return $returnShowPetBreedsCategoryWise;
     }
     
-    public function filterPetLists($filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
+    public function filterPetLists($currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
         $showFilterPetListDAO = new FilterPetListDAO();
+        $this->setCurrentPage($currentPage);
         $this->setFilterSelectedCategories($filterSelectedCategories);
         $this->setFilterSelectedBreeds($filterSelectedBreeds);
         $this->setFilterSelectedAge($filterSelectedAge);
@@ -64,6 +74,12 @@ class FilterPetList
         $this->setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice);
         $returnShowPetList = $showFilterPetListDAO->showFilteredPetList($this);
         return $returnShowPetList;
+    }
+    
+    public function deletingFilterPetListObject() {
+        $deleteFilterPetListObjectDAO = new FilterPetListDAO();
+        $returnFilterPetListObjectDeleteResponse = $deleteFilterPetListObjectDAO->deleteFilterObject();
+        return $returnFilterPetListObjectDeleteResponse;
     }
 }
 ?>
