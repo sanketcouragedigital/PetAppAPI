@@ -69,9 +69,10 @@ class FilterPetMateList
         return $returnShowPetMateList;
     }
     
-    public function deletingFilterPetMateListObject() {
+    public function deletingFilterPetMateListObject($email) {
         $deleteFilterPetMateListObjectDAO = new FilterPetMateListDAO();
-        $returnFilterPetMateListObjectDeleteResponse = $deleteFilterPetMateListObjectDAO->deleteFilterObject();
+        $this->setEmail($email);
+        $returnFilterPetMateListObjectDeleteResponse = $deleteFilterPetMateListObjectDAO->deleteFilterObject($this);
         return $returnFilterPetMateListObjectDeleteResponse;
     }
 }

@@ -2,12 +2,21 @@
 require_once '../dao/FilterPetListDAO.php';
 class FilterPetList
 {
+    private $email;
     private $currentPage;
     private $filterSelectedCategories;
     private $filterSelectedBreeds;
     private $filterSelectedAge;
     private $filterSelectedGender;
     private $filterSelectedAdoptionAndPrice;
+    
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+    
+    public function getEmail() {
+        return $this->email;
+    }
 
     public function setCurrentPage($currentPage) {
         $this->currentPage = $currentPage;
@@ -64,8 +73,9 @@ class FilterPetList
         return $returnShowPetBreedsCategoryWise;
     }
     
-    public function filterPetLists($currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
+    public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
         $showFilterPetListDAO = new FilterPetListDAO();
+        $this->setEmail($email);
         $this->setCurrentPage($currentPage);
         $this->setFilterSelectedCategories($filterSelectedCategories);
         $this->setFilterSelectedBreeds($filterSelectedBreeds);
@@ -76,9 +86,10 @@ class FilterPetList
         return $returnShowPetList;
     }
     
-    public function deletingFilterPetListObject() {
+    public function deletingFilterPetListObject($email) {
         $deleteFilterPetListObjectDAO = new FilterPetListDAO();
-        $returnFilterPetListObjectDeleteResponse = $deleteFilterPetListObjectDAO->deleteFilterObject();
+        $this->setEmail($email);
+        $returnFilterPetListObjectDeleteResponse = $deleteFilterPetListObjectDAO->deleteFilterObject($this);
         return $returnFilterPetListObjectDeleteResponse;
     }
 }

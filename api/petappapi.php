@@ -175,6 +175,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objFilter = new FilterPetList();
+        $email = $string['email'];
         $currentPage = $string['currentPage'];
         $filterSelectedCategories = "";
         $filterSelectedBreeds = "";
@@ -196,7 +197,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         if(!empty($string['filterSelectedAdoptionAndPrice'])) {
             $filterSelectedAdoptionAndPrice = $string['filterSelectedAdoptionAndPrice'];
         }
-        $response['showPetDetailsResponse'] = $objFilter -> filterPetLists($currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice);
+        $response['showPetDetailsResponse'] = $objFilter -> filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice);
         deliver_response($string['format'],$response,false);
     }
     else if(strcasecmp($method,'filterPetMateList') == 0){
@@ -413,39 +414,39 @@ else if (isset($_GET['method'])) {
         $response['showPetTrainerResponse'] = $fetchPetServices -> showingTrainer($currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showMyListingPetList') == 0) {
+    else if (strcasecmp($_GET['method'], 'showMyListingPetList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchMyListingPetList = new MyListing();
         $currentPage = $_GET['currentPage'];
-		$email=$_GET['email'];
+        $email=$_GET['email'];
         $response['showMyListingPetListResponse'] = $fetchMyListingPetList -> showingMyListingPetList($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showMyListingPetMateList') == 0) {
+    else if (strcasecmp($_GET['method'], 'showMyListingPetMateList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchMyListingPetMateList = new MyListing();
         $currentPage = $_GET['currentPage'];
-		$email=$_GET['email'];
+        $email=$_GET['email'];
         $response['showMyListingPetMateListResponse'] = $fetchMyListingPetMateList -> showingMyListingPetMateList($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'deleteMyListingPetList') == 0) {
+    else if (strcasecmp($_GET['method'], 'deleteMyListingPetList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchMyListingPetList = new MyListing();
         $id = $_GET['id'];
-		$email=$_GET['email'];
+        $email=$_GET['email'];
         $response['deleteMyListingPetListResponse'] = $fetchMyListingPetList -> deletingMyListingPetList($id,$email);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'deleteMyListingPetMateList') == 0) {
+    else if (strcasecmp($_GET['method'], 'deleteMyListingPetMateList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchMyListingPetMateList = new MyListing();
         $id = $_GET['id'];
-		$email=$_GET['email'];
+        $email=$_GET['email'];
         $response['deleteMyListingPetMateListResponse'] = $fetchMyListingPetMateList -> deletingMyListingPetMateList($id,$email);
         deliver_response($_GET['format'], $response, false);
     }
@@ -453,14 +454,16 @@ else if (isset($_GET['method'])) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $deleteFilterPetListObj = new FilterPetList();
-        $response['deleteFilterPetListObjectResponse'] = $deleteFilterPetListObj -> deletingFilterPetListObject();
+        $email=$_GET['email'];
+        $response['deleteFilterPetListObjectResponse'] = $deleteFilterPetListObj -> deletingFilterPetListObject($email);
         deliver_response($_GET['format'], $response, false);
     }
     else if (strcasecmp($_GET['method'], 'deleteFilterPetMateListObject') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $deleteFilterPetMateListObj = new FilterPetMateList();
-        $response['deleteFilterPetMateListObjectResponse'] = $deleteFilterPetMateListObj -> deletingFilterPetMateListObject();
+        $email=$_GET['email'];
+        $response['deleteFilterPetMateListObjectResponse'] = $deleteFilterPetMateListObj -> deletingFilterPetMateListObject($email);
         deliver_response($_GET['format'], $response, false);
     }
 }
