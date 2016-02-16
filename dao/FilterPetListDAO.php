@@ -114,7 +114,7 @@ class FilterPetListDAO
                         FROM petapp p
                         INNER JOIN userDetails ud
                         ON p.email = ud.email
-                        WHERE pet_age BETWEEN $minAge AND $maxAge ";     
+                        WHERE pet_age_inYear BETWEEN $minAge AND $maxAge ";     
                         
                 try {
                     $select = mysqli_query($this->con, $sql);
@@ -216,14 +216,14 @@ class FilterPetListDAO
                             FROM petapp p
                             INNER JOIN userDetails ud
                             ON p.email = ud.email
-                            WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
+                            WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
                     }
                     else if($adoptionAndPrice == "50000 Onwards") {
                     $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                             FROM petapp p
                             INNER JOIN userDetails ud
                             ON p.email = ud.email 
-                            WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
+                            WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
                     }
                     else {
                     $splitPrice = explode("-", $adoptionAndPrice);
@@ -233,7 +233,7 @@ class FilterPetListDAO
                             FROM petapp p
                             INNER JOIN userDetails ud
                             ON p.email = ud.email
-                            WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                            WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
                     }
                     try {
                         $select = mysqli_query($this->con, $sql);
@@ -254,7 +254,7 @@ class FilterPetListDAO
                             FROM petapp p
                             INNER JOIN userDetails ud
                             ON p.email = ud.email
-                            WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' ";
+                            WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' ";
                             
                     try {
                         $select = mysqli_query($this->con, $sql);
@@ -408,7 +408,7 @@ class FilterPetListDAO
                                 FROM petapp p
                                 INNER JOIN userDetails ud
                                 ON p.email = ud.email 
-                                WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge ";
+                                WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge ";
                         try {
                             $select = mysqli_query($this->con, $sql);
                             while ($rowdata = mysqli_fetch_assoc($select)) {
@@ -428,7 +428,7 @@ class FilterPetListDAO
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email 
-                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge ";
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge ";
                             try {
                                 $select = mysqli_query($this->con, $sql);
                                 while ($rowdata = mysqli_fetch_assoc($select)) {
@@ -453,14 +453,14 @@ class FilterPetListDAO
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email
-                                    WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
+                                    WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
                         }
                         else if($adoptionAndPrice == "50000 Onwards") {
                             $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email 
-                                    WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
+                                    WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
                         }
                         else {
                             $splitPrice = explode("-", $adoptionAndPrice);
@@ -470,7 +470,7 @@ class FilterPetListDAO
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email
-                                    WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                                    WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
                         }
                         try {
                             $select = mysqli_query($this->con, $sql);
@@ -587,14 +587,14 @@ class FilterPetListDAO
                                             FROM petapp p
                                             INNER JOIN userDetails ud
                                             ON p.email = ud.email
-                                            WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
+                                            WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
                                 }
                                 else if($adoptionAndPrice == "50000 Onwards") {
                                     $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                                             FROM petapp p
                                             INNER JOIN userDetails ud
                                             ON p.email = ud.email 
-                                            WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
+                                            WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
                                 }
                                 else {
                                     $splitPrice = explode("-", $adoptionAndPrice);
@@ -604,7 +604,7 @@ class FilterPetListDAO
                                             FROM petapp p
                                             INNER JOIN userDetails ud
                                             ON p.email = ud.email
-                                            WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                                            WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
                                 }        
                                 try {
                                     $select = mysqli_query($this->con, $sql);
@@ -629,14 +629,14 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_adoption='$adoptionAndPrice' ";
                                     }
                                     else if($adoptionAndPrice == "50000 Onwards") {
                                         $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email 
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price >= 50000 ";
                                     }
                                     else {
                                         $splitPrice = explode("-", $adoptionAndPrice);
@@ -646,7 +646,7 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_price BETWEEN $minPrice AND $maxPrice ";
                                     }        
                                     try {
                                         $select = mysqli_query($this->con, $sql);
@@ -673,7 +673,7 @@ class FilterPetListDAO
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email 
-                                    WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender'  ";
+                                    WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender'  ";
                             try {
                                 $select = mysqli_query($this->con, $sql);
                                 while ($rowdata = mysqli_fetch_assoc($select)) {
@@ -696,7 +696,7 @@ class FilterPetListDAO
                                     FROM petapp p
                                     INNER JOIN userDetails ud
                                     ON p.email = ud.email 
-                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender'  ";
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender'  ";
                                 try {
                                     $select = mysqli_query($this->con, $sql);
                                     while ($rowdata = mysqli_fetch_assoc($select)) {
@@ -727,14 +727,14 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
+                                                WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
                                     }
                                     else if($adoptionAndPrice == "50000 Onwards") {
                                         $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email 
-                                                WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
+                                                WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
                                     }
                                     else {
                                         $splitPrice = explode("-", $adoptionAndPrice);
@@ -744,7 +744,7 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                                                WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
                                     }
                         
                                     try {
@@ -777,14 +777,14 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_adoption='$adoptionAndPrice' ";
                                     }
                                     else if($adoptionAndPrice == "50000 Onwards") {
                                         $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email 
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price >= 50000 ";
                                     }
                                     else {
                                         $splitPrice = explode("-", $adoptionAndPrice);
@@ -794,7 +794,7 @@ class FilterPetListDAO
                                                 FROM petapp p
                                                 INNER JOIN userDetails ud
                                                 ON p.email = ud.email
-                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
+                                                WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender' AND pet_price BETWEEN $minPrice AND $maxPrice ";
                                     }
                         
                                     try {

@@ -62,7 +62,7 @@ class FilterPetMateListDAO {
                         FROM petmate pm 
                         INNER JOIN userDetails ud
                         ON pm.email = ud.email
-                        WHERE pet_age BETWEEN $minAge AND $maxAge
+                        WHERE pet_age_inYear BETWEEN $minAge AND $maxAge
                         HAVING distance < 5 ORDER BY distance ";
                 try {
                     $select = mysqli_query($this -> con, $sql);
@@ -125,7 +125,7 @@ class FilterPetMateListDAO {
                             FROM petmate pm 
                             INNER JOIN userDetails ud
                             ON pm.email = ud.email
-                            WHERE pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
+                            WHERE pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
                             HAVING distance < 5 ORDER BY distance ";
                     try {
                         $select = mysqli_query($this -> con, $sql);
@@ -196,7 +196,7 @@ class FilterPetMateListDAO {
                                 FROM petmate pm 
                                 INNER JOIN userDetails ud
                                 ON pm.email = ud.email
-                                WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge
+                                WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge
                                 HAVING distance < 5 ORDER BY distance ";
                         try {
                             $select = mysqli_query($this -> con, $sql);
@@ -215,7 +215,7 @@ class FilterPetMateListDAO {
                                     FROM petmate pm 
                                     INNER JOIN userDetails ud
                                     ON pm.email = ud.email
-                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge
+                                    WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge
                                     HAVING distance < 5 ORDER BY distance ";
                             try {
                                 $select = mysqli_query($this -> con, $sql);
@@ -243,7 +243,7 @@ class FilterPetMateListDAO {
                                     FROM petmate pm 
                                     INNER JOIN userDetails ud
                                     ON pm.email = ud.email
-                                    WHERE pet_category='$category' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
+                                    WHERE pet_category='$category' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
                                     HAVING distance < 5 ORDER BY distance ";
                             try {
                                 $select = mysqli_query($this -> con, $sql);
@@ -270,7 +270,7 @@ class FilterPetMateListDAO {
                                         FROM petmate pm 
                                         INNER JOIN userDetails ud
                                         ON pm.email = ud.email
-                                        WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
+                                        WHERE pet_category='$category' AND pet_breed='$breed' AND pet_age_inYear BETWEEN $minAge AND $maxAge AND pet_gender='$gender'
                                         HAVING distance < 5 ORDER BY distance ";
                                 try {
                                     $select = mysqli_query($this -> con, $sql);
