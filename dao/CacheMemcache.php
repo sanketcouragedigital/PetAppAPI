@@ -21,7 +21,7 @@ class CacheMemcache {
     }
     
     public function setData($key, $data) {
-        return $this->cache->set($key, $data, 0, $this->timeToLive);
+        return $this->cache->set($key, $data, 0, 86400);
     }
     
     public function delData($key) {

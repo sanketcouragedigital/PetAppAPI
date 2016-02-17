@@ -834,23 +834,23 @@ class FilterPetListDAO
                 $cache = new CacheMemcache();
                 if ($cache->memcacheEnabled) {
                     $cache->setData('filter_pet_list_email', $email);
-                    $cache->setData('filter_pet_list_array', $this->data); // saving data to cache server          
+                    $cache->setData('filter_pet_list_array_'+$email, $this->data); // saving data to cache server          
                 }
             }
         }
         else {
             $cache = new CacheMemcache();
+            $output = null;
             if($cache->memcacheEnabled) {
                 if($email == $cache->getData('filter_pet_list_email')) {
-                    $this->data = $cache->getData('filter_pet_list_array');
+                    $this->data = $cache->getData('filter_pet_list_array_'+$email);
                     $count = 0;
                     $count+= count($this->data);
                     $rowsPerPage = 10;
                     $totalPages = ceil($count / $rowsPerPage);
                     if (is_numeric($filterPetList->getCurrentPage())) {
                         $currentPage = (int) $filterPetList->getCurrentPage();
-                    }
-                    $output = null;
+                    }                    
                     if ($currentPage >= 1 && $currentPage <= $totalPages) {
                         $offset = ($currentPage - 1) * $rowsPerPage;
                         $output = array_slice($this->data, $offset, $rowsPerPage);
@@ -866,7 +866,7 @@ class FilterPetListDAO
         if ($cache->memcacheEnabled) {
             $email = $deletePetListFilterObject->getEmail();
             if($email == $cache->getData('filter_pet_list_email')) {
-                $this->data = $cache->delData('filter_pet_list_array'); // removing data from cache server
+                $this->data = $cache->delData('filter_pet_list_array_'+$email); // removing data from cache server
             }            
         }
         return $this->data;
