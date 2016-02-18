@@ -12,6 +12,7 @@ require_once '../model/Feedback.php';
 require_once '../model/MyListing.php';
 
 
+
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -236,7 +237,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveFeedbackResponse'] = $objuserFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($string['format'],$response,false);
     }
-    else if (strcasecmp($_POST['method'], 'savePetDetails') == 0) {
+    else if(strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objPetDetails = new PetDetails();
@@ -248,7 +249,9 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
-        $ageOfPet = $_POST['ageOfPet'];
+       // $ageOfPet = $_POST['ageOfPet'];
+		$ageInMonth=$_POST['petAgeInMonth'];
+		$ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $descriptionOfPet = $_POST['descriptionOfPet'];
         $adoptionOfPet = $_POST['adoptionOfPet'];
@@ -271,7 +274,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
+        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -287,12 +290,15 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
-        $ageOfPet = $_POST['ageOfPet'];
+        //$ageOfPet = $_POST['ageOfPet'];
+		$ageInMonth=$_POST['petAgeInMonth'];
+		$ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
+		$descriptionOfPet = $_POST['descriptionOfPet'];
 		date_default_timezone_set('Asia/Kolkata');
 		$postDate = date("Y-m-d H:i:s");
-        $descriptionOfPet = $_POST['descriptionOfPet'];
+       
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
             $first_image_name = $_FILES['firstPetImage']['name'];
@@ -308,10 +314,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_mate_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $postDate, $email);
+        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
-    }    
+    }   
 }
 else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPetDetails') == 0) {

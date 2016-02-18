@@ -10,7 +10,8 @@ class PetMateDetails
     private $third_image_target_path;
     private $categoryOfPet;
     private $breedOfPet;
-    private $ageOfPet;
+    private $ageInMonth;
+	private $ageInYear;
     private $genderOfPet;
     private $descriptionOfPet;
 	private $postDate;
@@ -81,12 +82,18 @@ class PetMateDetails
         return $this->breedOfPet;
     }
 
-    public function setAgeOfPet($ageOfPet) {
-        $this->ageOfPet = $ageOfPet;
+	public function setAgeInMonth($ageInMonth) {
+        $this->ageInMonth = $ageInMonth;
+    }    
+    public function getAgeInMonth() {
+        return $this->ageInMonth;
     }
-    
-    public function getAgeOfPet() {
-        return $this->ageOfPet;
+	
+	 public function setAgeInYear($ageInYear) {
+        $this->ageInYear = $ageInYear;
+    }
+    public function getAgeInYear() {
+        return $this->ageInYear;
     }
 
     public function setGenderOfPet($genderOfPet) {
@@ -127,7 +134,7 @@ class PetMateDetails
     public function getEmail() {
         return $this->email;
     }
-    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet,$postDate, $email) {
+    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -136,7 +143,8 @@ class PetMateDetails
         $this->setTargetPathOfThirdImage($third_image_target_path);
         $this->setCategoryOfPet($categoryOfPet);
         $this->setBreedOfPet($breedOfPet);
-        $this->setAgeOfPet($ageOfPet);
+        $this->setAgeInYear($ageInYear);
+		$this->setAgeInMonth($ageInMonth);
         $this->setGenderOfPet($genderOfPet);
         $this->setDescriptionOfPet($descriptionOfPet);
 		$this->setPostDate($postDate);

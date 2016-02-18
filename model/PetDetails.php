@@ -10,7 +10,8 @@ class PetDetails
     private $third_image_target_path;
     private $categoryOfPet;
     private $breedOfPet;
-    private $ageOfPet;
+    private $ageInMonth;
+	private $ageInYear;
     private $genderOfPet;
     private $descriptionOfPet;
     private $adoptionOfPet;
@@ -77,18 +78,23 @@ class PetDetails
 
     public function setBreedOfPet($breedOfPet) {
         $this->breedOfPet = $breedOfPet;
-    }
-    
+    }    
     public function getBreedOfPet() {
         return $this->breedOfPet;
     }
 
-    public function setAgeOfPet($ageOfPet) {
-        $this->ageOfPet = $ageOfPet;
+    public function setAgeInMonth($ageInMonth) {
+        $this->ageInMonth = $ageInMonth;
+    }    
+    public function getAgeInMonth() {
+        return $this->ageInMonth;
     }
-    
-    public function getAgeOfPet() {
-        return $this->ageOfPet;
+	
+	 public function setAgeInYear($ageInYear) {
+        $this->ageInYear = $ageInYear;
+    }
+    public function getAgeInYear() {
+        return $this->ageInYear;
     }
 
     public function setGenderOfPet($genderOfPet) {
@@ -147,7 +153,7 @@ class PetDetails
         return $this->email;
     }
 
-    public function mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageOfPet, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email) {
+    public function mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -156,7 +162,8 @@ class PetDetails
         $this->setTargetPathOfThirdImage($third_image_target_path);
         $this->setCategoryOfPet($categoryOfPet);
         $this->setBreedOfPet($breedOfPet);
-        $this->setAgeOfPet($ageOfPet);
+        $this->setAgeInYear($ageInYear);
+		$this->setAgeInMonth($ageInMonth);
         $this->setGenderOfPet($genderOfPet);
         $this->setDescriptionOfPet($descriptionOfPet);
         $this->setAdoptionOfPet($adoptionOfPet);

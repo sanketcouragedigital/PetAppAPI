@@ -24,14 +24,15 @@ class PetDetailsDAO
                 }
             }            
             if($status = 1) {
-                $sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age, pet_gender, pet_description, pet_adoption, pet_price, post_date, email)
+                $sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email)
                                 VALUES 
                                 ('".$petDetail->getTargetPathOfFirstImage()."',
                                  '".$petDetail->getTargetPathOfSecondImage()."',
                                  '".$petDetail->getTargetPathOfThirdImage()."',
                                  '".$petDetail->getCategoryOfPet()."',
                                  '".$petDetail->getBreedOfPet()."',
-                                 '".$petDetail->getAgeOfPet()."',
+                                 '".$petDetail->getAgeInMonth()."',
+								 '".$petDetail->getAgeInYear()."',
                                  '".$petDetail->getGenderOfPet()."',
                                  '".$petDetail->getDescriptionOfPet()."',   
                                  '".$petDetail->getAdoptionOfPet()."',
@@ -75,7 +76,7 @@ class PetDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+                $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                         FROM petapp p
                         INNER JOIN userDetails ud
                         ON p.email = ud.email
@@ -99,7 +100,7 @@ class PetDetailsDAO
         
         
         try {
-            $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
+            $sql = "SELECT p.first_image_path, p.second_image_path, p.third_image_path, p.pet_category, p.pet_breed, p.pet_age_inMonth, p.pet_age_inYear, p.pet_gender, p.pet_description, p.pet_adoption, p.pet_price, p.post_date, p.email, ud.name, ud.mobileno 
                     FROM petapp p
                     INNER JOIN userDetails ud
                     ON p.email = ud.email 
