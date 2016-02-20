@@ -14,6 +14,37 @@ class MyListingDAO
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
+	
+	public function saveModifiedPetDetail($MyListingPetList) {
+		try {
+			if ($status = 1) {
+				$sql = "UPDATE petapp SET 	pet_category = '" . $MyListingPetList -> getCategoryOfPet() . "',
+			                                pet_breed = '" . $MyListingPetList -> getBreedOfPet() . "',
+			                                pet_age_inMonth = '" . $MyListingPetList -> getPetAgeInMonth() . "' ,  
+			                                pet_age_inYear ='" . $MyListingPetList -> getPetAgeInYear() . "' , 
+			                                pet_gender ='" . $MyListingPetList -> getGenderOfPet() . "',
+			                                pet_description= '" . $MyListingPetList -> getDescriptionOfPet() . "',
+			                                pet_adoption ='" . $MyListingPetList -> getAdoptionOfPet() . "',
+			                                pet_price= '" . $MyListingPetList -> getPriceOfPet() . "',
+			                                email='" . $MyListingPetList -> getEmail() . "'
+			                                
+			                    		 	WHERE id = '" . $MyListingPetList -> getId() . "' ";
+
+				$isUpdated = mysqli_query($this -> con, $sql);
+				if ($isUpdated) {
+					$this -> data = "PET_DETAILS_UPDATED";
+				} else {
+					$this -> data = "ERROR";
+				}
+			} else {
+				$this -> data = "ERROR";
+			}
+		} catch(Exception $e) {
+			echo 'SQL Exception: ' . $e -> getMessage();
+		}
+		return $this -> data;
+	}
+
         
     public function showMyListingPetList($MyListingPetList) {
          $sql = "SELECT * FROM petapp WHERE email='".$MyListingPetList->getEmail()."'";
