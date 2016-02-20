@@ -10,6 +10,7 @@ require_once '../model/ClinicDetails.php';
 require_once '../model/PetServices.php';
 require_once '../model/Feedback.php';
 require_once '../model/MyListing.php';
+require_once '../model/ClinicFeedbackDetails.php';
 
 
 
@@ -237,6 +238,18 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveFeedbackResponse'] = $objuserFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($string['format'],$response,false);
     }
+	else if(strcasecmp($method,'submitClinicFeedback') == 0){
+		$response['code'] = 1;
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objClinicFeedbackDetails = new ClinicFeedbackDetails();
+		$clinicRatings = $string['ratings'];
+		$clinicFeedback= $string['feedback'];
+		$email =  $string['email'];
+		$clinicId =  $string['clinicId'];
+		$objClinicFeedbackDetails->mapIncomingClinicFeedbackDetails($clinicRatings,$clinicFeedback,$email,$clinicId);
+		$response['saveClinicFeedbackResponse'] = $objClinicFeedbackDetails -> SavingClinicFeedbackDetails();	
+        deliver_response($string['format'],$response,false);
+	}
     else if(strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -470,6 +483,15 @@ else if (isset($_GET['method'])) {
         $deleteFilterPetMateListObj = new FilterPetMateList();
         $email=$_GET['email'];
         $response['deleteFilterPetMateListObjectResponse'] = $deleteFilterPetMateListObj -> deletingFilterPetMateListObject($email);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'showClinicReviews') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchClinicReviewsDetails = new ClinicFeedbackDetails();
+		$clinicId=$_GET['clinicId'];
+        $currentPage = $_GET['currentPage'];
+        $response['showClinicReviewssResponse'] = $fetchClinicReviewsDetails -> showingClinicReviews($currentPage,$clinicId);
         deliver_response($_GET['format'], $response, false);
     }
 }
