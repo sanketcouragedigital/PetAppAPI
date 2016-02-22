@@ -9,6 +9,7 @@ class UsersDetails
 	private $city;
     private $mobileno;
     private $email;
+    private $oldEmail;
 	private $password;
 	
     public function setName($name) {
@@ -17,6 +18,13 @@ class UsersDetails
     
     public function getName() {
         return $this->name;
+    }
+     public function setOldEmail($oldEmail) {
+        $this->oldEmail = $oldEmail;
+    }
+    
+    public function getOldEmail() {
+        return $this->oldEmail;
     }
 
     public function setBuildingname($buildingname) {
@@ -73,12 +81,33 @@ class UsersDetails
 		$this->setCity($city);
         $this->setMobileno($mobileno);
         $this->setEmail($email);
-		$this->setPassword($password);
+        $this->setPassword($password);
     }
 
     public function SavingUsersDetails() {
         $saveUsersDetailsDAO = new UsersDetailsDAO();
         $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->saveDetail($this);
+        return $returnUsersDetailsSaveSuccessMessage;
+    }
+    public function mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password) {
+        $this->setName($name);
+        $this->setBuildingname($buildingname);
+        $this->setArea($area);
+        $this->setCity($city);
+        $this->setMobileno($mobileno);
+        $this->setEmail($email);
+        $this->setOldEmail($oldEmail);
+        $this->setPassword($password);
+    }
+    public function SavingEditUsersDetails() {
+        $saveUsersDetailsDAO = new UsersDetailsDAO();
+        $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->saveEditDetail($this);
+        return $returnUsersDetailsSaveSuccessMessage;
+    }
+    public function FetchingUsersDetails($oldEmail) {
+        $saveUsersDetailsDAO = new UsersDetailsDAO();
+        $this->setOldEmail($oldEmail);
+        $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->fetchUserDetail($this);
         return $returnUsersDetailsSaveSuccessMessage;
     }
     

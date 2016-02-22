@@ -178,7 +178,7 @@ class MyListingDAO
 	
 	public function deleteMyListingPetMateList($MyListingPetmateList) {
 		 try {
-		    $sql = "SELECT * FROM petmate WHERE id = '".$MyListingPetList->getId()."' AND email = '".$MyListingPetList->getEmail()."'";
+		    $sql = "SELECT * FROM petmate WHERE id = '".$MyListingPetmateList->getId()."' AND email = '".$MyListingPetmateList->getEmail()."'";
             $fetchData = mysqli_query($this->con, $sql);
             $this->result=array();
             while ($rowdata = mysqli_fetch_assoc($fetchData)) {

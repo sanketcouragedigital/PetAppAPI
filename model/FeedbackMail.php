@@ -40,8 +40,8 @@ class FeedbackMail {
     }
     
     
-    function sendEmail() {
-        $data =mail("$this->to","$this->subject","$this->message","$this->from");
+    public function sendEmail() {
+        $data = mail("$this->to","$this->subject","$this->message","$this->from");
         if($data) {
             $data = "USER_FEEDBACK_SAVED";
         }

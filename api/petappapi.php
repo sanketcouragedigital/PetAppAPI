@@ -13,7 +13,6 @@ require_once '../model/MyListing.php';
 require_once '../model/ClinicFeedbackDetails.php';
 
 
-
 function deliver_response($format, $api_response, $isSaveQuery) {
 
     // Define HTTP responses
@@ -138,6 +137,31 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
+    if(strcasecmp($method,'fetchUserDetails') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new UsersDetails();
+        $oldEmail=$string['oldEmail'];        
+        $response['showUserDetails'] = $objuserDetails -> FetchingUsersDetails($oldEmail);
+        deliver_response($string['format'],$response,false);
+    }
+    if(strcasecmp($method,'editProfile') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new UsersDetails();
+        $name = $string['name'];
+        $buildingname= $string['buildingname'];
+        $area= $string['area'];
+        $city= $string['city'];
+        $mobileno= $string['mobileno'];
+        $email= $string['email'];
+        $oldEmail=$string['oldEmail'];
+        $password= $string['confirmpassword'];
+        $objuserDetails->mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password);
+    
+        $response['saveUsersEditDetailsResponse'] = $objuserDetails -> SavingEditUsersDetails();
+        deliver_response($string['format'],$response,false);
+    }
     else if(strcasecmp($method,'userLogin') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -164,16 +188,16 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $email= $string['email'];
         $response['checkemailResponse'] = $objuserDetails -> CheckingEmail($email);
         deliver_response($string['format'],$response,false);
-    }  
-	else if (strcasecmp($method,'saveModifiedPetDetails') == 0) {
+    }
+    else if (strcasecmp($method,'saveModifiedPetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objMyListingModifyPetDetails = new MyListing();
-		$id = $string['id'];
+        $id = $string['id'];
         $categoryOfPet = $string['categoryOfPet'];
         $breedOfPet = $string['breedOfPet'];
         $petAgeInMonth = $string['petAgeInMonth'];
-		$petAgeInYear = $string['petAgeInYear'];
+        $petAgeInYear = $string['petAgeInYear'];
         $genderOfPet = $string['genderOfPet'];
         $descriptionOfPet = $string['descriptionOfPet'];
         $adoptionOfPet = $string['adoptionOfPet'];
@@ -182,7 +206,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objMyListingModifyPetDetails->mapIncomingModifiedPetDetailsParams($id, $categoryOfPet, $breedOfPet, $petAgeInMonth, $petAgeInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $email);
         $response['saveModifiedPetDetailsResponse'] = $objMyListingModifyPetDetails -> savingModifiedPetDetails();
         deliver_response($string['format'], $response, true);
-    }  
+    }
     else if (strcasecmp($method,'saveModifiedPetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -198,7 +222,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objMyListingModifyPetMateDetails->mapIncomingModifiedPetMateDetailsParams($id, $categoryOfPet, $breedOfPet, $petAgeInMonth, $petAgeInYear, $genderOfPet, $descriptionOfPet, $email);
         $response['saveModifiedPetMateDetailsResponse'] = $objMyListingModifyPetMateDetails -> savingModifiedPetMateDetails();
         deliver_response($string['format'], $response, true);
-    }  
+    }
     else if(strcasecmp($method,'filterCategoryWiseBreed') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -272,18 +296,18 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveFeedbackResponse'] = $objuserFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($string['format'],$response,false);
     }
-	else if(strcasecmp($method,'submitClinicFeedback') == 0){
-		$response['code'] = 1;
-		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-		$objClinicFeedbackDetails = new ClinicFeedbackDetails();
-		$clinicRatings = $string['ratings'];
-		$clinicFeedback= $string['feedback'];
-		$email =  $string['email'];
-		$clinicId =  $string['clinicId'];
-		$objClinicFeedbackDetails->mapIncomingClinicFeedbackDetails($clinicRatings,$clinicFeedback,$email,$clinicId);
-		$response['saveClinicFeedbackResponse'] = $objClinicFeedbackDetails -> SavingClinicFeedbackDetails();	
+    else if(strcasecmp($method,'submitClinicFeedback') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objClinicFeedbackDetails = new ClinicFeedbackDetails();
+        $clinicRatings = $string['ratings'];
+        $clinicFeedback= $string['feedback'];
+        $email =  $string['email'];
+        $clinicId =  $string['clinicId'];
+        $objClinicFeedbackDetails->mapIncomingClinicFeedbackDetails($clinicRatings,$clinicFeedback,$email,$clinicId);
+        $response['saveClinicFeedbackResponse'] = $objClinicFeedbackDetails -> SavingClinicFeedbackDetails();   
         deliver_response($string['format'],$response,false);
-	}
+    }
     else if(strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -296,16 +320,15 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
-       // $ageOfPet = $_POST['ageOfPet'];
-		$ageInMonth=$_POST['petAgeInMonth'];
-		$ageInYear=$_POST['petAgeInYear'];
+        $ageInMonth=$_POST['petAgeInMonth'];
+        $ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $descriptionOfPet = $_POST['descriptionOfPet'];
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
         $email = $_POST['email'];
-		date_default_timezone_set('Asia/Kolkata');
-		$postDate = date("Y-m-d H:i:s");
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
             $first_image_name = $_FILES['firstPetImage']['name'];
@@ -325,7 +348,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
-	else if (strcasecmp($_POST['method'], 'savePetMateDetails') == 0) {
+    else if (strcasecmp($_POST['method'], 'savePetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objPetDetails = new PetMateDetails();
@@ -337,14 +360,13 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $third_image_target_path = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
-        //$ageOfPet = $_POST['ageOfPet'];
-		$ageInMonth=$_POST['petAgeInMonth'];
-		$ageInYear=$_POST['petAgeInYear'];
+        $ageInMonth=$_POST['petAgeInMonth'];
+        $ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
-		$descriptionOfPet = $_POST['descriptionOfPet'];
-		date_default_timezone_set('Asia/Kolkata');
-		$postDate = date("Y-m-d H:i:s");
+        $descriptionOfPet = $_POST['descriptionOfPet'];
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
        
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
@@ -364,7 +386,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
-    }   
+    }    
 }
 else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPetDetails') == 0) {
@@ -519,11 +541,11 @@ else if (isset($_GET['method'])) {
         $response['deleteFilterPetMateListObjectResponse'] = $deleteFilterPetMateListObj -> deletingFilterPetMateListObject($email);
         deliver_response($_GET['format'], $response, false);
     }
-	else if (strcasecmp($_GET['method'], 'showClinicReviews') == 0) {
+    else if (strcasecmp($_GET['method'], 'showClinicReviews') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchClinicReviewsDetails = new ClinicFeedbackDetails();
-		$clinicId=$_GET['clinicId'];
+        $clinicId=$_GET['clinicId'];
         $currentPage = $_GET['currentPage'];
         $response['showClinicReviewssResponse'] = $fetchClinicReviewsDetails -> showingClinicReviews($currentPage,$clinicId);
         deliver_response($_GET['format'], $response, false);

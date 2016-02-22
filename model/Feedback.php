@@ -29,7 +29,7 @@ class Feedback
     public function sendFeedbackEmailToAdmin() {
         $emailSender = new FeedbackMail();
         $emailSender->setTo("sanketdhotre.dhotre3@gmail.com");
-        $emailSender->setFrom($this->email);
+        $emailSender->setFrom("Content-type: text/html; charset=utf-8\r\n;" + "From :".$this->email);
         $emailSender->setMessage($this->createEmailMessageBodyForFeedback());
         $emailSender->setSubject("An Email from ".$this->email.".");
         return $emailSender->sendEmail($emailSender);
