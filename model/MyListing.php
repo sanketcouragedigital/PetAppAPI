@@ -117,6 +117,23 @@ class MyListing
 		return $returnPetDetailSaveSuccessMessage;
 	}
 
+public function mapIncomingModifiedPetMateDetailsParams($id, $categoryOfPet, $breedOfPet, $petAgeInMonth, $petAgeInYear, $genderOfPet, $descriptionOfPet, $email) {
+		$this -> setCategoryOfPet($categoryOfPet);
+		$this -> setBreedOfPet($breedOfPet);
+		$this -> setPetAgeInMonth($petAgeInMonth);
+		$this -> setPetAgeInYear($petAgeInYear);
+		$this -> setGenderOfPet($genderOfPet);
+		$this -> setDescriptionOfPet($descriptionOfPet);
+		$this -> setEmail($email);
+		$this -> setId($id);
+	}
+
+	public function savingModifiedPetMateDetails() {
+		$saveMyListingPetMateDetailsDAO = new MyListingDAO();
+		$returnPetMateDetailSaveSuccessMessage = $saveMyListingPetMateDetailsDAO -> saveModifiedPetMateDetail($this);
+		return $returnPetMateDetailSaveSuccessMessage;
+	}
+
   
  	public function showingMyListingPetList($currentPage,$email) {
         $showMyListingPetListDAO = new MyListingDAO();

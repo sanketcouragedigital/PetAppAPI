@@ -183,6 +183,22 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveModifiedPetDetailsResponse'] = $objMyListingModifyPetDetails -> savingModifiedPetDetails();
         deliver_response($string['format'], $response, true);
     }  
+    else if (strcasecmp($method,'saveModifiedPetMateDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objMyListingModifyPetMateDetails = new MyListing();
+        $id = $string['id'];
+        $categoryOfPet = $string['categoryOfPet'];
+        $breedOfPet = $string['breedOfPet'];
+        $petAgeInMonth = $string['petAgeInMonth'];
+        $petAgeInYear = $string['petAgeInYear'];
+        $genderOfPet = $string['genderOfPet'];
+        $descriptionOfPet = $string['descriptionOfPet'];
+        $email = $string['email'];        
+        $objMyListingModifyPetMateDetails->mapIncomingModifiedPetMateDetailsParams($id, $categoryOfPet, $breedOfPet, $petAgeInMonth, $petAgeInYear, $genderOfPet, $descriptionOfPet, $email);
+        $response['saveModifiedPetMateDetailsResponse'] = $objMyListingModifyPetMateDetails -> savingModifiedPetMateDetails();
+        deliver_response($string['format'], $response, true);
+    }  
     else if(strcasecmp($method,'filterCategoryWiseBreed') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];

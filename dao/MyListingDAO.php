@@ -25,10 +25,10 @@ class MyListingDAO
 			                                pet_gender ='" . $MyListingPetList -> getGenderOfPet() . "',
 			                                pet_description= '" . $MyListingPetList -> getDescriptionOfPet() . "',
 			                                pet_adoption ='" . $MyListingPetList -> getAdoptionOfPet() . "',
-			                                pet_price= '" . $MyListingPetList -> getPriceOfPet() . "',
-			                                email='" . $MyListingPetList -> getEmail() . "'
+			                                pet_price= '" . $MyListingPetList -> getPriceOfPet() . "'
 			                                
-			                    		 	WHERE id = '" . $MyListingPetList -> getId() . "' ";
+			                    		 	WHERE id = '" . $MyListingPetList -> getId() . "'  
+                                            AND  email = '" . $MyListingPetList -> getEmail() . "' ";
 
 				$isUpdated = mysqli_query($this -> con, $sql);
 				if ($isUpdated) {
@@ -44,6 +44,36 @@ class MyListingDAO
 		}
 		return $this -> data;
 	}
+
+
+
+    public function saveModifiedPetMateDetail($MyListingPetMateList) {
+        try {
+            if ($status = 1) {
+                $sql = "UPDATE petmate SET  pet_category = '" . $MyListingPetMateList -> getCategoryOfPet() . "',
+                                            pet_breed = '" . $MyListingPetMateList -> getBreedOfPet() . "',
+                                            pet_age_inMonth = '" . $MyListingPetMateList -> getPetAgeInMonth() . "' ,  
+                                            pet_age_inYear ='" . $MyListingPetMateList -> getPetAgeInYear() . "' , 
+                                            pet_gender ='" . $MyListingPetMateList -> getGenderOfPet() . "',
+                                            pet_description= '" . $MyListingPetMateList -> getDescriptionOfPet() . "'
+                                            
+                                            WHERE id = '" . $MyListingPetMateList -> getId() . "'   
+                                            AND email = '". $MyListingPetMateList -> getemail() ."' " ;
+
+                $isUpdated = mysqli_query($this -> con, $sql);
+                if ($isUpdated) {
+                    $this -> data = "PET_MATE_DETAILS_UPDATED";
+                } else {
+                    $this -> data = "ERROR";
+                }
+            } else {
+                $this -> data = "ERROR";
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' . $e -> getMessage();
+        }
+        return $this -> data;
+    }
 
         
     public function showMyListingPetList($MyListingPetList) {
