@@ -1,5 +1,4 @@
 <?php
-
 require_once 'BaseDAO.php';
 class UsersDetailsDAO
 {

@@ -1,5 +1,4 @@
 <?php
-
 require_once 'BaseDAO.php';
 class LoginDetailsDAO
 {
@@ -83,5 +82,4 @@ class LoginDetailsDAO
     }
                 
 }
-
 ?>

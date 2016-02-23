@@ -1,6 +1,5 @@
 <?php
 require_once '../dao/UsersDetailsDAO.php';
-
 class UsersDetails
 {
 	private $name;

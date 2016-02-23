@@ -13,6 +13,5 @@ class RandomNoGenarator {
             } 
         return $genaratedcode; 
     }
-}  
-//echo GenarateCode(6);        
+}
 ?>
