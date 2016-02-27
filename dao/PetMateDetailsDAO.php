@@ -24,27 +24,60 @@ class PetMateDetailsDAO
                 }
             }  
             if($status = 1) {
-                $sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email)
-                        VALUES 
-                        ('".$petMateDetail->getTargetPathOfFirstImage()."',
-                         '".$petMateDetail->getTargetPathOfSecondImage()."',
-                         '".$petMateDetail->getTargetPathOfThirdImage()."',
-                         '".$petMateDetail->getCategoryOfPet()."',
-                         '".$petMateDetail->getBreedOfPet()."',
-                         '".$petMateDetail->getAgeInMonth()."',
-						 '".$petMateDetail->getAgeInYear()."',
-                         '".$petMateDetail->getGenderOfPet()."',
-                         '".$petMateDetail->getDescriptionOfPet()."',
-                         '".$petMateDetail->getPostDate()."',
-                         '".$petMateDetail->getEmail()."'
-                        )";
-        
-                $isInserted = mysqli_query($this->con, $sql);
-                if ($isInserted) {
-                    $this->data = "PET_DETAILS_SAVED";
-                } else {
-                    $this->data = "ERROR";
-                }
+				$addAlternateNo = $petMateDetail->getAlternateNo();
+				if($addAlternateNo == ""){
+					
+					$sql = "SELECT mobileno FROM userDetails WHERE email='".$petMateDetail->getEmail()."'";
+					$result = mysqli_query($this->con, $sql);  						
+                        $rowdata= mysqli_fetch_row($result);
+						$addAlternateNo = $rowdata[0];
+				
+					$sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email,alternateNo)
+							VALUES 
+							('".$petMateDetail->getTargetPathOfFirstImage()."',
+							 '".$petMateDetail->getTargetPathOfSecondImage()."',
+							 '".$petMateDetail->getTargetPathOfThirdImage()."',
+							 '".$petMateDetail->getCategoryOfPet()."',
+							 '".$petMateDetail->getBreedOfPet()."',
+							 '".$petMateDetail->getAgeInMonth()."',
+							 '".$petMateDetail->getAgeInYear()."',
+							 '".$petMateDetail->getGenderOfPet()."',
+							 '".$petMateDetail->getDescriptionOfPet()."',
+							 '".$petMateDetail->getPostDate()."',
+							 '".$petMateDetail->getEmail()."',
+							 '$addAlternateNo'
+							)";
+			
+					$isInserted = mysqli_query($this->con, $sql);
+					if ($isInserted) {
+						$this->data = "PET_DETAILS_SAVED";
+					} else {
+						$this->data = "ERROR";
+					}
+				}else {
+					$sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email,alternateNo)
+							VALUES 
+							('".$petMateDetail->getTargetPathOfFirstImage()."',
+							 '".$petMateDetail->getTargetPathOfSecondImage()."',
+							 '".$petMateDetail->getTargetPathOfThirdImage()."',
+							 '".$petMateDetail->getCategoryOfPet()."',
+							 '".$petMateDetail->getBreedOfPet()."',
+							 '".$petMateDetail->getAgeInMonth()."',
+							 '".$petMateDetail->getAgeInYear()."',
+							 '".$petMateDetail->getGenderOfPet()."',
+							 '".$petMateDetail->getDescriptionOfPet()."',
+							 '".$petMateDetail->getPostDate()."',
+							 '".$petMateDetail->getEmail()."',
+							 '".$petDetail->getAlternateNo()."'
+							)";
+			
+					$isInserted = mysqli_query($this->con, $sql);
+					if ($isInserted) {
+						$this->data = "PET_DETAILS_SAVED";
+					} else {
+						$this->data = "ERROR";
+					}
+				}
             }
             else {
                 $this->data = "ERROR";
@@ -63,7 +96,7 @@ class PetMateDetailsDAO
 		$latLongValue = mysqli_fetch_row($latlong);
 		$latitude = $latLongValue[0];
 		$longitude = $latLongValue[1];
-        $sql = "SELECT pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, ud.name, ud.email, ud.mobileno,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+        $sql = "SELECT pm.id,pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo, ud.name, ud.email,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
                 FROM petmate pm
                 INNER JOIN userDetails ud
                 ON pm.email = ud.email
@@ -85,7 +118,7 @@ class PetMateDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, ud.name, ud.email, ud.mobileno,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+                $sql = "SELECT pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date,pm.alternateNo, ud.name, ud.email,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
 						FROM petmate pm
 						INNER JOIN userDetails ud
 						ON pm.email = ud.email
@@ -113,7 +146,7 @@ class PetMateDetailsDAO
 		$longitude = $latLongValue[1];
         
         try {
-            $sql = "SELECT pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear,pm.pet_gender, pm.pet_description, pm.post_date, ud.name, ud.email, ud.mobileno,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
+            $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear,pm.pet_gender, pm.pet_description, pm.post_date,pm.alternateNo, ud.name, ud.email,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( ud.latitude ) ) * cos( radians( ud.longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( ud.latitude ) ) ) ) * 1.609344 AS distance
 						FROM petmate pm
 						INNER JOIN userDetails ud
 						ON pm.email = ud.email 

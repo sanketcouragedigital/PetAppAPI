@@ -125,6 +125,36 @@ class WhishListDetailsDAO
         }
         return $this->data;
     }
+	public function deleteWishListPetList($WishListPetList) {
+		 try {            
+			$sql = "DELETE FROM petList_wishList WHERE id='".$WishListPetList->getListId()."' AND email='".$WishListPetList->getEmail()."' ";
+			$isDeleted = mysqli_query($this->con, $sql);
+            if ($isDeleted) {
+                $this->data = "WishList_Pet_Deleted";                
+            } else {
+                $this->data = "ERROR";
+            }
+			 
+		} catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;	 		
+	}
+	
+	public function deleteWishListPetMateList($WishListPetmateList) {
+		 try {            
+			$sql = "DELETE FROM petMateList_wishList WHERE id='".$WishListPetmateList->getListId()."' AND email='".$WishListPetmateList->getEmail()."' ";
+			$isDeleted = mysqli_query($this->con, $sql);
+            if ($isDeleted) {
+                $this->data = "WishList_PetMate_Deleted";                             
+            } else {
+                $this->data = "ERROR";
+            }
+		} catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+	}
    
 }
 ?>

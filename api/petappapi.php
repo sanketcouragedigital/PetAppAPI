@@ -345,6 +345,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
         $email = $_POST['email'];
+		$alternateNo = $_POST['alternateNo'];
         date_default_timezone_set('Asia/Kolkata');
         $postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['firstPetImage'])){
@@ -362,7 +363,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email);
+        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email,$alternateNo);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -382,6 +383,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
+		$alternateNo = $_POST['alternateNo'];
         $descriptionOfPet = $_POST['descriptionOfPet'];
         date_default_timezone_set('Asia/Kolkata');
         $postDate = date("Y-m-d H:i:s");
@@ -401,7 +403,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_mate_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email);
+        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email,$alternateNo);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
     }    
@@ -584,6 +586,24 @@ else if (isset($_GET['method'])) {
         $email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
         $response['showPetMateWishListResponse'] = $fetchPetMateWishListDetails -> showingPetMateListWishList($email,$currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+		else if (strcasecmp($_GET['method'], 'deleteWishListPetList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetList = new WhishListDetails();
+        $listId = $_GET['id'];
+        $email=$_GET['email'];
+        $response['deleteWishListPetListResponse'] = $fetchMyListingPetList -> deletingWishListPetList($listId,$email);
+        deliver_response($_GET['format'], $response, false);
+    }
+    else if (strcasecmp($_GET['method'], 'deleteWishListPetMateList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchMyListingPetMateList = new WhishListDetails();
+        $listId = $_GET['id'];
+        $email=$_GET['email'];
+        $response['deleteWishListPetMateListResponse'] = $fetchMyListingPetMateList -> deletingWishListPetMateList($listId,$email);
         deliver_response($_GET['format'], $response, false);
     }
 }

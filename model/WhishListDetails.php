@@ -56,5 +56,20 @@ class WhishListDetails
         $returnshowWhishListDetailsDAO = $showWhishListDetailsDAO->showPetMateWishList($this);
         return $returnshowWhishListDetailsDAO;
 	}
+	public function deletingWishListPetList($listId,$email) {
+        $deleteMyListingPetListDAO = new MyListingDAO();
+        $this->setListId($listId);
+		$this->setEmail($email);
+        $returnDeleteMyListingPetListDetails = $deleteMyListingPetListDAO->deleteWishListPetList($this);
+        return $returnDeleteMyListingPetListDetails;
+    }
+	
+	public function deletingWishListPetMateList($listId,$email) {
+        $deleteMyListingPetMateListDAO = new MyListingDAO();
+        $this->setListId($listId);
+		$this->setEmail($email);
+        $returnDeleteMyListingPetMateListDetails = $deleteMyListingPetMateListDAO->deleteWishListPetMateList($this);
+        return $returnDeleteMyListingPetMateListDetails;
+    } 	
 }
 ?>
