@@ -87,6 +87,22 @@ class PetMateDetailsDAO
         }
         return $this->data;
     }
+	public function showUserWishList($userWishList) {
+        try {           
+			$sql ="SELECT *
+					FROM petMateList_wishList 			
+					WHERE email='".$userWishList->getEmail()."' ";
+					
+            $result = mysqli_query($this->con, $sql);   
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($result)) {
+                $this->data[]=$rowdata;
+            }            
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
     
     public function showDetail($pageWiseData) {
 		
@@ -100,8 +116,7 @@ class PetMateDetailsDAO
                 FROM petmate pm
                 INNER JOIN userDetails ud
                 ON pm.email = ud.email
-                HAVING distance < 5 ORDER BY distance";
-        
+                HAVING distance < 20 ORDER BY distance";        
         try {
             $result = mysqli_query($this->con, $sql);
             $numOfRows = mysqli_num_rows($result);
@@ -122,7 +137,7 @@ class PetMateDetailsDAO
 						FROM petmate pm
 						INNER JOIN userDetails ud
 						ON pm.email = ud.email
-						HAVING distance < 5 ORDER BY distance, post_date DESC LIMIT $offset, $rowsPerPage";
+						HAVING distance < 20 ORDER BY distance, post_date DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();

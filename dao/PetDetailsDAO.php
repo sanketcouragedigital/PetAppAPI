@@ -15,8 +15,6 @@ class PetDetailsDAO
     public function saveDetail($petDetail) {
         try {
 			
-			
-			
             $status = 0;
             $petsTempNames = array($petDetail->getFirstImageTemporaryName(), $petDetail->getSecondImageTemporaryName(), $petDetail->getThirdImageTemporaryName());
             $petsTargetPaths = array($petDetail->getTargetPathOfFirstImage(), $petDetail->getTargetPathOfSecondImage(), $petDetail->getTargetPathOfThirdImage());
@@ -88,6 +86,21 @@ class PetDetailsDAO
             else {
                 $this->data = "ERROR";
             }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+	public function showUserWishList($userWishList) {
+        try {           
+			$sql ="SELECT *
+					FROM petList_wishList 			
+					WHERE email='".$userWishList->getEmail()."' ";
+            $result = mysqli_query($this->con, $sql);   
+            $this->data=array();
+            while ($rowdata = mysqli_fetch_assoc($result)) {
+                $this->data[]=$rowdata;
+            }            
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }

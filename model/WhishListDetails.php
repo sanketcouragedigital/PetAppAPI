@@ -57,7 +57,7 @@ class WhishListDetails
         return $returnshowWhishListDetailsDAO;
 	}
 	public function deletingWishListPetList($listId,$email) {
-        $deleteMyListingPetListDAO = new MyListingDAO();
+        $deleteMyListingPetListDAO = new WhishListDetailsDAO();
         $this->setListId($listId);
 		$this->setEmail($email);
         $returnDeleteMyListingPetListDetails = $deleteMyListingPetListDAO->deleteWishListPetList($this);
@@ -65,7 +65,7 @@ class WhishListDetails
     }
 	
 	public function deletingWishListPetMateList($listId,$email) {
-        $deleteMyListingPetMateListDAO = new MyListingDAO();
+        $deleteMyListingPetMateListDAO = new WhishListDetailsDAO();
         $this->setListId($listId);
 		$this->setEmail($email);
         $returnDeleteMyListingPetMateListDetails = $deleteMyListingPetMateListDAO->deleteWishListPetMateList($this);

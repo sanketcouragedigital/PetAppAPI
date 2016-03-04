@@ -17,6 +17,7 @@ class PetMateDetails
 	private $postDate;
 	private $currentPage;
     private $email;
+	private $alternateNo;
 
     public function setFirstImageTemporaryName($first_image_tmp) {
         $this->first_image_tmp = $first_image_tmp;
@@ -130,11 +131,18 @@ class PetMateDetails
 	 public function setEmail($email) {
         $this->email = $email;
     }
-    
     public function getEmail() {
         return $this->email;
     }
-    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email) {
+	
+	public function setAlternateNo($alternateNo) {
+        $this->alternateNo = $alternateNo;
+    }    
+    public function getAlternateNo() {
+        return $this->alternateNo;
+    }
+
+    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email, $alternateNo) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -149,6 +157,7 @@ class PetMateDetails
         $this->setDescriptionOfPet($descriptionOfPet);
 		$this->setPostDate($postDate);
         $this->setEmail($email);
+		$this->setAlternateNo($alternateNo);
     }
 
     public function savingPetMateDetails() {
@@ -170,6 +179,12 @@ class PetMateDetails
         $this->setPostDate($date);
 		$this->setEmail($email);
         $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetail($this);
+        return $returnShowPetDetails;
+    }
+	public function showingUserWishListForPetMate($email) {
+        $showshowUserWishListDAO = new PetMateDetailsDAO();
+        $this->setEmail($email);
+        $returnShowPetDetails = $showshowUserWishListDAO->showUserWishList($this);
         return $returnShowPetDetails;
     }
 }

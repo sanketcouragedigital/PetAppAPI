@@ -46,9 +46,9 @@ class WhishListDetailsDAO
 	
 	
 	public function showPetWishList($petListWishList) {		
-       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date
+       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo				
                 FROM petList_wishList pw
-                INNER JOIN petmate pm
+                INNER JOIN petapp pm
                 ON pw.listId = pm.id
 				WHERE pw.email= '".$petListWishList->getEmail()."' ";        
         try {
@@ -66,9 +66,9 @@ class WhishListDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date
+                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo
                 FROM petList_wishList pw
-                INNER JOIN petmate pm
+                INNER JOIN petapp pm
                 ON pw.listId = pm.id
 				WHERE pw.email= '".$petListWishList->getEmail()."'
 				LIMIT $offset, $rowsPerPage";
@@ -84,12 +84,12 @@ class WhishListDetailsDAO
         }
         return $this->data;
     }
-	public function showPetMateWishList($petListWishList) {		
-       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date
+	public function showPetMateWishList($petMateListWishList) {		
+       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo
                 FROM petMateList_wishList pmw
                 INNER JOIN petmate pm
                 ON pmw.listId = pm.id
-				WHERE pmw.email= '".$petListWishList->getEmail()."' ";
+				WHERE pmw.email= '".$petMateListWishList->getEmail()."' ";
         
         try {
             $result = mysqli_query($this->con, $sql);
@@ -100,19 +100,20 @@ class WhishListDetailsDAO
             
             $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
             
-            if (is_numeric($petListWishList->getCurrentPage())) {
-                $currentPage = (int) $petListWishList->getCurrentPage();
+            if (is_numeric($petMateListWishList->getCurrentPage())) {
+                $currentPage = (int) $petMateListWishList->getCurrentPage();
             }
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date
+                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo
                 FROM petMateList_wishList pmw
                 INNER JOIN petmate pm
                 ON pmw.listId = pm.id
-				WHERE pmw.email= '".$petListWishList->getEmail()."'
+				WHERE pmw.email= '".$petMateListWishList->getEmail()."'
 				LIMIT $offset, $rowsPerPage";
+				
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();
@@ -127,7 +128,7 @@ class WhishListDetailsDAO
     }
 	public function deleteWishListPetList($WishListPetList) {
 		 try {            
-			$sql = "DELETE FROM petList_wishList WHERE id='".$WishListPetList->getListId()."' AND email='".$WishListPetList->getEmail()."' ";
+			$sql = "DELETE FROM petList_wishList WHERE listId='".$WishListPetList->getListId()."' AND email='".$WishListPetList->getEmail()."' ";
 			$isDeleted = mysqli_query($this->con, $sql);
             if ($isDeleted) {
                 $this->data = "WishList_Pet_Deleted";                
@@ -143,7 +144,7 @@ class WhishListDetailsDAO
 	
 	public function deleteWishListPetMateList($WishListPetmateList) {
 		 try {            
-			$sql = "DELETE FROM petMateList_wishList WHERE id='".$WishListPetmateList->getListId()."' AND email='".$WishListPetmateList->getEmail()."' ";
+			$sql = "DELETE FROM petMateList_wishList WHERE listId='".$WishListPetmateList->getListId()."' AND email='".$WishListPetmateList->getEmail()."' ";
 			$isDeleted = mysqli_query($this->con, $sql);
             if ($isDeleted) {
                 $this->data = "WishList_PetMate_Deleted";                             
