@@ -32,6 +32,14 @@ class MyListingDAO
 				$isUpdated = mysqli_query($this -> con, $sql);
 				if ($isUpdated) {
 					$this -> data = "PET_DETAILS_UPDATED";
+					$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$MyListingPetList->getBreedOfPet()."'";
+								$result = mysqli_query($this->con, $checkSql);
+								$count=mysqli_num_rows($result);
+								if($count!=1) {
+									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+									VALUES('".$MyListingPetList->getCategoryOfPet()."','".$MyListingPetList->getBreedOfPet()."')";
+									$isInserted = mysqli_query($this->con, $addBreedSQL);
+								}
 				} else {
 					$this -> data = "ERROR";
 				}
@@ -62,6 +70,14 @@ class MyListingDAO
                 $isUpdated = mysqli_query($this -> con, $sql);
                 if ($isUpdated) {
                     $this -> data = "PET_MATE_DETAILS_UPDATED";
+					$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$MyListingPetMateList->getBreedOfPet()."'";
+								$result = mysqli_query($this->con, $checkSql);
+								$count=mysqli_num_rows($result);
+								if($count!=1) {
+									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+									VALUES('".$MyListingPetMateList->getCategoryOfPet()."','".$MyListingPetMateList->getBreedOfPet()."')";
+									$isInserted = mysqli_query($this->con, $addBreedSQL);
+								}
                 } else {
                     $this -> data = "ERROR";
                 }
