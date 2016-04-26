@@ -15,7 +15,7 @@ class ClinicDetailsDAO
     
     
     public function showByCurrentLocation($latlong) {
-        $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+        $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,latitude,longitude,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 				FROM petclinic
 				HAVING distance < 5 ORDER BY distance";
         
@@ -36,7 +36,7 @@ class ClinicDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+                $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,latitude,longitude,( 3959 * acos( cos( radians('".$latlong->getLatitude()."') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('".$latlong->getLongitude()."') ) + sin( radians('".$latlong->getLatitude()."') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 						FROM petclinic
 						HAVING distance < 5 ORDER BY distance
 						LIMIT $offset, $rowsPerPage";
@@ -64,7 +64,7 @@ class ClinicDetailsDAO
 		$longitude = $latLongValue[1];
 			
 			
-        $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+        $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,latitude,longitude,( 3959 * acos( cos( radians('$latitude') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 					FROM petclinic
 					HAVING distance < 5 ORDER BY distance";
         
@@ -85,7 +85,7 @@ class ClinicDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,(3959 * acos( cos( radians('$latitude') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
+                $sql = "SELECT clinic_id,clinic_name,clinic_address,doctor_name,contact,notes,email,clinic_image,city,area,latitude,longitude,(3959 * acos( cos( radians('$latitude') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians( latitude ) ) ) ) * 1.609344 AS distance
 							FROM petclinic
 							HAVING distance < 5 ORDER BY distance LIMIT $offset, $rowsPerPage";
 							
@@ -103,6 +103,24 @@ class ClinicDetailsDAO
         }
         return $this->data;
     }
+	/*public function showByAddress($fetchDetails) {
+        
+        try {
+            $sql = "SELECT * FROM petclinic WHERE city='pune' ";
+					
+            $isValidating = mysqli_query($this->con, $sql);
+                $count=mysqli_num_rows($isValidating);
+                
+                    //$this->data = "VALID_PASSWORD";
+					$this->data=array();
+					while ($rowdata = mysqli_fetch_assoc($isValidating)) {
+						$this->data[]=$rowdata;
+					}         
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }*/
   
 }
 ?>

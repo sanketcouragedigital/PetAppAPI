@@ -28,6 +28,21 @@ class LoginDetailsDAO
         }
         return $this->data;
     }
+	public function checkPassword($CheckPassword) {
+           try {
+                $sql = "SELECT * FROM userDetails WHERE email='".$CheckPassword->getEmail()."' AND password='".$CheckPassword->getPassword()."' ";        
+                $isValidating = mysqli_query($this->con, $sql);
+                $count=mysqli_num_rows($isValidating);
+                if($count==1) {
+                    $this->data = "VALID_PASSWORD";
+                } else {
+                    $this->data = "INVALID_PASSWORD";
+                }                 
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
     
     public function emailDetail($LoginDetails) {
            try {

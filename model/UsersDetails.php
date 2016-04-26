@@ -103,11 +103,18 @@ class UsersDetails
         $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->saveEditDetail($this);
         return $returnUsersDetailsSaveSuccessMessage;
     }
-    public function FetchingUsersDetails($oldEmail) {
+    public function FetchingUsersDetails($oldEmail,$password) {
         $saveUsersDetailsDAO = new UsersDetailsDAO();
         $this->setOldEmail($oldEmail);
+		$this->setPassword($password);
         $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->fetchUserDetail($this);
         return $returnUsersDetailsSaveSuccessMessage;
+    }
+	public function FetchingContactDetails($email) {
+        $fetchContactDetailsDAO = new UsersDetailsDAO();
+        $this->setEmail($email);	
+        $returnFetchContactDetailsMessage = $fetchContactDetailsDAO->fetchContactDetail($this);
+        return $returnFetchContactDetailsMessage;
     }
     
 }

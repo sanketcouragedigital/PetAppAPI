@@ -43,4 +43,5 @@ class EmailGenarator {
 			$success =(mail("$this->to","$this->subject","$this->message","$this->from"));
 			return $success;			
 		}
+	}
 ?>

@@ -1,12 +1,12 @@
 <?php
 require_once 'BaseDAO.php';
-class WhishListDetailsDAO
+class WishListDetailsDAO
 {    
     private $con;
     private $msg;
     private $data;   
     // Attempts to initialize the database connection using the supplied info.
-    public function WhishListDetailsDAO() {
+    public function WishListDetailsDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
@@ -46,10 +46,12 @@ class WhishListDetailsDAO
 	
 	
 	public function showPetWishList($petListWishList) {		
-       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo				
-                FROM petList_wishList pw
-                INNER JOIN petapp pm
-                ON pw.listId = pm.id
+       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo,ud.name
+                FROM petapp pm 
+				INNER JOIN userDetails ud
+				ON pm.email = ud.email
+				INNER JOIN petList_wishList pw
+				ON pw.listId = pm.id
 				WHERE pw.email= '".$petListWishList->getEmail()."' ";        
         try {
             $result = mysqli_query($this->con, $sql);
@@ -66,12 +68,14 @@ class WhishListDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo
-                FROM petList_wishList pw
-                INNER JOIN petapp pm
-                ON pw.listId = pm.id
-				WHERE pw.email= '".$petListWishList->getEmail()."'
-				LIMIT $offset, $rowsPerPage";
+                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.pet_adoption, pm.pet_price, pm.alternateNo,ud.name
+						FROM petapp pm 
+						INNER JOIN userDetails ud
+						ON pm.email = ud.email
+						INNER JOIN petList_wishList pw
+						ON pw.listId = pm.id
+						WHERE pw.email= '".$petListWishList->getEmail()."'
+						LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
                 $this->data=array();
@@ -85,10 +89,12 @@ class WhishListDetailsDAO
         return $this->data;
     }
 	public function showPetMateWishList($petMateListWishList) {		
-       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo
-                FROM petMateList_wishList pmw
-                INNER JOIN petmate pm
-                ON pmw.listId = pm.id
+       $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo,ud.name
+                FROM petmate pm 
+				INNER JOIN userDetails ud
+				ON pm.email = ud.email
+				INNER JOIN petMateList_wishList pmw
+				ON pmw.listId = pm.id	
 				WHERE pmw.email= '".$petMateListWishList->getEmail()."' ";
         
         try {
@@ -107,10 +113,12 @@ class WhishListDetailsDAO
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo
-                FROM petMateList_wishList pmw
-                INNER JOIN petmate pm
-                ON pmw.listId = pm.id
+                $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo,ud.name
+                FROM petmate pm 
+				INNER JOIN userDetails ud
+				ON pm.email = ud.email
+				INNER JOIN petMateList_wishList pmw
+				ON pmw.listId = pm.id	
 				WHERE pmw.email= '".$petMateListWishList->getEmail()."'
 				LIMIT $offset, $rowsPerPage";
 				

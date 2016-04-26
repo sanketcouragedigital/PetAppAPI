@@ -15,77 +15,94 @@ class PetDetailsDAO
     public function saveDetail($petDetail) {
         try {
 			
-            $status = 0;
-            $petsTempNames = array($petDetail->getFirstImageTemporaryName(), $petDetail->getSecondImageTemporaryName(), $petDetail->getThirdImageTemporaryName());
-            $petsTargetPaths = array($petDetail->getTargetPathOfFirstImage(), $petDetail->getTargetPathOfSecondImage(), $petDetail->getTargetPathOfThirdImage());
-            foreach ($petsTempNames as $index => $petsTempName) {
-                if(move_uploaded_file($petsTempName, $petsTargetPaths[$index])) {
-                    $status = 1;
-                }
-            }            
-            if($status = 1) {
-				$addAlternateNo = $petDetail->getAlternateNo();
-				if($addAlternateNo == ""){
-					$sql = "SELECT mobileno FROM userDetails WHERE email='".$petDetail->getEmail()."'";
-					$result = mysqli_query($this->con, $sql);  
-						//$rowdata = mysqli_fetch_assoc($result);
-                        $rowdata= mysqli_fetch_row($result);
-						$addAlternateNo = $rowdata[0];
-		 
-					$sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email,alternateNo)
-									VALUES 
-									('".$petDetail->getTargetPathOfFirstImage()."',
-									 '".$petDetail->getTargetPathOfSecondImage()."',
-									 '".$petDetail->getTargetPathOfThirdImage()."',
-									 '".$petDetail->getCategoryOfPet()."',
-									 '".$petDetail->getBreedOfPet()."',
-									 '".$petDetail->getAgeInMonth()."',
-									 '".$petDetail->getAgeInYear()."',
-									 '".$petDetail->getGenderOfPet()."',
-									 '".$petDetail->getDescriptionOfPet()."',   
-									 '".$petDetail->getAdoptionOfPet()."',
-									 '".$petDetail->getPriceOfPet()."',
-									 '".$petDetail->getPostDate()."',
-									 '".$petDetail->getEmail()."',
-									 '$addAlternateNo'
-									 )";
-					
-					$isInserted = mysqli_query($this->con, $sql);
-					if ($isInserted) {
-						$this->data = "PET_DETAILS_SAVED";
-					} else {
-						$this->data = "ERROR";
-					}			
-				}else {									
-					$sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email,alternateNo)
-									VALUES 
-									('".$petDetail->getTargetPathOfFirstImage()."',
-									 '".$petDetail->getTargetPathOfSecondImage()."',
-									 '".$petDetail->getTargetPathOfThirdImage()."',
-									 '".$petDetail->getCategoryOfPet()."',
-									 '".$petDetail->getBreedOfPet()."',
-									 '".$petDetail->getAgeInMonth()."',
-									 '".$petDetail->getAgeInYear()."',
-									 '".$petDetail->getGenderOfPet()."',
-									 '".$petDetail->getDescriptionOfPet()."',   
-									 '".$petDetail->getAdoptionOfPet()."',
-									 '".$petDetail->getPriceOfPet()."',
-									 '".$petDetail->getPostDate()."',
-									 '".$petDetail->getEmail()."',
-									 '".$petDetail->getAlternateNo()."'
-									 )";
-					
-					$isInserted = mysqli_query($this->con, $sql);
-					if ($isInserted) {
-						$this->data = "PET_DETAILS_SAVED";
-					} else {
-						$this->data = "ERROR";
+				$status = 0;
+				$petsTempNames = array($petDetail->getFirstImageTemporaryName(), $petDetail->getSecondImageTemporaryName(), $petDetail->getThirdImageTemporaryName());
+				$petsTargetPaths = array($petDetail->getTargetPathOfFirstImage(), $petDetail->getTargetPathOfSecondImage(), $petDetail->getTargetPathOfThirdImage());
+				foreach ($petsTempNames as $index => $petsTempName) {
+					if(move_uploaded_file($petsTempName, $petsTargetPaths[$index])) {
+						$status = 1;
 					}
+				}            
+				if($status = 1) {
+					$addAlternateNo = $petDetail->getAlternateNo();
+					if($addAlternateNo == ""){
+						$sql = "SELECT mobileno FROM userDetails WHERE email='".$petDetail->getEmail()."'";
+						$result = mysqli_query($this->con, $sql);  
+							//$rowdata = mysqli_fetch_assoc($result);
+							$rowdata= mysqli_fetch_row($result);
+							$addAlternateNo = $rowdata[0];
+							
+						$sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email,alternateNo)
+										VALUES 
+										('".$petDetail->getTargetPathOfFirstImage()."',
+										 '".$petDetail->getTargetPathOfSecondImage()."',
+										 '".$petDetail->getTargetPathOfThirdImage()."',
+										 '".$petDetail->getCategoryOfPet()."',
+										 '".$petDetail->getBreedOfPet()."',
+										 '".$petDetail->getAgeInMonth()."',
+										 '".$petDetail->getAgeInYear()."',
+										 '".$petDetail->getGenderOfPet()."',
+										 '".$petDetail->getDescriptionOfPet()."',   
+										 '".$petDetail->getAdoptionOfPet()."',
+										 '".$petDetail->getPriceOfPet()."',
+										 '".$petDetail->getPostDate()."',
+										 '".$petDetail->getEmail()."',
+										 '$addAlternateNo'
+										 )";
+						
+						$isInserted = mysqli_query($this->con, $sql);
+						if ($isInserted) {
+							$this->data = "PET_DETAILS_SAVED";
+							
+								$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petDetail->getBreedOfPet()."'";
+								$result = mysqli_query($this->con, $checkSql);
+								$count=mysqli_num_rows($result);
+								if($count!=1) {
+									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
+									$isInserted = mysqli_query($this->con, $addBreedSQL);
+								}
+						} else {
+							$this->data = "ERROR";
+						}			
+					}else {									
+						$sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email,alternateNo)
+										VALUES 
+										('".$petDetail->getTargetPathOfFirstImage()."',
+										 '".$petDetail->getTargetPathOfSecondImage()."',
+										 '".$petDetail->getTargetPathOfThirdImage()."',
+										 '".$petDetail->getCategoryOfPet()."',
+										 '".$petDetail->getBreedOfPet()."',
+										 '".$petDetail->getAgeInMonth()."',
+										 '".$petDetail->getAgeInYear()."',
+										 '".$petDetail->getGenderOfPet()."',
+										 '".$petDetail->getDescriptionOfPet()."',   
+										 '".$petDetail->getAdoptionOfPet()."',
+										 '".$petDetail->getPriceOfPet()."',
+										 '".$petDetail->getPostDate()."',
+										 '".$petDetail->getEmail()."',
+										 '".$petDetail->getAlternateNo()."'
+										 )";
+						
+						$isInserted = mysqli_query($this->con, $sql);
+						if ($isInserted) {
+							$this->data = "PET_DETAILS_SAVED";
+							$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petDetail->getBreedOfPet()."'";
+								$result = mysqli_query($this->con, $checkSql);
+								$count=mysqli_num_rows($result);
+								if($count!=1) {
+									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
+									$isInserted = mysqli_query($this->con, $addBreedSQL);
+								}
+						} else {
+							$this->data = "ERROR";
+						}
+					}
+				} else {
+					$this->data = "ERROR";
 				}
-            }
-            else {
-                $this->data = "ERROR";
-            }
+			
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }

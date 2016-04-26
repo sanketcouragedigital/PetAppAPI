@@ -56,6 +56,13 @@ class LoginDetails
         $returnShowLoginDetails = $showLoginDetailsDAO->loginDetail($this);
         return $returnShowLoginDetails;
     }
+	public function PasswordChecking($email,$password) {
+        $this->setEmail($email);
+        $this->setPassword($password);
+        $showLoginDetailsDAO = new LoginDetailsDAO();
+        $returnCheckPasswordDetails = $showLoginDetailsDAO->checkPassword($this);
+        return $returnCheckPasswordDetails;
+    }
     public function SettingNewPassword($activationCode,$newPassword,$email) {
         $this->setActivationCode($activationCode);
         $this->setNewPassword($newPassword);
@@ -91,7 +98,7 @@ class LoginDetails
     public function GenarateEmailForUSer(){
         $emailSender = new EmailGenarator();
         $emailSender->setTo($this->getEmail());//write user mail id
-        $emailSender->setFrom('From: no-reply-peto@app.com' . "\r\n" . 'Reply-To: no-reply-peto@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setFrom('From: no-reply@app.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
         $emailSender->setMessage($this->createMessageToSendUser());
         $emailSender->setSubject("Password Recovery Code");// from petapp email
         return $emailSender->sendEmail($emailSender);

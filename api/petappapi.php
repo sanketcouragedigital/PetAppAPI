@@ -11,7 +11,8 @@ require_once '../model/PetServices.php';
 require_once '../model/Feedback.php';
 require_once '../model/MyListing.php';
 require_once '../model/ClinicFeedbackDetails.php';
-require_once '../model/WhishListDetails.php';
+require_once '../model/WishListDetails.php';
+require_once '../model/ShopProductDetails.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -138,18 +139,11 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
-    else if(strcasecmp($method,'fetchUserDetails') == 0){
-        $response['code'] = 1;
-        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objuserDetails = new UsersDetails();
-        $oldEmail=$string['oldEmail'];        
-        $response['showUserDetails'] = $objuserDetails -> FetchingUsersDetails($oldEmail);
-        deliver_response($string['format'],$response,false);
-    }
+    
 	else if(strcasecmp($method,'saveWishListForPetList') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objPetWishListDetails = new WhishListDetails();
+        $objPetWishListDetails = new WishListDetails();
         $listId=$string['petListId'];        
         $email= $string['userEmail'];
         $response['savePetWishListResponse'] = $objPetWishListDetails -> savePetWishList($email,$listId);       
@@ -158,7 +152,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 	else if(strcasecmp($method,'saveWishListForPetMateList') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objPetMateWishListDetails = new WhishListDetails();
+        $objPetMateWishListDetails = new WishListDetails();
         $listId=$string['petMateListId'];        
         $email= $string['userEmail'];
         $response['savePetMateWishListResponse'] = $objPetMateWishListDetails -> savePetMateWishList($email,$listId);       
@@ -187,6 +181,24 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $email= $string['email'];
         $password= $string['confirmpassword'];
         $response['loginDetailsResponse'] = $objuserDetails ->CheckingUsersDetails($email,$password);
+        deliver_response($string['format'],$response,false);
+    } 
+	else if(strcasecmp($method,'fetchUserDetails') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new UsersDetails();
+        $oldEmail=$string['oldEmail']; 
+		$password=$string['confirmpassword']; 
+        $response['showUserDetails'] = $objuserDetails -> FetchingUsersDetails($oldEmail,$password);
+        deliver_response($string['format'],$response,false);
+    }
+	else if(strcasecmp($method,'checkPassword') == 0){
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new LoginDetails();
+        $email= $string['email'];
+        $password= $string['confirmpassword'];
+        $response['CheckPasswordResponse'] = $objuserDetails ->PasswordChecking($email,$password);
         deliver_response($string['format'],$response,false);
     } 
     else if(strcasecmp($method,'setNewPassword') == 0){
@@ -431,6 +443,30 @@ else if (isset($_GET['method'])) {
         $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
+else if (strcasecmp($_GET['method'], 'showShopProductsDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetDetails = new ShopProductDetails();		
+        $currentPage = $_GET['currentPage'];
+		$response['showShopProductDetailsResponse'] = $fetchPetDetails -> showingProductDetails($currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }	
+    else if (strcasecmp($_GET['method'], 'showShopProductSwipeRefreshList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetRefreshListDetails = new ShopProductDetails();
+        $date = $_GET['date'];
+        $response['showShopProductDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
+        deliver_response($_GET['format'], $response, false);
+    }
+	else if (strcasecmp($_GET['method'], 'showContactNo') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchContactDetails = new UsersDetails();		
+		$email = $_GET['email'];
+		$response['showContactDetailsResponse'] = $fetchContactDetails -> FetchingContactDetails($email);
+        deliver_response($_GET['format'], $response, false);
+    }
 	else if (strcasecmp($_GET['method'], 'showPetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -486,6 +522,15 @@ else if (isset($_GET['method'])) {
         $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByAddress($currentPage,$email);
         deliver_response($_GET['format'], $response, false);
     }
+	/*else if (strcasecmp($_GET['method'], 'checkClinic') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchClinicDetails = new ClinicDetails();
+		$email=$_GET['email'];
+        $currentPage = $_GET['currentPage'];
+        $response['showClinicDetailsResponse'] = $fetchClinicDetails -> showingClinicByAddress($currentPage,$email);
+        deliver_response($_GET['format'], $response, false);
+    }*/
     else if (strcasecmp($_GET['method'], 'showPetShelter') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -576,13 +621,13 @@ else if (isset($_GET['method'])) {
         $fetchClinicReviewsDetails = new ClinicFeedbackDetails();
         $clinicId=$_GET['clinicId'];
         $currentPage = $_GET['currentPage'];
-        $response['showClinicReviewssResponse'] = $fetchClinicReviewsDetails -> showingClinicReviews($currentPage,$clinicId);
+        $response['showClinicReviewsResponse'] = $fetchClinicReviewsDetails -> showingClinicReviews($currentPage,$clinicId);
         deliver_response($_GET['format'], $response, false);
     }
 	else if (strcasecmp($_GET['method'], 'showPetListWishList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchPetWishListDetails = new WhishListDetails();
+        $fetchPetWishListDetails = new WishListDetails();
         $email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
         $response['showPetWishListResponse'] = $fetchPetWishListDetails -> showingPetListWishList($email,$currentPage);
@@ -591,7 +636,7 @@ else if (isset($_GET['method'])) {
 	else if (strcasecmp($_GET['method'], 'showPetMateWishList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchPetMateWishListDetails = new WhishListDetails();
+        $fetchPetMateWishListDetails = new WishListDetails();
         $email=$_GET['email'];
         $currentPage = $_GET['currentPage'];
         $response['showPetMateWishListResponse'] = $fetchPetMateWishListDetails -> showingPetMateListWishList($email,$currentPage);
@@ -600,7 +645,7 @@ else if (isset($_GET['method'])) {
 	else if (strcasecmp($_GET['method'], 'deleteWishListPetList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchMyListingPetList = new WhishListDetails();
+        $fetchMyListingPetList = new WishListDetails();
         $listId = $_GET['id'];
         $email=$_GET['email'];
         $response['deleteWishListPetListResponse'] = $fetchMyListingPetList -> deletingWishListPetList($listId,$email);
@@ -609,7 +654,7 @@ else if (isset($_GET['method'])) {
     else if (strcasecmp($_GET['method'], 'deleteWishListPetMateList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $fetchMyListingPetMateList = new WhishListDetails();
+        $fetchMyListingPetMateList = new WishListDetails();
         $listId = $_GET['id'];
         $email=$_GET['email'];
         $response['deleteWishListPetMateListResponse'] = $fetchMyListingPetMateList -> deletingWishListPetMateList($listId,$email);

@@ -51,14 +51,6 @@ class PetMateDetailsDAO
 					$isInserted = mysqli_query($this->con, $sql);
 					if ($isInserted) {
 						$this->data = "PET_DETAILS_SAVED";
-						$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
-								$result = mysqli_query($this->con, $checkSql);
-								$count=mysqli_num_rows($result);
-								if($count!=1) {
-									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
-									VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
-									$isInserted = mysqli_query($this->con, $addBreedSQL);
-								}
 					} else {
 						$this->data = "ERROR";
 					}
@@ -76,20 +68,12 @@ class PetMateDetailsDAO
 							 '".$petMateDetail->getDescriptionOfPet()."',
 							 '".$petMateDetail->getPostDate()."',
 							 '".$petMateDetail->getEmail()."',
-							 '".$petMateDetail->getAlternateNo()."'
+							 '".$petDetail->getAlternateNo()."'
 							)";
 			
 					$isInserted = mysqli_query($this->con, $sql);
 					if ($isInserted) {
 						$this->data = "PET_DETAILS_SAVED";
-						$checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
-								$result = mysqli_query($this->con, $checkSql);
-								$count=mysqli_num_rows($result);
-								if($count!=1) {
-									$addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
-									VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
-									$isInserted = mysqli_query($this->con, $addBreedSQL);
-								}
 					} else {
 						$this->data = "ERROR";
 					}
