@@ -13,6 +13,8 @@ require_once '../model/MyListing.php';
 require_once '../model/ClinicFeedbackDetails.php';
 require_once '../model/WishListDetails.php';
 require_once '../model/ShopProductDetails.php';
+require_once '../model/OrderDetails.php';
+require_once '../model/OrderConfirmationEmail.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -133,13 +135,58 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		$mobileno= $string['mobileno'];
 		$email= $string['email'];
 		$password= $string['confirmpassword'];
-		$objuserDetails->mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);
-	
-		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingUsersDetails();
+		$objuserDetails->mapIncomingOrderDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);	
+		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingOrderDetails();
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
-    
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+	else if(strcasecmp($method,'sendOrderEmail') == 0){
+		$response['code'] = 1;	
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objOrderEmailDetails = new OrderConfirmationEmail();
+		$orderedId = $string['orderedId'];
+		$productId = $string['productId'];
+		$productName = $string['productName'];
+		$productPrice = $string['productPrice'];
+		$quantity = $string['quantity'];
+		$shippingCharges = $string['shippingCharges'];
+		$productTotalPrice = $string['productTotalPrice'];		
+		$name = $string['customer_name'];
+		$mobileno= $string['customer_contact'];
+		$email= $string['customer_email'];	
+		$buildingname= $string['address'];
+		$area= $string['area'];
+		$city= $string['city'];
+		$pincode= $string['pincode'];					
+		$response['saveOrderEmailDetailsResponse'] = $objOrderEmailDetails -> GeneraeEmailForUserVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode);	
+		//deliver_response($format[1],$response,false);
+        deliver_response($string['format'],$response,false);
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	else if(strcasecmp($method,'orderGenaration') == 0){
+		$response['code'] = 1;	
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objOrdersDetails = new OrderDetails();
+		$productId = $string['productId'];
+		$quantity = $string['quantity'];
+		$shippingCharges = $string['shippingCharges'];
+		$productTotalPrice = $string['productTotalPrice'];		
+		$name = $string['customer_name'];
+		$mobileno= $string['customer_contact'];
+		$email= $string['customer_email'];	
+		$buildingname= $string['address'];
+		$area= $string['area'];
+		$city= $string['city'];
+		$pincode= $string['pincode'];					
+		date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");		
+		$objOrdersDetails->mapIncomingOrderDetailsParams($productId,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode,$postDate);	
+		$response['saveOrdersDetailsResponse'] = $objOrdersDetails -> SavingOrderDetails();
+		//deliver_response($format[1],$response,false);
+        deliver_response($string['format'],$response,false);
+	}
+
 	else if(strcasecmp($method,'saveWishListForPetList') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -443,7 +490,7 @@ else if (isset($_GET['method'])) {
         $response['showPetDetailsResponse'] = $fetchPetRefreshListDetails -> showingRefreshPetDetails($date);
         deliver_response($_GET['format'], $response, false);
     }
-else if (strcasecmp($_GET['method'], 'showShopProductsDetails') == 0) {
+	else if (strcasecmp($_GET['method'], 'showShopProductsDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $fetchPetDetails = new ShopProductDetails();		
@@ -467,6 +514,17 @@ else if (strcasecmp($_GET['method'], 'showShopProductsDetails') == 0) {
 		$response['showContactDetailsResponse'] = $fetchContactDetails -> FetchingContactDetails($email);
         deliver_response($_GET['format'], $response, false);
     }
+	else if (strcasecmp($_GET['method'], 'showUserOrders') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchOrderDetails = new OrderDetails();		
+		$email = $_GET['email'];
+		$currentPage = $_GET['currentPage'];
+		$response['showOrderDetailsResponse'] = $fetchOrderDetails -> FetchingOrderDetails($email,$currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	else if (strcasecmp($_GET['method'], 'showPetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];

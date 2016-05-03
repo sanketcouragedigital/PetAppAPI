@@ -124,10 +124,9 @@ class PetDetailsDAO
         return $this->data;
     }
     
-    public function showDetail($pageWiseData) {
-        $sql = "SELECT * FROM petapp";
-        
+    public function showDetail($pageWiseData) {               
         try {
+			$sql = "SELECT * FROM petapp";
             $result = mysqli_query($this->con, $sql);
             $numOfRows = mysqli_num_rows($result);
             
