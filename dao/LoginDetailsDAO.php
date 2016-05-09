@@ -13,21 +13,59 @@ class LoginDetailsDAO
         $this->con = $baseDAO->getConnection();
     }
     public function loginDetail($LoginDetails) {
-           try {
-                $sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."' AND password='".$LoginDetails->getPassword()."'";        
-                $isValidating = mysqli_query($this->con, $sql);
-                $count=mysqli_num_rows($isValidating);
-                if($count==1) {
-                    $this->data = "LOGIN_SUCCESS";
-                } else {
-                    $this->data = "LOGIN_FAILED";
-                } 
-                
+        $this->data = $this->checkUser($LoginDetails);
+           
+        return $this->data;
+    }
+
+    public function checkUser($LoginDetails) {
+        try {
+            $sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."' AND password='".$LoginDetails->getPassword()."'";        
+            $isValidating = mysqli_query($this->con, $sql);
+            $count=mysqli_num_rows($isValidating);
+            if($count==1) {
+                $this->data = $this->checkNGO($LoginDetails);
+            } else {
+                $this->data = "LOGIN_FAILED";
+            }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
         return $this->data;
     }
+
+    public function checkNGO($LoginDetails) {
+        try {
+            $sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."' AND password='".$LoginDetails->getPassword()."' AND is_ngo = 'Yes'";
+            $isNGO = mysqli_query($this->con, $sql);
+            $count = mysqli_num_rows($isNGO);
+            if($count == 1) {
+                $this->data = $this->checkApprovedNGO($LoginDetails);
+            } else {
+                $this->data = "NOT_NGO";
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;        
+    }
+    
+    public function checkApprovedNGO($LoginDetails) {
+        try {
+            $sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."' AND password='".$LoginDetails->getPassword()."' AND is_ngo = 'Yes' AND is_verified = 'Yes'";
+            $isApprovedNGO = mysqli_query($this->con, $sql);
+            $count = mysqli_num_rows($isApprovedNGO);
+            if($count == 1) {
+                $this->data = "APPROVED_NGO";
+            } else {
+                $this->data = "NOT_APPROVED_NGO";
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+
 	public function checkPassword($CheckPassword) {
            try {
                 $sql = "SELECT * FROM userDetails WHERE email='".$CheckPassword->getEmail()."' AND password='".$CheckPassword->getPassword()."' ";        

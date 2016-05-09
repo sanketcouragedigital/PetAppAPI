@@ -10,6 +10,8 @@ class UsersDetails
     private $email;
     private $oldEmail;
 	private $password;
+    private $isNGO;
+    private $urlOfNGO;
 	
     public function setName($name) {
         $this->name = $name;
@@ -72,8 +74,24 @@ class UsersDetails
     public function getPassword() {
         return $this->password;
     }
+    
+    public function setIsNGO($isNGO) {
+        $this->isNGO = $isNGO;
+    }
+    
+    public function getIsNGO() {
+        return $this->isNGO;
+    }
+    
+    public function setUrlOfNGO($urlOfNGO) {
+        $this->urlOfNGO = $urlOfNGO;
+    }
+    
+    public function getUrlOfNGO() {
+        return $this->urlOfNGO;
+    }
 
-    public function mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password) {
+    public function mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password, $isNGO, $urlOfNGO) {
         $this->setName($name);
         $this->setBuildingname($buildingname);
         $this->setArea($area);
@@ -81,6 +99,8 @@ class UsersDetails
         $this->setMobileno($mobileno);
         $this->setEmail($email);
         $this->setPassword($password);
+        $this->setIsNGO($isNGO);
+        $this->setUrlOfNGO($urlOfNGO);
     }
 
     public function SavingUsersDetails() {

@@ -15,28 +15,43 @@ class UsersDetailsDAO
     
     public function saveDetail($UsersDetail) {
 		
-        try {			
-				//convert area to lat long..
-					$address = "'".$UsersDetail->getArea()."'";
-					$region = "'".$UsersDetail->getCity()."'";
-					$address = str_replace(" ", "+", $address);
-					$region= str_replace(" ", "+", $region);
+        try {
+            			
+			//convert area to lat long..
+			$address = "'".$UsersDetail->getArea()."'";
+			$region = "'".$UsersDetail->getCity()."'";
+			$address = str_replace(" ", "+", $address);
+			$region= str_replace(" ", "+", $region);
 					
-					$json = file_get_contents("http://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&region=$region");
-					$json = json_decode($json);
+			$json = file_get_contents("http://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&region=$region");
+			$json = json_decode($json);
 
-					$lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-					$long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
-					
-                $sql = "INSERT INTO userDetails(name,buildingname,area,city,mobileno,email,password,latitude,longitude)
-                        VALUES ('".$UsersDetail->getName()."', '".$UsersDetail->getBuildingname()."', '".$UsersDetail->getArea()."', '".$UsersDetail->getCity()."', '".$UsersDetail->getMobileno()."', '".$UsersDetail->getEmail()."', '".$UsersDetail->getPassword()."','$lat','$long')";
+			$lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+			$long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+                    
+            $this->data = $this->insertUserDetails($UsersDetail, $lat, $long);
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+    
+    public function insertUserDetails($UsersDetail, $lat, $long) {
+        try {
+            $sql = "INSERT INTO userDetails(name,buildingname,area,city,mobileno,email,password,latitude,longitude, is_ngo, is_verified, ngo_url)
+                    VALUES ('".$UsersDetail->getName()."', '".$UsersDetail->getBuildingname()."', '".$UsersDetail->getArea()."', '".$UsersDetail->getCity()."', '".$UsersDetail->getMobileno()."', '".$UsersDetail->getEmail()."', '".$UsersDetail->getPassword()."','$lat','$long', '".$UsersDetail->getIsNGO()."', 'No', '".$UsersDetail->getUrlOfNGO()."')";
         
-                $isInserted = mysqli_query($this->con, $sql);
-                if ($isInserted) {
-					$this->data = "USERS_DETAILS_SAVED";
-                } else {
-                    $this->data = "ERROR";
+            $isInserted = mysqli_query($this->con, $sql);
+            if ($isInserted) {
+                if($UsersDetail->getIsNGO() == "") {
+                    $this->data = "USERS_DETAILS_SAVED";
                 }
+                else {
+                    $this->data = "NGO_DETAILS_SAVED";
+                }                   
+            } else {
+                $this->data = "ERROR";
+            }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }

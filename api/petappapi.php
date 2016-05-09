@@ -126,17 +126,19 @@ $method = $string['method'];
 if (isset($_POST['method']) || $checkmethod == 'POST') {
 	if(strcasecmp($method,'userRegistration') == 0){
 		$response['code'] = 1;
-		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-		$objuserDetails = new UsersDetails();
-		$name = $string['name'];
-		$buildingname= $string['buildingname'];
-		$area= $string['area'];
-		$city= $string['city'];
-		$mobileno= $string['mobileno'];
-		$email= $string['email'];
-		$password= $string['confirmpassword'];
-		$objuserDetails->mapIncomingOrderDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);	
-		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingOrderDetails();
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objuserDetails = new UsersDetails();
+        $name = $string['name'];
+        $buildingname= $string['buildingname'];
+        $area= $string['area'];
+        $city= $string['city'];
+        $mobileno= $string['mobileno'];
+        $email= $string['email'];
+        $password= $string['confirmpassword'];
+        $isNGO = $string['isNGO'];
+        $urlOfNGO = $string['urlOfNGO'];
+        $objuserDetails->mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password, $isNGO, $urlOfNGO);   
+        $response['saveUsersDetailsResponse'] = $objuserDetails -> SavingUsersDetails();
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
