@@ -15,6 +15,7 @@ require_once '../model/WishListDetails.php';
 require_once '../model/ShopProductDetails.php';
 require_once '../model/OrderDetails.php';
 require_once '../model/OrderConfirmationEmail.php';
+require_once '../model/CamapignDetails.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -126,23 +127,22 @@ $method = $string['method'];
 if (isset($_POST['method']) || $checkmethod == 'POST') {
 	if(strcasecmp($method,'userRegistration') == 0){
 		$response['code'] = 1;
-        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
-        $objuserDetails = new UsersDetails();
-        $name = $string['name'];
-        $buildingname= $string['buildingname'];
-        $area= $string['area'];
-        $city= $string['city'];
-        $mobileno= $string['mobileno'];
-        $email= $string['email'];
-        $password= $string['confirmpassword'];
-        $isNGO = $string['isNGO'];
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objuserDetails = new UsersDetails();
+		$name = $string['name'];
+		$buildingname= $string['buildingname'];
+		$area= $string['area'];
+		$city= $string['city'];
+		$mobileno= $string['mobileno'];
+		$email= $string['email'];
+		$password= $string['confirmpassword'];
+		$isNGO = $string['isNGO'];
         $urlOfNGO = $string['urlOfNGO'];
-        $objuserDetails->mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password, $isNGO, $urlOfNGO);   
-        $response['saveUsersDetailsResponse'] = $objuserDetails -> SavingUsersDetails();
+		$objuserDetails->mapIncomingOrderDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);	
+		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingOrderDetails();
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
-    //////////////////////////////////////////////////////////////////////////////////////////////////
 	else if(strcasecmp($method,'sendOrderEmail') == 0){
 		$response['code'] = 1;	
 		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -165,7 +165,6 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
-	///////////////////////////////////////////////////////////////////////////////////////////////////
 	else if(strcasecmp($method,'orderGenaration') == 0){
 		$response['code'] = 1;	
 		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -370,8 +369,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objuserFeedback = new FeedBack();
         $email = $string['email'];
         $feedback = $string['feedback'];
-        $objuserFeedback->mapIncomingFeedbackParams($email,$feedback);
-    
+        $objuserFeedback->mapIncomingFeedbackParams($email,$feedback);    
         $response['saveFeedbackResponse'] = $objuserFeedback -> sendFeedbackEmailToAdmin();
         deliver_response($string['format'],$response,false);
     }
@@ -387,6 +385,75 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveClinicFeedbackResponse'] = $objClinicFeedbackDetails -> SavingClinicFeedbackDetails();   
         deliver_response($string['format'],$response,false);
     }
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	else if(strcasecmp($_POST['method'], 'saveDonation') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objCamapignDetails = new CamapignDetails();
+        $campaignId = $_POST['campaignId'];
+        $email = $_POST['donarEmail'];
+		$donationAmount = $_POST['donationAmount'];
+		$ngoOwnerEmail = $_POST['ngoOwnerEmail'];	
+        $objCamapignDetails->mapIncomingDonationParams($campaignId,$email,$donationAmount,$ngoOwnerEmail);   
+        $response['saveDonationDetailsResponse'] = $objCamapignDetails -> donationInfo();
+        deliver_response($_POST['format'], $response, true);
+    }
+	else if(strcasecmp($_POST['method'], 'ModifyCampaign') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objCamapignDetails = new CamapignDetails();      
+        $ngoName = $_POST['ngoName'];
+        $campaignName = $_POST['campaignName'];
+        $actualAmount=$_POST['actualAmount'];
+        $minimumAmount=$_POST['minimumAmount'];
+        $description = $_POST['description'];
+        $lastDate = $_POST['lastDate'];      
+        $email = $_POST['email'];	
+		$campaignId = $_POST['campaignId'];		
+		$objCamapignDetails->mapIncomingCamapignModifyDetailsParams($campaignId, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $email);
+        $response['saveModifiedCampaignDetailsResponse'] = $objCamapignDetails -> modifyingCamapignDetails();
+        deliver_response($_POST['format'], $response, true);
+	}
+	else if(strcasecmp($_POST['method'], 'CreateCampaign') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objCamapignDetails = new CamapignDetails();
+        $first_image_tmp = "";
+        $first_image_target_path = "";
+        $second_image_tmp = "";
+        $second_image_target_path = "";
+        $third_image_tmp = "";
+        $third_image_target_path = "";
+        $ngoName = $_POST['ngoName'];
+        $campaignName = $_POST['campaignName'];
+        $actualAmount=$_POST['actualAmount'];
+        $minimumAmount=$_POST['minimumAmount'];
+        $description = $_POST['description'];
+        $lastDate = $_POST['lastDate'];      
+        $email = $_POST['email'];		
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
+		
+        if(isset($_FILES['firstCampaignImage'])){
+            $first_image_tmp = $_FILES['firstCampaignImage']['tmp_name'];
+            $first_image_name = $_FILES['firstCampaignImage']['name'];
+            $first_image_target_path = "../campaign_images/".basename($first_image_name);
+        }
+        if(isset($_FILES['secondCampaignImage'])){
+            $second_image_tmp = $_FILES['secondCampaignImage']['tmp_name'];
+            $second_image_name = $_FILES['secondCampaignImage']['name'];
+            $second_image_target_path = "../campaign_images/".basename($second_image_name);
+        }
+        if(isset($_FILES['thirdCampaignImage'])){
+            $third_image_tmp = $_FILES['thirdCampaignImage']['tmp_name'];
+            $third_image_name = $_FILES['thirdCampaignImage']['name'];
+            $third_image_target_path = "../campaign_images/".basename($third_image_name);
+        }
+        $objCamapignDetails->mapIncomingCamapignDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email);
+        $response['saveCampaignDetailsResponse'] = $objCamapignDetails -> savingCamapignDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
+	//////////////////////////////////////////////////////////////////////////////////////////////////
     else if(strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -428,6 +495,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }    
+	
     else if (strcasecmp($_POST['method'], 'savePetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -484,6 +552,26 @@ else if (isset($_GET['method'])) {
 		$response['showPetDetailsResponse'] = $fetchPetDetails -> showingPetDetails($currentPage);
         deliver_response($_GET['format'], $response, false);
     }	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	else if (strcasecmp($_GET['method'], 'showCampaignDetails') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchCampaignDetails = new CamapignDetails();		
+		$email = $_GET['email'];
+		$currentPage = $_GET['currentPage'];
+		$response['showCampaignDetailsResponse'] = $fetchCampaignDetails -> showingCampaignDetails($email,$currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+	
+	else if (strcasecmp($_GET['method'], 'showCampaignForAll') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchCampaignDetails = new CamapignDetails();		
+		$currentPage = $_GET['currentPage'];
+		$response['showCampaignDetailsForAllResponse'] = $fetchCampaignDetails -> showingCampaignDetailsForAll($currentPage);
+        deliver_response($_GET['format'], $response, false);
+    }
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     else if (strcasecmp($_GET['method'], 'showPetSwipeRefreshList') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -525,8 +613,6 @@ else if (isset($_GET['method'])) {
 		$response['showOrderDetailsResponse'] = $fetchOrderDetails -> FetchingOrderDetails($email,$currentPage);
         deliver_response($_GET['format'], $response, false);
     }
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	else if (strcasecmp($_GET['method'], 'showPetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];

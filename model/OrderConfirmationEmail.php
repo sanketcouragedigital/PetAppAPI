@@ -162,7 +162,7 @@ class OrderConfirmationEmail
 	public function GenarateEmailForUSer($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){        
 		$emailSender = new EmailGenarator();
         $emailSender->setTo($email);//write user mail id
-        $emailSender->setFrom('From: peto@couragedigital.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
         $emailSender->setMessage($this->createMessageToSendUser($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode));
         $emailSender->setSubject("Thank you for shopping with Peto !");// from petapp email
         $returnEmailForUser =  $emailSender->sendEmail($emailSender);
@@ -179,8 +179,8 @@ class OrderConfirmationEmail
 	
 	public function GenarateEmailForVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){
         $emailSender = new EmailGenarator();
-        $emailSender->setTo('peto@couragedigital.com');//write user mail id
-        $emailSender->setFrom('From: petoorder@gmail.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setTo('orders@petoandme.com');//write user mail id
+        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
         $emailSender->setMessage($this->createMessageToSendVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode));
         $emailSender->setSubject("New Order Confirmation");// from petapp email      
 		$returnEmailForVendor =  $emailSender->sendEmail($emailSender);		
