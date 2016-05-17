@@ -83,24 +83,50 @@ class CamapignDetailsDAO
 	  public function saveDonationInfo($donationDetail) {
 			try {
 					
-					$sql = "INSERT INTO ngo_donation(campaign_id, donationAmount, email)
+					$sql = "INSERT INTO ngo_donation(campaign_id, donationAmount, email,postDate)
 							VALUES 
 							(
 							 '".$donationDetail->getCampaignId()."',
 							 '".$donationDetail->getDonationAmount()."',
-							 '".$donationDetail->getEmail()."'
+							 '".$donationDetail->getEmail()."',
+							 '".$donationDetail->getDonationPostDate()."'
 							 )";
 						
 						$isInserted = mysqli_query($this->con, $sql);
 						if ($isInserted) {
 							$this->data = "DONATION_DETAILS_SAVED_SUCCESSFULLY";
-							$resetPassword = new LoginDetails();
+							
+							$SqlDonationDetails="SELECT c.campaign_id,c.campaignName,c.ngoName,c.email as ngoOwnerEmail,u.id as userId,u.name as donarName,u.email as donarEmail,u.mobileno as donarMobileNo,nd.donationAmount,nd.postDate as donation_Date
+													FROM campaign c
+													INNER JOIN ngo_donation nd
+														ON c.campaign_id = nd.campaign_id
+													INNER JOIN userDetails u
+														ON u.email = nd.email
+													WHERE c.campaign_id='".$donationDetail->getCampaignId()."'";
+							$result = mysqli_query($this->con, $SqlDonationDetails);
+								$donationDetails=array();
+								while ($rowdata = mysqli_fetch_assoc($result)) {
+									$donationDetails=$rowdata;									
+								}
+								//print_r ($donationDetails);
+								
+								$campaign_id = $donationDetails['campaign_id'];
+								$donation_Date = $donationDetails['donation_Date'];
+								$donar_id = $donationDetails['userId'];					
+								$campaignName = $donationDetails['campaignName'];
+								$ngoName = $donationDetails['ngoName'];
+								$ngoOwnerEmail = $donationDetails['ngoOwnerEmail'];
+								$donarName = $donationDetails['donarName'];
+								$donarEmail = $donationDetails['donarEmail'];
+								$donarMobileNo = $donationDetails['donarMobileNo'];
+								$donationAmount = $donationDetails['donationAmount'];
 							$objDonationEmailDetails = new DonationEmails();
-							$objDonationEmailDetails -> SendDonationEmail($donationDetail->getEmail(),$donationDetail->getNgoOwnerEmail());
+							$objDonationEmailDetails -> SendDonationEmail($donation_Date,$donar_id,$campaign_id,$campaignName,$ngoName,$ngoOwnerEmail,$donarName,$donarEmail,$donarMobileNo,$donationAmount);
 						} else {
 							$this->data = "ERROR";
 						}	
-				
+						//$this->data=array('donationDetails' => $donationDetails,'donationSave' => $response);	
+					
 			} catch(Exception $e) {
 				echo 'SQL Exception: ' .$e->getMessage();
 			}
@@ -124,7 +150,13 @@ class CamapignDetailsDAO
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
-				$sql = "SELECT * FROM campaign WHERE email = '".$pageWiseData->getEmail()."'
+				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
+						FROM ngo_donation  nd
+						INNER JOIN campaign c
+						ON nd.campaign_id = c.campaign_id
+                        INNER JOIN userDetails d 
+                        ON d.email = c.email
+						WHERE c.email ='".$pageWiseData->getEmail()."' GROUP BY c.campaign_id
 						ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 $this->data=array();
@@ -155,8 +187,14 @@ class CamapignDetailsDAO
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
-				$sql = "SELECT * FROM campaign
-						ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
+				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
+						FROM ngo_donation  nd
+						INNER JOIN campaign c
+						ON nd.campaign_id = c.campaign_id
+						INNER JOIN userDetails d 
+                        ON d.email = c.email
+						GROUP BY c.campaign_id
+						ORDER BY postDate  DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 $this->data=array();
                 while ($rowdata = mysqli_fetch_assoc($result)) {

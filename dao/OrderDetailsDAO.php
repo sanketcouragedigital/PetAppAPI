@@ -47,15 +47,13 @@ class OrderDetailsDAO
 				$orderId="";
                 if ($isInserted) {					
 					$response= "ORDER_GENERATED";
-					$orderId = mysqli_insert_id($this->con);
-					
+					$orderId = mysqli_insert_id($this->con);					
 					$sql="SELECT * FROM products WHERE id='".$OrderDetail->getProductId()."'";
 					$productResult = mysqli_query($this->con, $sql);
 					$productDetails = array();
 					while ($rowdata = mysqli_fetch_assoc($productResult)) {
 						$productDetails[]=$rowdata;
-					}
-					
+					}					
                 } else {
 					$response= "ERROR";                   
                 }

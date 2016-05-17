@@ -43,7 +43,7 @@ class UsersDetailsDAO
         
             $isInserted = mysqli_query($this->con, $sql);
             if ($isInserted) {
-                if($UsersDetail->getIsNGO() == "") {
+                if($UsersDetail->getIsNGO() == "No") {
                     $this->data = "USERS_DETAILS_SAVED";
                 }
                 else {
@@ -104,6 +104,7 @@ class UsersDetailsDAO
                                                 mobileno='".$EditUsersDetail->getMobileno()."',
                                                 email='".$EditUsersDetail->getEmail()."',
                                                 password='".$EditUsersDetail->getPassword()."',
+												ngo_url='".$EditUsersDetail->getUrlOfNGO()."',
                                                 latitude='$lat',
                                                 longitude='$long'
                                                 WHERE email='".$EditUsersDetail->getOldEmail()."' ";

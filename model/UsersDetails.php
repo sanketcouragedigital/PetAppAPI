@@ -108,7 +108,7 @@ class UsersDetails
         $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->saveDetail($this);
         return $returnUsersDetailsSaveSuccessMessage;
     }
-    public function mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password) {
+    public function mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password,$urlOfNGO) {
         $this->setName($name);
         $this->setBuildingname($buildingname);
         $this->setArea($area);
@@ -117,6 +117,7 @@ class UsersDetails
         $this->setEmail($email);
         $this->setOldEmail($oldEmail);
         $this->setPassword($password);
+		$this->setUrlOfNGO($urlOfNGO);
     }
     public function SavingEditUsersDetails() {
         $saveUsersDetailsDAO = new UsersDetailsDAO();

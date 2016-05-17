@@ -16,6 +16,7 @@ require_once '../model/ShopProductDetails.php';
 require_once '../model/OrderDetails.php';
 require_once '../model/OrderConfirmationEmail.php';
 require_once '../model/CamapignDetails.php';
+require_once '../model/CampaignDeleteConfirmationEmail.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -138,8 +139,8 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		$password= $string['confirmpassword'];
 		$isNGO = $string['isNGO'];
         $urlOfNGO = $string['urlOfNGO'];
-		$objuserDetails->mapIncomingOrderDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password);	
-		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingOrderDetails();
+		$objuserDetails->mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password,$isNGO,$urlOfNGO);	
+		$response['saveUsersDetailsResponse'] = $objuserDetails -> SavingUsersDetails();
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
@@ -187,7 +188,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		//deliver_response($format[1],$response,false);
         deliver_response($string['format'],$response,false);
 	}
-
+	
 	else if(strcasecmp($method,'saveWishListForPetList') == 0){
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -218,7 +219,8 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $email= $string['email'];
         $oldEmail=$string['oldEmail'];
         $password= $string['confirmpassword'];
-        $objuserDetails->mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password);    
+		$urlOfNGO= $string['ngoUrl'];
+        $objuserDetails->mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password,$urlOfNGO);    
         $response['saveUsersEditDetailsResponse'] = $objuserDetails -> SavingEditUsersDetails();
         deliver_response($string['format'],$response,false);
     }
@@ -386,33 +388,50 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         deliver_response($string['format'],$response,false);
     }
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-	else if(strcasecmp($_POST['method'], 'saveDonation') == 0) {
+	else if(strcasecmp($string['method'], 'saveDonation') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objCamapignDetails = new CamapignDetails();
-        $campaignId = $_POST['campaignId'];
-        $email = $_POST['donarEmail'];
-		$donationAmount = $_POST['donationAmount'];
-		$ngoOwnerEmail = $_POST['ngoOwnerEmail'];	
-        $objCamapignDetails->mapIncomingDonationParams($campaignId,$email,$donationAmount,$ngoOwnerEmail);   
+        $campaignId = $string['campaignId'];
+        $email = $string['donarEmail'];
+		$donationAmount = $string['donationAmount'];
+		$ngoOwnerEmail = $string['ngoOwnerEmail'];	
+		date_default_timezone_set('Asia/Kolkata');
+        $donationPostDate = date("Y-m-d H:i:s");
+        $objCamapignDetails->mapIncomingDonationParams($campaignId,$email,$donationAmount,$ngoOwnerEmail,$donationPostDate);   
         $response['saveDonationDetailsResponse'] = $objCamapignDetails -> donationInfo();
-        deliver_response($_POST['format'], $response, true);
+        deliver_response($string['format'], $response, true);
     }
-	else if(strcasecmp($_POST['method'], 'ModifyCampaign') == 0) {
+	else if(strcasecmp($string['method'], 'ModifyCampaign') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
         $objCamapignDetails = new CamapignDetails();      
-        $ngoName = $_POST['ngoName'];
-        $campaignName = $_POST['campaignName'];
-        $actualAmount=$_POST['actualAmount'];
-        $minimumAmount=$_POST['minimumAmount'];
-        $description = $_POST['description'];
-        $lastDate = $_POST['lastDate'];      
-        $email = $_POST['email'];	
-		$campaignId = $_POST['campaignId'];		
+        $ngoName = $string['ngoName'];
+        $campaignName = $string['campaignName'];
+        $actualAmount=$string['actualAmount'];
+        $minimumAmount=$string['minimumAmount'];
+        $description = $string['description'];
+        $lastDate = $string['lastDate'];      
+        $email = $string['email'];	
+		$campaignId = $string['campaignId'];		
+		
 		$objCamapignDetails->mapIncomingCamapignModifyDetailsParams($campaignId, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $email);
         $response['saveModifiedCampaignDetailsResponse'] = $objCamapignDetails -> modifyingCamapignDetails();
-        deliver_response($_POST['format'], $response, true);
+        deliver_response($string['format'], $response, true);
+	}
+	else if(strcasecmp($method,'deleteCampaign') == 0){
+		$response['code'] = 1;	
+		$response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+		$objDeleteCampaignDetails = new CampaignDeleteConfirmationEmail();
+		$campaignId = $string['campaignId'];
+		$campaignName = $string['campaignName'];
+		$ngoName = $string['ngoName'];
+		$ngoEmail = $string['ngoEmail'];
+		$lastDate = $string['lastDate'];
+		$userEmail = $string['userEmail'];
+		$mobileNo = $string['mobileNo'];						
+		$response['deleteCampaignDetailsResponse'] = $objDeleteCampaignDetails -> EmailToDeleteCampaignForUserVendor($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$userEmail,$mobileNo);		
+        deliver_response($string['format'],$response,false);
 	}
 	else if(strcasecmp($_POST['method'], 'CreateCampaign') == 0) {
         $response['code'] = 1;

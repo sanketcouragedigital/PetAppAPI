@@ -58,6 +58,8 @@ class LoginDetailsDAO
             if($count == 1) {
                 $this->data = "APPROVED_NGO";
             } else {
+				$emailToNotVerifyNGo = new LoginDetails();
+                $this->data=$emailToNotVerifyNGo -> NgoNotVerify($LoginDetails->getEmail());
                 $this->data = "NOT_APPROVED_NGO";
             }
         } catch(Exception $e) {

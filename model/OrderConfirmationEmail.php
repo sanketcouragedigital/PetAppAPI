@@ -1,9 +1,7 @@
 <?php
-//require_once '../dao/OrderConfirmationEmailDAO.php';
 require_once 'EmailGenarator.php';
 class OrderConfirmationEmail
 {
-	
 	private $orderedId;
 	private $productId;
 	private $productName;

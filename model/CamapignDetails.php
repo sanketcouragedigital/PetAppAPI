@@ -20,6 +20,15 @@ class CamapignDetails
 	private $campaignId;
 	private $donationAmount;
 	private $ngoOwnerEmail;
+	private $donationPostDate;
+	
+	public function setDonationPostDate($donationPostDate) {
+        $this->donationPostDate = $donationPostDate;
+    }
+    
+    public function getDonationPostDate() {
+        return $this->donationPostDate;
+    }
 	
 	
 	public function setNgoOwnerEmail($ngoOwnerEmail) {
@@ -162,8 +171,7 @@ class CamapignDetails
     }    
     public function getEmail() {
         return $this->email;
-    }
-	   
+    }	   
 
     public function mapIncomingCamapignDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email) {
         $this->setFirstImageTemporaryName($first_image_tmp);
@@ -207,11 +215,12 @@ class CamapignDetails
     }
 	//for Donation
 	
-	public function mapIncomingDonationParams($campaignId,$email, $donationAmount, $ngoOwnerEmail) {		
+	public function mapIncomingDonationParams($campaignId,$email, $donationAmount, $ngoOwnerEmail,$donationPostDate) {		
         $this->setCampaignId($campaignId);
 		$this->setEmail($email);
 		$this->setDonationAmount($donationAmount);        	
-		$this->setNgoOwnerEmail($ngoOwnerEmail);		
+		$this->setNgoOwnerEmail($ngoOwnerEmail);	
+		$this->setDonationPostDate($donationPostDate);		
     }
 
     public function donationInfo() {
