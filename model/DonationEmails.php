@@ -93,6 +93,26 @@ class DonationEmails
         $emailMessage="\n Peto,\n\n\n A new donation has been made by user: $donarName and id: $donar_id \n\n\n Details of transaction: \n\n\n Amount: $donationAmount \n Date and time: $donation_Date \n Campaign Name: $campaignName \n Email of user: $donarEmail \n\n\n\n\n Regards,\n Team Peto";	 
 		return $emailMessage;
     }
+	
+	
+	//send email to NGO for Imforming that Their campaign will delete after three days
+		public function SendCampaignDeleteDateWiseEmail($campaign_id,$campaignName,$ngoName,$ngoOwnerEmail,$lastDateOfCampaign,$postedDateOfCampaign){
+        $emailSender = new EmailGenarator();
+        $emailSender->setTo($ngoOwnerEmail);//write user mail id
+        $emailSender->setFrom('From: donations@petoandme.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setMessage($this->createMessageForNgoToDeleteCampaign($campaign_id,$campaignName,$ngoName,$ngoOwnerEmail,$lastDateOfCampaign,$postedDateOfCampaign));
+        $emailSender->setSubject("Campaign Delete Notification");// from petapp email      
+		$returnEmailForNGO =  $emailSender->sendEmail($emailSender);		
+		if($returnEmailForNGO==true){
+			return returnEmailForNGO;
+		}else {
+			$emailSender->sendEmail($emailSender);
+		}      
+    } 
+    public function createMessageForNgoToDeleteCampaign($campaign_id,$campaignName,$ngoName,$ngoOwnerEmail,$lastDateOfCampaign,$postedDateOfCampaign){
+        $emailMessage="\n Peto,your campaign wil delete after three days.\ncapmapin id= $campaign_id \n campaign name= $campaignName\n NGO name= $ngoName\n Last Date = $lastDateOfCampaign \n Posted Date = $postedDateOfCampaign\n";	 
+		return $emailMessage;
+    }
     
 }
 ?>

@@ -25,7 +25,11 @@ class CamapignDetailsDAO
 						$status = 1;
 					}
 				}  
-				if($status = 1) {				
+				if($status = 1) {	
+					$lastDateOfCampaign = "";
+					if($campaignDetail->getLastDate()!=="") {
+						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
+					}
 					$sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, ngoName, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
 							VALUES 
 							('".$campaignDetail->getTargetPathOfFirstImage()."',
@@ -36,7 +40,7 @@ class CamapignDetailsDAO
 							 '".$campaignDetail->getDescription()."',
 							 '".$campaignDetail->getActualAmount()."',
 							 '".$campaignDetail->getMinimumAmount()."',
-							 '".$campaignDetail->getLastDate()."',   						 
+							 '".$lastDateOfCampaign."',   						 
 							 '".$campaignDetail->getPostDate()."',
 							 '".$campaignDetail->getEmail()."'
 							 )";
@@ -57,14 +61,18 @@ class CamapignDetailsDAO
     }
     
 	public function modifyCampaignDetail($campaignDetail) {
-			try { 			
+			try { 	
+					$lastDateOfCampaign = "";
+					if($campaignDetail->getLastDate()!=="") {
+						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
+					}			
 					$sql = "UPDATE campaign SET
 							 ngoName='".$campaignDetail->getNGOName()."',
 							 campaignName='".$campaignDetail->getCampaignName()."',
 							 description='".$campaignDetail->getDescription()."',
 							 actualAmount='".$campaignDetail->getActualAmount()."',
 							 minimumAmount='".$campaignDetail->getMinimumAmount()."',
-							 lastDate='".$campaignDetail->getLastDate()."' 						 							 
+							 lastDate='".$lastDateOfCampaign."' 						 							 
 							 WHERE email='".$campaignDetail->getEmail()."' AND campaign_id='".$campaignDetail->getCampaignId()."'";
 						
 						$isInserted = mysqli_query($this->con, $sql);
