@@ -428,9 +428,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		$ngoName = $string['ngoName'];
 		$ngoEmail = $string['ngoEmail'];
 		$lastDate = $string['lastDate'];
+		$postDate = $string['postDate'];		
 		$userEmail = $string['userEmail'];
 		$mobileNo = $string['mobileNo'];						
-		$response['deleteCampaignDetailsResponse'] = $objDeleteCampaignDetails -> EmailToDeleteCampaignForUserVendor($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$userEmail,$mobileNo);		
+		$response['deleteCampaignDetailsResponse'] = $objDeleteCampaignDetails -> EmailToDeleteCampaignForUserVendor($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo);		
         deliver_response($string['format'],$response,false);
 	}
 	else if(strcasecmp($_POST['method'], 'CreateCampaign') == 0) {

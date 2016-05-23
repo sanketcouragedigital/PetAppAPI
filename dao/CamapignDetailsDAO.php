@@ -160,9 +160,9 @@ class CamapignDetailsDAO
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
 				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
 						FROM ngo_donation  nd
-						INNER JOIN campaign c
+						RIGHT JOIN campaign c
 						ON nd.campaign_id = c.campaign_id
-                        INNER JOIN userDetails d 
+                        RIGHT JOIN userDetails d 
                         ON d.email = c.email
 						WHERE c.email ='".$pageWiseData->getEmail()."' GROUP BY c.campaign_id
 						ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
@@ -197,9 +197,9 @@ class CamapignDetailsDAO
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
 				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
 						FROM ngo_donation  nd
-						INNER JOIN campaign c
+						RIGHT JOIN campaign c
 						ON nd.campaign_id = c.campaign_id
-						INNER JOIN userDetails d 
+						RIGHT JOIN userDetails d 
                         ON d.email = c.email
 						GROUP BY c.campaign_id
 						ORDER BY postDate  DESC LIMIT $offset, $rowsPerPage";
