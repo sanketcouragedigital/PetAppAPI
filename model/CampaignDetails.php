@@ -1,6 +1,6 @@
 <?php
-require_once '../dao/CamapignDetailsDAO.php';
-class CamapignDetails
+require_once '../dao/CampaignDetailsDAO.php';
+class CampaignDetails
 {
 	private $first_image_tmp;
     private $second_image_tmp;
@@ -173,7 +173,7 @@ class CamapignDetails
         return $this->email;
     }	   
 
-    public function mapIncomingCamapignDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email) {
+    public function mapIncomingCampaignDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -190,8 +190,8 @@ class CamapignDetails
         $this->setEmail($email);		
     }
 
-    public function savingCamapignDetails() {
-        $saveCampaignDetailsDAO = new CamapignDetailsDAO();
+    public function savingCampaignDetails() {
+        $saveCampaignDetailsDAO = new CampaignDetailsDAO();
         $returnCampaignDetailSaveSuccessMessage = $saveCampaignDetailsDAO->saveCampaignDetail($this);
         return $returnCampaignDetailSaveSuccessMessage;
     }
@@ -208,8 +208,8 @@ class CamapignDetails
         $this->setEmail($email);		
     }
 
-    public function modifyingCamapignDetails() {
-        $saveCampaignDetailsDAO = new CamapignDetailsDAO();
+    public function modifyingCampaignDetails() {
+        $saveCampaignDetailsDAO = new CampaignDetailsDAO();
         $returnCampaignDetailSaveSuccessMessage = $saveCampaignDetailsDAO->modifyCampaignDetail($this);
         return $returnCampaignDetailSaveSuccessMessage;
     }
@@ -224,13 +224,13 @@ class CamapignDetails
     }
 
     public function donationInfo() {
-        $saveCampaignDetailsDAO = new CamapignDetailsDAO();
+        $saveCampaignDetailsDAO = new CampaignDetailsDAO();
         $returnCampaignDetailSaveSuccessMessage = $saveCampaignDetailsDAO->saveDonationInfo($this);
         return $returnCampaignDetailSaveSuccessMessage;
     }
 	
     public function showingCampaignDetails($email,$currentPage) {
-        $showCampaignDetailsDAO = new CamapignDetailsDAO();
+        $showCampaignDetailsDAO = new CampaignDetailsDAO();
         $this->setCurrentPage($currentPage);
 		 $this->setEmail($email);
         $returnShowCampaignDetails = $showCampaignDetailsDAO->showCampaignDetail($this);
@@ -238,7 +238,7 @@ class CamapignDetails
     }
 	
 	public function showingCampaignDetailsForAll($currentPage) {
-        $showCampaignDetailsDAO = new CamapignDetailsDAO();
+        $showCampaignDetailsDAO = new CampaignDetailsDAO();
         $this->setCurrentPage($currentPage);
         $returnShowCampaignDetails = $showCampaignDetailsDAO->showCampaignDetailForAll($this);
         return $returnShowCampaignDetails;

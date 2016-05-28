@@ -2,14 +2,14 @@
 require_once 'BaseDAO.php';
 require_once '../model/DonationEmails.php';
 
-class CamapignDetailsDAO
+class CampaignDetailsDAO
 {    
     private $con;
     private $msg;
     private $data;
     
     // Attempts to initialize the database connection using the supplied info.
-    public function CamapignDetailsDAO() {
+    public function CampaignDetailsDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
@@ -28,7 +28,7 @@ class CamapignDetailsDAO
 				if($status = 1) {	
 					$lastDateOfCampaign = "";
 					if($campaignDetail->getLastDate()!=="") {
-						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
+						$lastDateOfCampaign =  DateTime::createFromFormat('d-m-Y', $campaignDetail->getLastDate())->format('Y-m-d');
 					}
 					$sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, ngoName, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
 							VALUES 
@@ -62,17 +62,17 @@ class CamapignDetailsDAO
     
 	public function modifyCampaignDetail($campaignDetail) {
 			try { 	
-					$lastDateOfCampaign = "";
+					/*$lastDateOfCampaign = "";
 					if($campaignDetail->getLastDate()!=="") {
 						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
-					}			
+					}	*/		
 					$sql = "UPDATE campaign SET
 							 ngoName='".$campaignDetail->getNGOName()."',
 							 campaignName='".$campaignDetail->getCampaignName()."',
 							 description='".$campaignDetail->getDescription()."',
 							 actualAmount='".$campaignDetail->getActualAmount()."',
 							 minimumAmount='".$campaignDetail->getMinimumAmount()."',
-							 lastDate='".$lastDateOfCampaign."' 						 							 
+							 lastDate='".$campaignDetail->getLastDate()."' 						 							 
 							 WHERE email='".$campaignDetail->getEmail()."' AND campaign_id='".$campaignDetail->getCampaignId()."'";
 						
 						$isInserted = mysqli_query($this->con, $sql);
@@ -162,7 +162,7 @@ class CamapignDetailsDAO
 						FROM ngo_donation  nd
 						RIGHT JOIN campaign c
 						ON nd.campaign_id = c.campaign_id
-                        RIGHT JOIN userDetails d 
+                        INNER JOIN userDetails d 
                         ON d.email = c.email
 						WHERE c.email ='".$pageWiseData->getEmail()."' GROUP BY c.campaign_id
 						ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
@@ -171,11 +171,12 @@ class CamapignDetailsDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
+				return $this->data;
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->data;
+       return $this->data=array();
     }
 	
 	public function showCampaignDetailForAll($pageWiseData) {               
@@ -199,7 +200,7 @@ class CamapignDetailsDAO
 						FROM ngo_donation  nd
 						RIGHT JOIN campaign c
 						ON nd.campaign_id = c.campaign_id
-						RIGHT JOIN userDetails d 
+						INNER JOIN userDetails d 
                         ON d.email = c.email
 						GROUP BY c.campaign_id
 						ORDER BY postDate  DESC LIMIT $offset, $rowsPerPage";
@@ -208,11 +209,12 @@ class CamapignDetailsDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
+				return $this->data;
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->data;
+        return $this->data=array();
     }
 
    

@@ -100,11 +100,13 @@ class MyListingDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
-            }                       
+            }          
+			return $this->data;
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->data;
+        
+		return $this->data=array();
        
     }
 	
@@ -135,11 +137,13 @@ class MyListingDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
+				return $this->data;	 
             }                       
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->data;	 
+        
+		return $this->data=array();
     }
 	public function deleteMyListingPetList($MyListingPetList) {
 		 try {

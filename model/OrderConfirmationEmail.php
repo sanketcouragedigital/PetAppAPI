@@ -152,7 +152,7 @@ class OrderConfirmationEmail
         $returnEmailForUser -> GenarateEmailForUSer($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode);		
 		//email for us		
 		$returnEmailForVendor = new OrderConfirmationEmail();		
-        $returnEmailForVendor -> GenarateEmailForVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode);	
+        $returnEmailForVendor -> GenarateEmailForPeto($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode);	
 		$returnEmailSuccessMessage = "EMAIL_SUCCESSFUULY_SENT";
 		return $returnEmailSuccessMessage;					
     }
@@ -160,7 +160,7 @@ class OrderConfirmationEmail
 	public function GenarateEmailForUSer($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){        
 		$emailSender = new EmailGenarator();
         $emailSender->setTo($email);//write user mail id
-        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
         $emailSender->setMessage($this->createMessageToSendUser($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode));
         $emailSender->setSubject("Thank you for shopping with Peto !");// from petapp email
         $returnEmailForUser =  $emailSender->sendEmail($emailSender);
@@ -175,20 +175,20 @@ class OrderConfirmationEmail
 		return $emailMessage;
     }
 	
-	public function GenarateEmailForVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){
+	public function GenarateEmailForPeto($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){
         $emailSender = new EmailGenarator();
         $emailSender->setTo('orders@petoandme.com');//write user mail id
-        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
-        $emailSender->setMessage($this->createMessageToSendVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode));
+        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setMessage($this->createMessageToSendPeto($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode));
         $emailSender->setSubject("New Order Confirmation");// from petapp email      
-		$returnEmailForVendor =  $emailSender->sendEmail($emailSender);		
-		if($returnEmailForVendor==true){
-			return returnEmailForVendor;
+		$returnEmailForPeto =  $emailSender->sendEmail($emailSender);		
+		if($returnEmailForPeto==true){
+			return returnEmailForPeto;
 		}else {
 			$emailSender->sendEmail($emailSender);
 		}      
     } 
-    public function createMessageToSendVendor($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){
+    public function createMessageToSendPeto($orderedId,$productId,$productName,$productPrice,$quantity,$shippingCharges,$productTotalPrice,$name,$mobileno,$email,$buildingname,$area,$city,$pincode){
         $emailMessage="Hi   \n\n New order Generated!  \n\nCustomer Details : \n  Customer Name : $name \n  Customer Email : $email \n  Customer Contact No : $mobileno \n  Address : $buildingname \n  Area : $area \n  City : $city \n  Pin Code : $pincode \n\n Product Details \n  Order Id : $orderedId \n  Product Id : $productId \n  Product Name : $productName \n  Product Price : $productPrice \n  Product Quantity : $quantity \n  Shipping Charges : $shippingCharges \n  Total Price : $productTotalPrice \n ";	       
 		return $emailMessage;
     }

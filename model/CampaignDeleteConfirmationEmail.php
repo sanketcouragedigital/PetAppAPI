@@ -79,19 +79,19 @@ class CampaignDeleteConfirmationEmail
 		$this->setMobileNo($mobileNo);
 		//email for customer	
 		$returnEmailForUser = new CampaignDeleteConfirmationEmail();		
-        $returnEmailForUser -> GenarateEmailForDeleteCampaign($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail);		
+        $returnEmailForUser -> CampaignDeleteEmailForPeto($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail);		
 		//email to NGo	
 		$returnEmailForVendor = new CampaignDeleteConfirmationEmail();		
-        $returnEmailForVendor -> GenarateEmailForUseConfirmation($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo);	
+        $returnEmailForVendor -> CampaignDeleteConfirmationEmailForNGO($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo);	
 		$returnEmailSuccessMessage = "EMAIL_SUCCESSFUULY_SENT_FOR_DELETE_CAMPAIGN";
 		return $returnEmailSuccessMessage;					
     }
 	// send email to user for order conformation..
-	public function GenarateEmailForUseConfirmation($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo){        
+	public function CampaignDeleteConfirmationEmailForNGO($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo){        
 		$emailSender = new EmailGenarator();
         $emailSender->setTo($ngoEmail);//write user mail id
-        $emailSender->setFrom('From: donations@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
-        $emailSender->setMessage($this->createMessage($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo));
+        $emailSender->setFrom('From: donations@petoandme.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setMessage($this->createMessageForNGO($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo));
         $emailSender->setSubject("Delete Campaign");// from petapp email
         $returnEmailForUser =  $emailSender->sendEmail($emailSender);
 		if($returnEmailForUser==true){
@@ -100,15 +100,15 @@ class CampaignDeleteConfirmationEmail
 			$emailSender->sendEmail($emailSender);
 		}		
     } 
-    public function createMessage($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo){
+    public function createMessageForNGO($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo){
         $emailMessage="Dear $ngoName,\nWe would like to caution you that the campaign $campaignName you have created on $postDate will be expiring on $lastDate.\nPlease visit our dashboard if you would like to extend the campaign, else it will be removed. If you have any further questions or concerns please feel free to contact us at: donations@petoandme.com\nThank you,\nTeam Peto";			
 		return $emailMessage;
     }
 	
-	public function GenarateEmailForDeleteCampaign($campaignId,$campaignName,$ngoName,$ngoEmail,$postDate,$lastDate,$userEmail){
+	public function CampaignDeleteEmailForPeto($campaignId,$campaignName,$ngoName,$ngoEmail,$postDate,$lastDate,$userEmail){
         $emailSender = new EmailGenarator();
         $emailSender->setTo('orders@petoandme.com');//write user mail id
-        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: peto@couragedigital.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
+        $emailSender->setFrom('From: orders@petoandme.com' . "\r\n" . 'Reply-To: no-reply@app.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion());//write pet App mail id
         $emailSender->setMessage($this->createMessageToPeto($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail));
         $emailSender->setSubject("Delete Campaign");// from petapp email      
 		$returnEmailForVendor =  $emailSender->sendEmail($emailSender);		
