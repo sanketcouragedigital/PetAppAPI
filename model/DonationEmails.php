@@ -71,7 +71,7 @@ class DonationEmails
 		}      
     } 
     public function createMessageToSendNgoOwner($campaign_id,$campaignName,$ngoName,$ngoOwnerEmail,$donarName,$donarEmail,$donarMobileNo,$donationAmount){
-        $emailMessage="Dear $ngoName \n\n\n We have some good news ! A donation of amount Rs $donationAmount has been made by $donarName towards your campaign $campaignName.\n\n You may visit our dashboard to view total amount of donation made so far for your campaign $campaignName by clicking here <link to dashboard> \n\n If you have any questions or concerns please feel free to contact us at: donations@petoandme.com \n\n Thanking you,\n Team Peto";	      
+        $emailMessage="Dear $ngoName \n\n\n We have some good news ! A donation of amount Rs $donationAmount has been made by $donarName towards your campaign $campaignName.\n\n You may visit our dashboard to view total amount of donation made so far for your campaign $campaignName by clicking here http://www.petoandme.com/ngo/ . \n\n If you have any questions or concerns please feel free to contact us at: donations@petoandme.com \n\n Thanking you,\n Team Peto";	      
 		return $emailMessage;
     }
 	

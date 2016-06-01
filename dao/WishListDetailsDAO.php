@@ -82,12 +82,12 @@ class WishListDetailsDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
-				return $this->data;
+                return $this->data;
             }                      
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
-        }        
-		return $this->data=array();
+        }
+        return $this->data=array();
     }
 	public function showPetMateWishList($petMateListWishList) {		
        $sql = "SELECT pm.id, pm.first_image_path, pm.second_image_path, pm.third_image_path, pm.pet_category, pm.pet_breed, pm.pet_age_inMonth, pm.pet_age_inYear, pm.pet_gender, pm.pet_description, pm.post_date, pm.alternateNo,ud.name
@@ -129,12 +129,12 @@ class WishListDetailsDAO
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
-				return $this->data;
+                return $this->data;
             }                      
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-       return $this->data=array();
+        return $this->data=array();
     }
 	public function deleteWishListPetList($WishListPetList) {
 		 try {            

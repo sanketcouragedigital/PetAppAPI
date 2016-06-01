@@ -2,7 +2,7 @@
 class BaseDAO {
     
     
-    private $db_host = '103.21.59.166:3306'; //hostname  
+    private $db_host = '103.21.59.166:3306'; //hostname
     private $db_user = 'appcom_petuser'; // username
     private $db_password = 'pet@pp2015!'; // password
     private $db_name = 'appcom_petapp'; //database name
@@ -19,4 +19,3 @@ class BaseDAO {
     }
 }
 ?>
-

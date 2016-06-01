@@ -179,9 +179,35 @@ class PetDetails
 		$this->setAlternateNo($alternateNo);
     }
 
+    public function mapIncomingPetForDesktopDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email,$alternateNo) {
+        $this->setFirstImageTemporaryName($first_image_tmp);
+        $this->setSecondImageTemporaryName($second_image_tmp);
+        $this->setThirdImageTemporaryName($third_image_tmp);
+        $this->setTargetPathOfFirstImage($first_image_target_path);
+        $this->setTargetPathOfSecondImage($second_image_target_path);
+        $this->setTargetPathOfThirdImage($third_image_target_path);
+        $this->setCategoryOfPet($categoryOfPet);
+        $this->setBreedOfPet($breedOfPet);
+        $this->setAgeInYear($ageInYear);
+        $this->setAgeInMonth($ageInMonth);
+        $this->setGenderOfPet($genderOfPet);
+        $this->setDescriptionOfPet($descriptionOfPet);
+        $this->setAdoptionOfPet($adoptionOfPet);
+        $this->setPriceOfPet($priceOfPet);
+        $this->setPostDate($postDate);
+        $this->setEmail($email);
+        $this->setAlternateNo($alternateNo);
+    }
+
     public function savingPetDetails() {
         $savePetDetailsDAO = new PetDetailsDAO();
         $returnPetDetailSaveSuccessMessage = $savePetDetailsDAO->saveDetail($this);
+        return $returnPetDetailSaveSuccessMessage;
+    }
+
+    public function savingPetForDesktopDetails() {
+        $savePetDetailsDAO = new PetDetailsDAO();
+        $returnPetDetailSaveSuccessMessage = $savePetDetailsDAO->saveForDesktopDetail($this);
         return $returnPetDetailSaveSuccessMessage;
     }
 	

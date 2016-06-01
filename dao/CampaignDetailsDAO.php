@@ -59,6 +59,51 @@ class CampaignDetailsDAO
 			}
         return $this->data;
     }
+
+    public function saveCampaignForDesktopDetail($campaignDetail) {
+      try {
+
+        $status = 0;
+        $campaignTempNames = array($campaignDetail->getFirstImageTemporaryName(), $campaignDetail->getSecondImageTemporaryName(), $campaignDetail->getThirdImageTemporaryName());
+        $campaignTargetPaths = array($campaignDetail->getTargetPathOfFirstImage(), $campaignDetail->getTargetPathOfSecondImage(), $campaignDetail->getTargetPathOfThirdImage());
+        foreach ($campaignTempNames as $index => $campaignTempName) {
+          $campaignImage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $campaignTempName));
+          if($campaignTargetPaths[$index] != "") {
+            if(file_put_contents($campaignTargetPaths[$index], $campaignImage)) {
+              $status = 1;
+            }
+          }
+        }
+        if($status = 1) {
+          $sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, ngoName, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
+              VALUES
+              ('".$campaignDetail->getTargetPathOfFirstImage()."',
+               '".$campaignDetail->getTargetPathOfSecondImage()."',
+               '".$campaignDetail->getTargetPathOfThirdImage()."',
+               '".$campaignDetail->getNGOName()."',
+               '".$campaignDetail->getCampaignName()."',
+               '".$campaignDetail->getDescription()."',
+               '".$campaignDetail->getActualAmount()."',
+               '".$campaignDetail->getMinimumAmount()."',
+               '".$campaignDetail->getLastDate()."',
+               '".$campaignDetail->getPostDate()."',
+               '".$campaignDetail->getEmail()."'
+               )";
+
+            $isInserted = mysqli_query($this->con, $sql);
+            if ($isInserted) {
+              $this->data = "CAMPAIGN_DETAILS_SAVED";
+            } else {
+              $this->data = "ERROR";
+            }
+        } else {
+          $this->data = "ERROR";
+        }
+      } catch(Exception $e) {
+        echo 'SQL Exception: ' .$e->getMessage();
+      }
+        return $this->data;
+    }
     
 	public function modifyCampaignDetail($campaignDetail) {
 			try { 	

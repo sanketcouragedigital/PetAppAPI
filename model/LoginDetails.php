@@ -117,7 +117,7 @@ class LoginDetails
         $emailSender->setSubject("NGO Verification");// from petapp email      
 		$returnEmailNgo =  $emailSender->sendEmail($emailSender);		
 		if($returnEmailNgo==true){
-			return returnEmailNgo;
+			return $returnEmailNgo;
 		}else {
 			$emailSender->sendEmail($emailSender);
 		}      

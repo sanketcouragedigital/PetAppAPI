@@ -47,7 +47,7 @@ class OrderDetailsDAO
 				$orderId="";
                 if ($isInserted) {					
 					$response= "ORDER_GENERATED";
-					$orderId = mysqli_insert_id($this->con);					
+					$orderId = mysqli_insert_id($this->con);				
 					$sql="SELECT * FROM products WHERE id='".$OrderDetail->getProductId()."'";
 					$productResult = mysqli_query($this->con, $sql);
 					$productDetails = array();
@@ -90,9 +90,9 @@ class OrderDetailsDAO
                 $result = mysqli_query($this->con, $sql);
                 $this->data=array();
                 while ($rowdata = mysqli_fetch_assoc($result)) {
-                    $this->data[]=$rowdata;					
+                    $this->data[]=$rowdata;
                 }
-				return $this->data;
+                return $this->data;
             }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();

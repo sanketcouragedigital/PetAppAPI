@@ -190,9 +190,32 @@ class CampaignDetails
         $this->setEmail($email);		
     }
 
+    public function mapIncomingCampaignForDesktopDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email) {
+        $this->setFirstImageTemporaryName($first_image_tmp);
+        $this->setSecondImageTemporaryName($second_image_tmp);
+        $this->setThirdImageTemporaryName($third_image_tmp);
+        $this->setTargetPathOfFirstImage($first_image_target_path);
+        $this->setTargetPathOfSecondImage($second_image_target_path);
+        $this->setTargetPathOfThirdImage($third_image_target_path);
+        $this->setNGOName($ngoName);
+        $this->setCampaignName($campaignName);
+        $this->setDescription($description);
+        $this->setActualAmount($actualAmount);
+        $this->setMinimumAmount($minimumAmount);
+        $this->setLastDate($lastDate);
+        $this->setPostDate($postDate);
+        $this->setEmail($email);
+    }
+
     public function savingCampaignDetails() {
         $saveCampaignDetailsDAO = new CampaignDetailsDAO();
         $returnCampaignDetailSaveSuccessMessage = $saveCampaignDetailsDAO->saveCampaignDetail($this);
+        return $returnCampaignDetailSaveSuccessMessage;
+    }
+
+    public function savingCampaignForDesktopDetails() {
+        $saveCampaignDetailsDAO = new CampaignDetailsDAO();
+        $returnCampaignDetailSaveSuccessMessage = $saveCampaignDetailsDAO->saveCampaignForDesktopDetail($this);
         return $returnCampaignDetailSaveSuccessMessage;
     }
 	//for modification

@@ -472,6 +472,41 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['saveCampaignDetailsResponse'] = $objCampaignDetails -> savingCampaignDetails();
         deliver_response($_POST['format'], $response, true);
     }
+    else if(strcasecmp($_POST['method'], 'CreateCampaignFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objCampaignDetails = new CampaignDetails();
+        $firstCampaignImage = "";
+        $firstCampaignImageName = "";
+        $secondCampaignImage = "";
+        $secondCampaignImageName = "";
+        $thirdCampaignImage = "";
+        $thirdCampaignImageName = "";
+        $ngoName = $_POST['ngoName'];
+        $campaignName = $_POST['campaignName'];
+        $actualAmount=$_POST['actualAmount'];
+        $minimumAmount=$_POST['minimumAmount'];
+        $description = $_POST['description'];
+        $lastDate = $_POST['lastDate'];
+        $email = $_POST['email'];
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
+        if($_POST['firstCampaignImage'] != ""){
+          $firstCampaignImage = $_POST['firstCampaignImage'];
+          $firstCampaignImageName = "../campaign_images/".$_POST['firstCampaignImageName'].".png";
+        }
+        if($_POST['secondCampaignImage'] != ""){
+          $secondCampaignImage = $_POST['secondCampaignImage'];
+          $secondCampaignImageName = "../campaign_images/".$_POST['secondCampaignImageName'].".png";
+        }
+        if($_POST['thirdCampaignImage'] != ""){
+          $thirdCampaignImage = $_POST['thirdCampaignImage'];
+          $thirdCampaignImageName = "../campaign_images/".$_POST['thirdCampaignImageName'].".png";
+        }
+        $objCampaignDetails->mapIncomingCampaignForDesktopDetailsParams($firstCampaignImage, $firstCampaignImageName, $secondCampaignImage, $secondCampaignImageName, $thirdCampaignImage, $thirdCampaignImageName, $ngoName, $campaignName, $description, $actualAmount, $minimumAmount, $lastDate, $postDate, $email);
+        $response['saveCampaignDetailsResponse'] = $objCampaignDetails -> savingCampaignForDesktopDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
     else if(strcasecmp($_POST['method'], 'savePetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -509,11 +544,48 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email,$alternateNo);
+        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
-    }    
-	
+    }
+    else if(strcasecmp($_POST['method'], 'savePetDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objPetDetails = new PetDetails();
+        $firstPetImage = "";
+        $firstPetImageName = "";
+        $secondPetImage = "";
+        $secondPetImageName = "";
+        $thirdPetImage = "";
+        $thirdPetImageName = "";
+        $categoryOfPet = $_POST['categoryOfPet'];
+        $breedOfPet = $_POST['breedOfPet'];
+        $ageInMonth=$_POST['petAgeInMonth'];
+        $ageInYear=$_POST['petAgeInYear'];
+        $genderOfPet = $_POST['genderOfPet'];
+        $descriptionOfPet = $_POST['descriptionOfPet'];
+        $adoptionOfPet = $_POST['adoptionOfPet'];
+        $priceOfPet = $_POST['priceOfPet'];
+        $email = $_POST['email'];
+        $alternateNo = $_POST['alternateNo'];
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
+        if($_POST['firstPetImage'] != ""){
+          $firstPetImage = $_POST['firstPetImage'];
+          $firstPetImageName = "../pet_images/".$_POST['firstPetImageName'].".png";
+        }
+        if($_POST['secondPetImage'] != ""){
+          $secondPetImage = $_POST['secondPetImage'];
+          $secondPetImageName = "../pet_images/".$_POST['secondPetImageName'].".png";
+        }
+        if($_POST['thirdPetImage'] != ""){
+          $thirdPetImage = $_POST['thirdPetImage'];
+          $thirdPetImageName = "../pet_images/".$_POST['thirdPetImageName'].".png";
+        }
+        $objPetDetails->mapIncomingPetForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo);
+        $response['savePetDetailsResponse'] = $objPetDetails -> savingPetForDesktopDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
     else if (strcasecmp($_POST['method'], 'savePetMateDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
