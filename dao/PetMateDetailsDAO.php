@@ -54,7 +54,7 @@ class PetMateDetailsDAO
 					} else {
 						$this->data = "ERROR";
 					}
-				}else {
+				} else {
 					$sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email,alternateNo)
 							VALUES 
 							('".$petMateDetail->getTargetPathOfFirstImage()."',
@@ -87,6 +87,85 @@ class PetMateDetailsDAO
         }
         return $this->data;
     }
+
+    public function saveForDesktopDetail($petMateDetail) {
+        try {
+            $status = 0;
+            $petsTempNames = array($petMateDetail->getFirstImageTemporaryName(), $petMateDetail->getSecondImageTemporaryName(), $petMateDetail->getThirdImageTemporaryName());
+            $petsTargetPaths = array($petMateDetail->getTargetPathOfFirstImage(), $petMateDetail->getTargetPathOfSecondImage(), $petMateDetail->getTargetPathOfThirdImage());
+            foreach ($petsTempNames as $index => $petsTempName) {
+                $petImage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $petsTempName));
+                if($petsTargetPaths[$index] != "") {
+                    if(file_put_contents($petsTargetPaths[$index], $petImage)) {
+                        $status = 1;
+                    }
+                }
+            }  
+            if($status = 1) {
+                $addAlternateNo = $petMateDetail->getAlternateNo();
+                if($addAlternateNo == ""){
+                    
+                    $sql = "SELECT mobileno FROM userDetails WHERE email='".$petMateDetail->getEmail()."'";
+                    $result = mysqli_query($this->con, $sql);                       
+                        $rowdata= mysqli_fetch_row($result);
+                        $addAlternateNo = $rowdata[0];
+                
+                    $sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email,alternateNo)
+                            VALUES 
+                            ('".$petMateDetail->getTargetPathOfFirstImage()."',
+                             '".$petMateDetail->getTargetPathOfSecondImage()."',
+                             '".$petMateDetail->getTargetPathOfThirdImage()."',
+                             '".$petMateDetail->getCategoryOfPet()."',
+                             '".$petMateDetail->getBreedOfPet()."',
+                             '".$petMateDetail->getAgeInMonth()."',
+                             '".$petMateDetail->getAgeInYear()."',
+                             '".$petMateDetail->getGenderOfPet()."',
+                             '".$petMateDetail->getDescriptionOfPet()."',
+                             '".$petMateDetail->getPostDate()."',
+                             '".$petMateDetail->getEmail()."',
+                             '$addAlternateNo'
+                            )";
+            
+                    $isInserted = mysqli_query($this->con, $sql);
+                    if ($isInserted) {
+                        $this->data = "PET_DETAILS_SAVED";
+                    } else {
+                        $this->data = "ERROR";
+                    }
+                } else {
+                    $sql = "INSERT INTO petmate(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, post_date, email,alternateNo)
+                            VALUES 
+                            ('".$petMateDetail->getTargetPathOfFirstImage()."',
+                             '".$petMateDetail->getTargetPathOfSecondImage()."',
+                             '".$petMateDetail->getTargetPathOfThirdImage()."',
+                             '".$petMateDetail->getCategoryOfPet()."',
+                             '".$petMateDetail->getBreedOfPet()."',
+                             '".$petMateDetail->getAgeInMonth()."',
+                             '".$petMateDetail->getAgeInYear()."',
+                             '".$petMateDetail->getGenderOfPet()."',
+                             '".$petMateDetail->getDescriptionOfPet()."',
+                             '".$petMateDetail->getPostDate()."',
+                             '".$petMateDetail->getEmail()."',
+                             '".$petDetail->getAlternateNo()."'
+                            )";
+            
+                    $isInserted = mysqli_query($this->con, $sql);
+                    if ($isInserted) {
+                        $this->data = "PET_DETAILS_SAVED";
+                    } else {
+                        $this->data = "ERROR";
+                    }
+                }
+            }
+            else {
+                $this->data = "ERROR";
+            }
+        } catch(Exception $e) {
+            echo 'SQL Exception: ' .$e->getMessage();
+        }
+        return $this->data;
+    }
+
 	public function showUserWishList($userWishList) {
         try {           
 			$sql ="SELECT *

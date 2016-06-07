@@ -625,7 +625,128 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email,$alternateNo);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
-    }    
+    }
+    else if (strcasecmp($_POST['method'], 'savePetMateDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objPetDetails = new PetMateDetails();
+        $firstPetImage = "";
+        $firstPetImageName = "";
+        $secondPetImage = "";
+        $secondPetImageName = "";
+        $thirdPetImage = "";
+        $thirdPetImageName = "";
+        $categoryOfPet = $_POST['categoryOfPet'];
+        $breedOfPet = $_POST['breedOfPet'];
+        $ageInMonth=$_POST['petAgeInMonth'];
+        $ageInYear=$_POST['petAgeInYear'];
+        $genderOfPet = $_POST['genderOfPet'];
+        $email = $_POST['email'];
+        $alternateNo = $_POST['alternateNo'];
+        $descriptionOfPet = $_POST['descriptionOfPet'];
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");
+        if($_POST['firstPetImage'] != ""){
+          $firstPetImage = $_POST['firstPetImage'];
+          $firstPetImageName = "../pet_mate_images/".$_POST['firstPetImageName'].".png";
+        }
+        if($_POST['secondPetImage'] != ""){
+          $secondPetImage = $_POST['secondPetImage'];
+          $secondPetImageName = "../pet_mate_images/".$_POST['secondPetImageName'].".png";
+        }
+        if($_POST['thirdPetImage'] != ""){
+          $thirdPetImage = $_POST['thirdPetImage'];
+          $thirdPetImageName = "../pet_mate_images/".$_POST['thirdPetImageName'].".png";
+        }
+        $objPetDetails->mapIncomingPetMateForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth , $ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email, $alternateNo);
+        $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateForDesktopDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
+    else if (strcasecmp($_POST['method'], 'saveClinicDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objClinicDetails = new ClinicDetails();
+        $clinicImage = "";
+        $clinicImageName = "";
+        $clinicName = $_POST['clinicName'];
+        $doctorName = $_POST['doctorName'];
+        $clinicAddress = $_POST['clinicAddress'];
+        $clinicArea = $_POST['clinicArea'];
+        $clinicCity = $_POST['clinicCity'];        
+        $contactNo = $_POST['contactNo'];
+        $email = $_POST['email'];
+        $notesOfClinic = $_POST['notesOfClinic'];
+        if($_POST['clinicImage'] != ""){
+          $clinicImage = $_POST['clinicImage'];
+          $clinicImageName = "../clinic_images/".$_POST['clinicImageName'].".png";
+        }
+        $objClinicDetails->mapIncomingClinicForDesktopDetailsParams($clinicImage, $clinicImageName, $clinicName, $doctorName, $clinicAddress, $clinicArea, $clinicCity, $contactNo, $email, $notesOfClinic);
+        $response['saveClinicDetailsResponse'] = $objClinicDetails -> savingClinicForDesktopDetails();
+        deliver_response($_POST['format'], $response, true);
+    }
+    else if (strcasecmp($_POST['method'], 'saveGroomerDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objGroomerDetails = new PetServices();
+        $groomerImage = "";
+        $groomerImageName = "";
+        $groomerName = $_POST['groomerName'];
+        $description = $_POST['description'];
+        $groomerAddress = $_POST['groomerAddress'];
+        $groomerArea = $_POST['groomerArea'];
+        $groomerCity = $_POST['groomerCity'];        
+        $contactNo = $_POST['contactNo'];
+        $email = $_POST['email'];
+        $timing = $_POST['timing'];
+        if($_POST['groomerImage'] != ""){
+          $groomerImage = $_POST['groomerImage'];
+          $groomerImageName = "../groomer_images/".$_POST['groomerImageName'].".png";
+        }
+        $response['saveGroomerDetailsResponse'] = $objGroomerDetails -> savingGroomerForDesktopDetails($groomerImage, $groomerImageName, $groomerName, $description, $groomerAddress, $groomerArea, $groomerCity, $contactNo, $email, $timing);
+        deliver_response($_POST['format'], $response, true);
+    }
+    else if (strcasecmp($_POST['method'], 'saveShelterDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objShelterDetails = new PetServices();
+        $shelterImage = "";
+        $shelterImageName = "";
+        $shelterName = $_POST['shelterName'];
+        $description = $_POST['description'];
+        $shelterAddress = $_POST['shelterAddress'];
+        $shelterArea = $_POST['shelterArea'];
+        $shelterCity = $_POST['shelterCity'];        
+        $contactNo = $_POST['contactNo'];
+        $email = $_POST['email'];
+        $timing = $_POST['timing'];
+        if($_POST['shelterImage'] != ""){
+          $shelterImage = $_POST['shelterImage'];
+          $shelterImageName = "../shelter_images/".$_POST['shelterImageName'].".png";
+        }
+        $response['saveShelterDetailsResponse'] = $objShelterDetails -> savingShelterForDesktopDetails($shelterImage, $shelterImageName, $shelterName, $description, $shelterAddress, $shelterArea, $shelterCity, $contactNo, $email, $timing);
+        deliver_response($_POST['format'], $response, true);
+    }
+    else if (strcasecmp($_POST['method'], 'saveTrainerDetailsFromDesktop') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objTrainerDetails = new PetServices();
+        $trainerImage = "";
+        $trainerImageName = "";
+        $trainerName = $_POST['trainerName'];
+        $description = $_POST['description'];
+        $trainerAddress = $_POST['trainerAddress'];
+        $trainerArea = $_POST['trainerArea'];
+        $trainerCity = $_POST['trainerCity'];        
+        $contactNo = $_POST['contactNo'];
+        $email = $_POST['email'];
+        $timing = $_POST['timing'];
+        if($_POST['trainerImage'] != ""){
+          $trainerImage = $_POST['trainerImage'];
+          $trainerImageName = "../trainer_images/".$_POST['trainerImageName'].".png";
+        }
+        $response['saveTrainerDetailsResponse'] = $objTrainerDetails -> savingTrainerForDesktopDetails($trainerImage, $trainerImageName, $trainerName, $description, $trainerAddress, $trainerArea, $trainerCity, $contactNo, $email, $timing);
+        deliver_response($_POST['format'], $response, true);
+    }
 }
 else if (isset($_GET['method'])) {
     if (strcasecmp($_GET['method'], 'showPetDetails') == 0) {

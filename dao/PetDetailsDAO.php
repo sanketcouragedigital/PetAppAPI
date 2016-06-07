@@ -125,7 +125,7 @@ class PetDetailsDAO
 					$addAlternateNo = $petDetail->getAlternateNo();
 					if($addAlternateNo == ""){
 						$sql = "SELECT mobileno FROM userDetails WHERE email='".$petDetail->getEmail()."'";
-						$result = mysqli_query($this->con, $sql);  
+						$result = mysqli_query($this->con, $sql);
 							//$rowdata = mysqli_fetch_assoc($result);
 							$rowdata= mysqli_fetch_row($result);
 							$addAlternateNo = $rowdata[0];
