@@ -30,12 +30,11 @@ class CampaignDetailsDAO
 					if($campaignDetail->getLastDate()!=="") {
 						$lastDateOfCampaign =  DateTime::createFromFormat('d-m-Y', $campaignDetail->getLastDate())->format('Y-m-d');
 					}
-					$sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, ngoName, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
+					$sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
 							VALUES 
 							('".$campaignDetail->getTargetPathOfFirstImage()."',
 							 '".$campaignDetail->getTargetPathOfSecondImage()."',
-							 '".$campaignDetail->getTargetPathOfThirdImage()."',
-							 '".$campaignDetail->getNGOName()."',
+							 '".$campaignDetail->getTargetPathOfThirdImage()."',							 
 							 '".$campaignDetail->getCampaignName()."',
 							 '".$campaignDetail->getDescription()."',
 							 '".$campaignDetail->getActualAmount()."',
@@ -59,6 +58,50 @@ class CampaignDetailsDAO
 			}
         return $this->data;
     }
+
+    public function saveCampaignForDesktopDetail($campaignDetail) {
+      try {
+
+        $status = 0;
+        $campaignTempNames = array($campaignDetail->getFirstImageTemporaryName(), $campaignDetail->getSecondImageTemporaryName(), $campaignDetail->getThirdImageTemporaryName());
+        $campaignTargetPaths = array($campaignDetail->getTargetPathOfFirstImage(), $campaignDetail->getTargetPathOfSecondImage(), $campaignDetail->getTargetPathOfThirdImage());
+        foreach ($campaignTempNames as $index => $campaignTempName) {
+          $campaignImage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $campaignTempName));
+          if($campaignTargetPaths[$index] != "") {
+            if(file_put_contents($campaignTargetPaths[$index], $campaignImage)) {
+              $status = 1;
+            }
+          }
+        }
+        if($status = 1) {
+          $sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
+              VALUES
+              ('".$campaignDetail->getTargetPathOfFirstImage()."',
+               '".$campaignDetail->getTargetPathOfSecondImage()."',
+               '".$campaignDetail->getTargetPathOfThirdImage()."',               
+               '".$campaignDetail->getCampaignName()."',
+               '".$campaignDetail->getDescription()."',
+               '".$campaignDetail->getActualAmount()."',
+               '".$campaignDetail->getMinimumAmount()."',
+               '".$campaignDetail->getLastDate()."',
+               '".$campaignDetail->getPostDate()."',
+               '".$campaignDetail->getEmail()."'
+               )";
+
+            $isInserted = mysqli_query($this->con, $sql);
+            if ($isInserted) {
+              $this->data = "CAMPAIGN_DETAILS_SAVED";
+            } else {
+              $this->data = "ERROR";
+            }
+        } else {
+          $this->data = "ERROR";
+        }
+      } catch(Exception $e) {
+        echo 'SQL Exception: ' .$e->getMessage();
+      }
+        return $this->data;
+    }
     
 	public function modifyCampaignDetail($campaignDetail) {
 			try { 	
@@ -66,8 +109,7 @@ class CampaignDetailsDAO
 					if($campaignDetail->getLastDate()!=="") {
 						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
 					}	*/		
-					$sql = "UPDATE campaign SET
-							 ngoName='".$campaignDetail->getNGOName()."',
+					$sql = "UPDATE campaign SET							 
 							 campaignName='".$campaignDetail->getCampaignName()."',
 							 description='".$campaignDetail->getDescription()."',
 							 actualAmount='".$campaignDetail->getActualAmount()."',
@@ -104,12 +146,17 @@ class CampaignDetailsDAO
 						if ($isInserted) {
 							$this->data = "DONATION_DETAILS_SAVED_SUCCESSFULLY";
 							
-							$SqlDonationDetails="SELECT c.campaign_id,c.campaignName,c.ngoName,c.email as ngoOwnerEmail,u.id as userId,u.name as donarName,u.email as donarEmail,u.mobileno as donarMobileNo,nd.donationAmount,nd.postDate as donation_Date
+							$SqlDonationDetails="SELECT c.campaign_id,c.campaignName,c.email as ngoOwnerEmail,
+													ud.ngo_name,
+													nd.donationAmount, nd.postDate as donation_Date,
+													u.id as userId, u.name as donarName, u.email as donarEmail,u.mobileno as donarMobileNo
 													FROM campaign c
+													INNER JOIN userDetails ud
+													ON c.email=ud.email
 													INNER JOIN ngo_donation nd
-														ON c.campaign_id = nd.campaign_id
+													ON c.campaign_id = nd.campaign_id
 													INNER JOIN userDetails u
-														ON u.email = nd.email
+													ON u.email = nd.email 
 													WHERE c.campaign_id='".$donationDetail->getCampaignId()."'";
 							$result = mysqli_query($this->con, $SqlDonationDetails);
 								$donationDetails=array();
@@ -158,14 +205,17 @@ class CampaignDetailsDAO
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
-				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
-						FROM ngo_donation  nd
-						RIGHT JOIN campaign c
-						ON nd.campaign_id = c.campaign_id
-                        INNER JOIN userDetails d 
-                        ON d.email = c.email
-						WHERE c.email ='".$pageWiseData->getEmail()."' GROUP BY c.campaign_id
-						ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
+				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,
+							c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.description,c.minimumAmount,
+							c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,
+							d.ngo_url,d.mobileno,d.ngo_name
+							FROM ngo_donation  nd
+							RIGHT JOIN campaign c
+							ON nd.campaign_id = c.campaign_id
+							INNER JOIN userDetails d 
+							ON d.email = c.email
+							WHERE c.email ='".$pageWiseData->getEmail()."' GROUP BY c.campaign_id
+							ORDER BY postDate DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 $this->data=array();
                 while ($rowdata = mysqli_fetch_assoc($result)) {
@@ -196,14 +246,17 @@ class CampaignDetailsDAO
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;                        
-				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.ngoName,c.description,c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,d.ngo_url,d.mobileno
-						FROM ngo_donation  nd
-						RIGHT JOIN campaign c
-						ON nd.campaign_id = c.campaign_id
-						INNER JOIN userDetails d 
-                        ON d.email = c.email
-						GROUP BY c.campaign_id
-						ORDER BY postDate  DESC LIMIT $offset, $rowsPerPage";
+				$sql = "SELECT  sum(nd.donationAmount)as collectedAmount,c.actualAmount - sum(nd.donationAmount)as remainingAmount,
+							c.actualAmount,c.email as ngo_email,c.campaign_id,c.campaignName,c.description,
+							c.minimumAmount,c.lastDate,c.postDate,c.first_image_path,c.second_image_path,c.third_image_path,
+							d.ngo_url,d.mobileno,d.ngo_name
+							FROM ngo_donation  nd
+							RIGHT JOIN campaign c
+							ON nd.campaign_id = c.campaign_id
+							INNER JOIN userDetails d 
+							ON d.email = c.email
+							GROUP BY c.campaign_id
+							ORDER BY postDate  DESC LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 $this->data=array();
                 while ($rowdata = mysqli_fetch_assoc($result)) {

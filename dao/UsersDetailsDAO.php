@@ -38,28 +38,29 @@ class UsersDetailsDAO
     
     public function insertUserDetails($UsersDetail, $lat, $long) {
         try {
-			$sql = "SELECT * FROM  userDetails               
-                    WHERE email='".$UsersDetail->getEmail()."'";					
-				$isValidating = mysqli_query($this->con, $sql);
-                $count=mysqli_num_rows($isValidating);
-                if($count==1) {			
-                    $this->data = "Email_Is_Already_Registered";
-				}else{		
-					$sql = "INSERT INTO userDetails(name,buildingname,area,city,mobileno,email,password,latitude,longitude, is_ngo, is_verified, ngo_url)
-							VALUES ('".$UsersDetail->getName()."', '".$UsersDetail->getBuildingname()."', '".$UsersDetail->getArea()."', '".$UsersDetail->getCity()."', '".$UsersDetail->getMobileno()."', '".$UsersDetail->getEmail()."', '".$UsersDetail->getPassword()."','$lat','$long', '".$UsersDetail->getIsNGO()."', 'No', '".$UsersDetail->getUrlOfNGO()."')";
-				
-					$isInserted = mysqli_query($this->con, $sql);
-					if ($isInserted) {
-						if($UsersDetail->getIsNGO() == "Yes") {
-							$this->data = "NGO_DETAILS_SAVED";
-						}
-						else {
-							$this->data = "USERS_DETAILS_SAVED";
-						}                   
-					} else {
-						$this->data = "ERROR";
-					}
-				}
+            $sql = "SELECT * FROM  userDetails               
+                    WHERE email='".$UsersDetail->getEmail()."'";
+
+            $isValidating = mysqli_query($this->con, $sql);
+            $count=mysqli_num_rows($isValidating);
+            if($count==1) {         
+                $this->data = "Email_Is_Already_Registered";
+            }else{      
+                $sql = "INSERT INTO userDetails(name,buildingname,area,city,mobileno,email,password,latitude,longitude, is_ngo, is_verified, ngo_url,ngo_name)
+                        VALUES ('".$UsersDetail->getName()."', '".$UsersDetail->getBuildingname()."', '".$UsersDetail->getArea()."', '".$UsersDetail->getCity()."', '".$UsersDetail->getMobileno()."', '".$UsersDetail->getEmail()."', '".$UsersDetail->getPassword()."','$lat','$long', '".$UsersDetail->getIsNGO()."', 'No', '".$UsersDetail->getUrlOfNGO()."', '".$UsersDetail->getNGOName()."')";
+                
+                $isInserted = mysqli_query($this->con, $sql);
+                if ($isInserted) {
+                    if($UsersDetail->getIsNGO() == "Yes") {
+                        $this->data = "NGO_DETAILS_SAVED";
+                    }
+                    else {
+                        $this->data = "USERS_DETAILS_SAVED";
+                    }                   
+                } else {
+                    $this->data = "ERROR";
+                }
+            }
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
@@ -113,6 +114,7 @@ class UsersDetailsDAO
                                                 email='".$EditUsersDetail->getEmail()."',
                                                 password='".$EditUsersDetail->getPassword()."',
 												ngo_url='".$EditUsersDetail->getUrlOfNGO()."',
+												ngo_name='".$EditUsersDetail->getNGOName()."',
                                                 latitude='$lat',
                                                 longitude='$long'
                                                 WHERE email='".$EditUsersDetail->getOldEmail()."' ";

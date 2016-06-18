@@ -12,6 +12,7 @@ class UsersDetails
 	private $password;
     private $isNGO;
     private $urlOfNGO;
+	private $ngoName;
 	
     public function setName($name) {
         $this->name = $name;
@@ -90,8 +91,15 @@ class UsersDetails
     public function getUrlOfNGO() {
         return $this->urlOfNGO;
     }
+	public function setNGOName($ngoName) {
+        $this->ngoName = $ngoName;
+    }
+    
+    public function getNGOName() {
+        return $this->ngoName;
+    }
 
-    public function mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password, $isNGO, $urlOfNGO) {
+    public function mapIncomingUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$password, $isNGO, $urlOfNGO,$ngoName) {
         $this->setName($name);
         $this->setBuildingname($buildingname);
         $this->setArea($area);
@@ -101,6 +109,7 @@ class UsersDetails
         $this->setPassword($password);
         $this->setIsNGO($isNGO);
         $this->setUrlOfNGO($urlOfNGO);
+		$this->setNGOName($ngoName);
     }
 
     public function SavingUsersDetails() {
@@ -108,7 +117,7 @@ class UsersDetails
         $returnUsersDetailsSaveSuccessMessage = $saveUsersDetailsDAO->saveDetail($this);
         return $returnUsersDetailsSaveSuccessMessage;
     }
-    public function mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password,$urlOfNGO) {
+    public function mapIncomingEditUserDetailsParams($name,$buildingname,$area,$city,$mobileno,$email,$oldEmail,$password,$urlOfNGO,$ngoName) {
         $this->setName($name);
         $this->setBuildingname($buildingname);
         $this->setArea($area);
@@ -118,6 +127,7 @@ class UsersDetails
         $this->setOldEmail($oldEmail);
         $this->setPassword($password);
 		$this->setUrlOfNGO($urlOfNGO);
+		$this->setNGOName($ngoName);
     }
     public function SavingEditUsersDetails() {
         $saveUsersDetailsDAO = new UsersDetailsDAO();

@@ -50,10 +50,10 @@ class ClinicFeedbackDetails
         return $returnshowClinicFeedbackDAODetails;
     }
 	public function showingClinicReviews($currentPage,$clinicId) {
-        $showClinicReviewskDAO = new ClinicFeedbackDetailsDAO();
+        $showClinicReviewsDAO = new ClinicFeedbackDetailsDAO();
 		$this->setCurrentPage($currentPage);
 		$this->setClinicId($clinicId);
-        $returnShowReviewsList = $showClinicReviewskDAO->ShowClinicReviews($this);
+        $returnShowReviewsList = $showClinicReviewsDAO->ShowClinicReviews($this);
         return $returnShowReviewsList;
     } 	
 }

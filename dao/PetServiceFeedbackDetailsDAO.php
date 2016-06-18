@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseDAO.php';
-class ClinicFeedbackDetailsDAO
+class PetServiceFeedbackDetailsDAO
 {
     
     private $con;
@@ -8,19 +8,19 @@ class ClinicFeedbackDetailsDAO
     private $data;
     
     // Attempts to initialize the database connection using the supplied info.
-    public function ClinicFeedbackDetailsDAO() {
+    public function PetServiceFeedbackDetailsDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
     }
     
-    public function SavingClinicFeedback($clinicFeedback) {		
+    public function SavingPetServiceFeedback($petServiceFeedback) {		
         try {					
-                $sql = "INSERT INTO clinic_feedback(ratings,reviews,email,clinic_id)
-                        VALUES ('".$clinicFeedback->getclinicRatings()."', '".$clinicFeedback->getClinicFeedback()."', '".$clinicFeedback->getEmail()."', '".$clinicFeedback->getClinicId()."')";
+                $sql = "INSERT INTO service_feedback(ratings, reviews, email, serviceListId, serviceType)
+                        VALUES ('".$petServiceFeedback->getPetServiceRatings()."', '".$petServiceFeedback->getPetServiceFeedback()."', '".$petServiceFeedback->getEmail()."', '".$petServiceFeedback->getPetServiceId()."', '".$petServiceFeedback->getPetServiceType()."')";
         
                 $isInserted = mysqli_query($this->con, $sql);
                 if ($isInserted) {
-					$this->data = "CLINIC_FEEDBACK_SAVED";
+					$this->data = "PET_SERVICE_FEEDBACK_SAVED";
                 } else {
                     $this->data = "ERROR";
                 }
@@ -29,12 +29,14 @@ class ClinicFeedbackDetailsDAO
         }
         return $this->data;
     }
-	public function ShowClinicReviews($clinicReviews) {		
-       $sql = "SELECT cf.ratings,cf.reviews,ud.name
-                FROM clinic_feedback cf
+    
+	public function ShowPetServiceReviews($petServiceFeedback) {		
+       $sql = "SELECT sf.ratings, sf.reviews, ud.name
+                FROM service_feedback sf
                 INNER JOIN userDetails ud
-                ON cf.email = ud.email
-				WHERE cf.clinic_id= '".$clinicReviews->getClinicId()."' ";
+                ON sf.email = ud.email
+				WHERE sf.serviceListId = '".$petServiceFeedback->getPetServiceId()."'
+                AND sf.serviceType = '".$petServiceFeedback->getPetServiceType()."' ";
         
         try {
             $result = mysqli_query($this->con, $sql);
@@ -45,18 +47,19 @@ class ClinicFeedbackDetailsDAO
             
             $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
             
-            if (is_numeric($clinicReviews->getCurrentPage())) {
-                $currentPage = (int) $clinicReviews->getCurrentPage();
+            if (is_numeric($petServiceFeedback->getCurrentPage())) {
+                $currentPage = (int) $petServiceFeedback->getCurrentPage();
             }
             
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
                 $offset = ($currentPage - 1) * $rowsPerPage;
             
-                $sql = "SELECT cf.ratings,cf.reviews,ud.name
-						FROM clinic_feedback cf
+                $sql = "SELECT sf.ratings, sf.reviews, ud.name
+						FROM service_feedback sf
 						INNER JOIN userDetails ud
-						ON cf.email = ud.email
-						WHERE cf.clinic_id= '".$clinicReviews->getClinicId()."'
+						ON sf.email = ud.email
+						WHERE sf.serviceListId = '".$petServiceFeedback->getPetServiceId()."'
+                        AND sf.serviceType = '".$petServiceFeedback->getPetServiceType()."'
 						LIMIT $offset, $rowsPerPage";
                 $result = mysqli_query($this->con, $sql);
                 
@@ -70,6 +73,7 @@ class ClinicFeedbackDetailsDAO
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
+        //return $this->data=array();
         $this->data=array();
         
         $this->data[0]['emptyKey']="Empty";
