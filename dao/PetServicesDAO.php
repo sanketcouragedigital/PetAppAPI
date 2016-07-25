@@ -177,7 +177,7 @@ class PetServicesDAO
 			$sql = "SELECT * FROM pet_shelter ";        
                 $isValidating = mysqli_query($this->con, $sql);
                 $count=mysqli_num_rows($isValidating);
-				$numOfRows = count($count);
+				$numOfRows = $count;
             
 				$rowsPerPage = 10;
 				$totalPages = ceil($numOfRows / $rowsPerPage);
@@ -213,11 +213,9 @@ class PetServicesDAO
 			$sql = "SELECT * FROM pet_trainer ";        
                 $isValidating = mysqli_query($this->con, $sql);
                 $count=mysqli_num_rows($isValidating);
-				$numOfRows = count($count);
-            
+				$numOfRows = $count;            
 				$rowsPerPage = 10;
-				$totalPages = ceil($numOfRows / $rowsPerPage);
-				
+				$totalPages = ceil($numOfRows / $rowsPerPage);				
 				$this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
 				
 				if (is_numeric($PetServices->getCurrentPage())) {
@@ -248,7 +246,7 @@ class PetServicesDAO
 				$sql = "SELECT * FROM pet_stores ";        
                 $isValidating = mysqli_query($this->con, $sql);
                 $count=mysqli_num_rows($isValidating);
-				$numOfRows = count($count);
+				$numOfRows = $count;
             
 				$rowsPerPage = 10;
 				$totalPages = ceil($numOfRows / $rowsPerPage);
@@ -284,7 +282,7 @@ class PetServicesDAO
 				$sql = "SELECT * FROM pet_groomer ";        
                 $isValidating = mysqli_query($this->con, $sql);
                 $count=mysqli_num_rows($isValidating);
-				$numOfRows = count($count);
+				$numOfRows = $count;
             
 				$rowsPerPage = 10;
 				$totalPages = ceil($numOfRows / $rowsPerPage);

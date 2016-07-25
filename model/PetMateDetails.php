@@ -18,6 +18,7 @@ class PetMateDetails
 	private $currentPage;
     private $email;
 	private $alternateNo;
+    private $deviceId;
 
     public function setFirstImageTemporaryName($first_image_tmp) {
         $this->first_image_tmp = $first_image_tmp;
@@ -141,8 +142,16 @@ class PetMateDetails
     public function getAlternateNo() {
         return $this->alternateNo;
     }
+    
+    public function setDeviceId($deviceId) {
+        $this->deviceId = $deviceId;
+    }
+    
+    public function getDeviceId() {
+        return $this->deviceId;
+    }
 
-    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email, $alternateNo) {
+    public function mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email, $alternateNo, $deviceId) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -158,9 +167,10 @@ class PetMateDetails
 		$this->setPostDate($postDate);
         $this->setEmail($email);
 		$this->setAlternateNo($alternateNo);
+        $this->setDeviceId($deviceId);
     }
 
-    public function mapIncomingPetMateForDesktopDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email, $alternateNo) {
+    public function mapIncomingPetMateForDesktopDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet,$postDate, $email, $alternateNo, $deviceId) {
         $this->setFirstImageTemporaryName($first_image_tmp);
         $this->setSecondImageTemporaryName($second_image_tmp);
         $this->setThirdImageTemporaryName($third_image_tmp);
@@ -176,6 +186,7 @@ class PetMateDetails
         $this->setPostDate($postDate);
         $this->setEmail($email);
         $this->setAlternateNo($alternateNo);
+        $this->setDeviceId($deviceId);
     }
 
     public function savingPetMateDetails() {

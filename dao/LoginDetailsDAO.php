@@ -95,8 +95,14 @@ class LoginDetailsDAO
                 $count=mysqli_num_rows($isValidating);
                 if($count==1) {
                     //$this->data = "VALID_EMAIL";
-                    $resetPassword = new LoginDetails();
-                    $this->data=$resetPassword -> GenarateRandomNo($LoginDetails->getEmail());
+					$sql = "SELECT * FROM userDetails WHERE email='".$LoginDetails->getEmail()."'";
+					$result = mysqli_query($this->con, $sql);
+					$this->data=array();
+					while ($rowdata = mysqli_fetch_assoc($result)) {
+						$this->data[]=$rowdata;
+					}
+                    //$resetPassword = new LoginDetails();
+                    //$this->data=$resetPassword -> GenarateRandomNo($LoginDetails->getEmail());
                 } else {
                     $this->data = "INVALID_EMAIL"; 
                 } 

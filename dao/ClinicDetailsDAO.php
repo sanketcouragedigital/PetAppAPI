@@ -72,8 +72,8 @@ class ClinicDetailsDAO
         
         try {
             $result = mysqli_query($this->con, $sql);
-            $count = mysqli_fetch_row($result);
-            $numOfRows = count($count);
+            $count = mysqli_num_rows($result);
+            $numOfRows = $count;
             
             $rowsPerPage = 10;
             $totalPages = ceil($numOfRows / $rowsPerPage);
@@ -122,8 +122,8 @@ class ClinicDetailsDAO
         
         try {
             $result = mysqli_query($this->con, $sql);
-            $count = mysqli_fetch_row($result);
-            $numOfRows = count($count);
+            $count = mysqli_num_rows($result);
+            $numOfRows = $count;
             
             $rowsPerPage = 10;
             $totalPages = ceil($numOfRows / $rowsPerPage);
@@ -161,24 +161,28 @@ class ClinicDetailsDAO
         $sql = "SELECT * FROM petclinic";        
         try {
             $result = mysqli_query($this->con, $sql);
-            $count = mysqli_fetch_row($result);
-            $numOfRows = count($count);            
-            $rowsPerPage = 10;
-            $totalPages = ceil($numOfRows / $rowsPerPage);            
-            $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);            
+            $numOfRows = mysqli_num_rows($result);            
+			$rowsPerPage = 10;          
+			$totalPages = ceil($numOfRows / $rowsPerPage);            
+            $this->con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
+            
             if (is_numeric($pageWiseData->getCurrentPage())) {
                 $currentPage = (int) $pageWiseData->getCurrentPage();
-            }            
+            }
+            
             if ($currentPage >= 1 && $currentPage <= $totalPages) {
-                $offset = ($currentPage - 1) * $rowsPerPage;            
-                $sql = "SELECT * FROM petclinic LIMIT $offset, $rowsPerPage";                           
-                $result = mysqli_query($this->con, $sql);                
+                $offset = ($currentPage - 1) * $rowsPerPage;
+            
+                $sql = "SELECT * FROM petclinic LIMIT $offset, $rowsPerPage";
+							
+                $result = mysqli_query($this->con, $sql);
+                
                 $this->data=array();
                 while ($rowdata = mysqli_fetch_assoc($result)) {
                     $this->data[]=$rowdata;
                 }
                 return $this->data;
-            }
+            }           
         } catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
@@ -187,13 +191,13 @@ class ClinicDetailsDAO
 
     public function saveClinicChanges($ClinicDetails) {
         try {           
-                $sql = "UPDATE petclinic SET clinic_name = '" . $ClinicDetails -> getName() . "',
+                $sql = "UPDATE petclinic SET clinic_name = '" . $ClinicDetails -> getClinicName() . "',
                                             doctor_name = '" . $ClinicDetails -> getDoctorName() . "',
-                                            clinic_address = '" . $ClinicDetails -> getAddress() . "' ,  
-                                            city ='" . $ClinicDetails -> getCity() . "' ,                                           
-                                            area= '" . $ClinicDetails -> getArea() . "',
-                                            contact ='" . $ClinicDetails -> getContact() . "',
-                                            notes ='" . $ClinicDetails -> getTiming() . "',                                         
+                                            clinic_address = '" . $ClinicDetails -> getClinicAddress() . "' ,  
+                                            city ='" . $ClinicDetails -> getClinicCity() . "' ,                                           
+                                            area= '" . $ClinicDetails -> getClinicArea() . "',
+                                            contact ='" . $ClinicDetails -> getContactNo() . "',
+                                            notes ='" . $ClinicDetails -> getNotesOfClinic() . "',                                         
                                             email = '" . $ClinicDetails -> getEmail() . "'                                          
                                             WHERE clinic_id = '" . $ClinicDetails -> getId() . "'";
 

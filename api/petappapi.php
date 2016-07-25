@@ -18,6 +18,8 @@ require_once '../model/OrderDetails.php';
 require_once '../model/OrderConfirmationEmail.php';
 require_once '../model/CampaignDetails.php';
 require_once '../model/CampaignDeleteConfirmationEmail.php';
+require_once '../model/PremiumListDetails.php';
+require_once '../model/FirebaseTokenRegister.php';
 
 
 function deliver_response($format, $api_response, $isSaveQuery) {
@@ -272,6 +274,14 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['checkemailResponse'] = $objuserDetails -> CheckingEmail($email);
         deliver_response($string['format'],$response,false);
     }
+    else if (strcasecmp($method, 'checkAvailabilityOfTrainerPremiumList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $fetchPetServices = new PremiumListDetails();
+        $listPosition = $string['listPosition'];
+        $response['showAvailabilityOfTrainerPremiumListResponse'] = $fetchPetServices -> checkListAvailability($listPosition);
+        deliver_response($string['format'], $response, false);
+    }
     else if (strcasecmp($method,'saveModifiedPetDetails') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -403,7 +413,6 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $response['savePetServiceFeedbackResponse'] = $objPetServiceFeedbackDetails -> SavingPetServiceFeedbackDetails();   
         deliver_response($string['format'],$response,false);
     }
-
 	else if(strcasecmp($string['method'], 'saveDonation') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -518,6 +527,59 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
 		$response['deleteCampaignDetailsResponse'] = $objDeleteCampaignDetails -> EmailToDeleteCampaignForUserVendor($campaignId,$campaignName,$ngoName,$ngoEmail,$lastDate,$postDate,$userEmail,$mobileNo);		
         deliver_response($string['format'],$response,false);
 	}
+    else if(strcasecmp($method,'registerFirebaseToken') == 0){
+        $response['code'] = 1;  
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objRegisterFirebaseDetails = new FirebaseTokenRegister();
+        $android_id = $string['android_id'];
+        $token = $string['token'];
+        $response['registerFirebaseTokenResponse'] = $objRegisterFirebaseDetails -> firebaseTokenRegistration($android_id, $token);        
+        deliver_response($string['format'],$response,false);
+    }
+    else if(strcasecmp($method, 'SaveTrainerList') == 0) {
+        $response['code'] = 1;
+        $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
+        $objPremiumListDetails = new PremiumListDetails();
+        $first_image_tmp = "";
+        $first_image_target_path = "";        
+        $firstName = $string['firstName'];
+        $lastName=$string['lastName'];
+        $timing=$string['timing'];
+        $description = $string['description'];
+        $listPosition = $string['listPosition']; 
+        $listPrice = $string['listPrice'];  
+        $adv_booking  = $string['advBooking']; //if yes then $adv_date_booking_from = some date otherwise blank
+        $adv_date_booking = $string['advDateBookingFrom'];      
+        $email = $string['email'];      
+        date_default_timezone_set('Asia/Kolkata');
+        $postDate = date("Y-m-d H:i:s");        
+        if(isset($_FILES['firstTrainerImage'])){
+            $first_image_tmp = $_FILES['firstTrainerImage']['tmp_name'];
+            $first_image_name = $_FILES['firstTrainerImage']['name'];
+            $first_image_target_path = "../trainer_images/".basename($first_image_name);
+        }
+        if($listPosition=="Free"){
+            $date_booking_from = "";        
+            $date_booking_to = "";
+            $adv_date_booking_from = "";        
+            $adv_date_booking_to = "";          
+        }else{
+            if($adv_booking == "Yes"){
+                $date_booking_from = "";        
+                $date_booking_to = "";
+                $adv_date_booking_from = date('Y-m-d', strtotime("+1 day", strtotime($adv_date_booking)));
+                $adv_date_booking_to = date('Y-m-d', strtotime("+1 month", strtotime($adv_date_booking_from)));
+            }else{
+                $date_booking_from = date("Y-m-d");     
+                $date_booking_to = date("Y-m-d", strtotime("+1 month"));
+                $adv_date_booking_from = "";        
+                $adv_date_booking_to = "";
+            }           
+        }
+        $objPremiumListDetails->mapIncomingTrainerDetailsParams($first_image_tmp, $first_image_target_path, $firstName, $description, $lastName, $timing, $listPosition,$listPrice, $postDate, $adv_booking, $date_booking_from, $date_booking_to, $adv_date_booking_from, $adv_date_booking_to, $email);
+        $response['saveTrainerDetailsResponse'] = $objPremiumListDetails -> savingTrainerDetails();
+        deliver_response($string['format'], $response, true);
+    }
 	else if(strcasecmp($_POST['method'], 'CreateCampaign') == 0) {
         $response['code'] = 1;
         $response['status'] = $api_response_code[$response['code']]['HTTP Response'];
@@ -602,6 +664,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $second_image_target_path = "";
         $third_image_tmp = "";
         $third_image_target_path = "";
+        $deviceId = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageInMonth=$_POST['petAgeInMonth'];
@@ -611,7 +674,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $adoptionOfPet = $_POST['adoptionOfPet'];
         $priceOfPet = $_POST['priceOfPet'];
         $email = $_POST['email'];
-		$alternateNo = $_POST['alternateNo'];
+        $alternateNo = $_POST['alternateNo'];
         date_default_timezone_set('Asia/Kolkata');
         $postDate = date("Y-m-d H:i:s");
         if(isset($_FILES['firstPetImage'])){
@@ -629,7 +692,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo);
+        if($_POST['deviceId'] != ""){
+          $deviceId = $_POST['deviceId'];
+        }
+        $objPetDetails->mapIncomingPetDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo, $deviceId);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetDetails();
         deliver_response($_POST['format'], $response, true);
     }
@@ -643,6 +709,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $secondPetImageName = "";
         $thirdPetImage = "";
         $thirdPetImageName = "";
+        $deviceId = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageInMonth=$_POST['petAgeInMonth'];
@@ -667,7 +734,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
           $thirdPetImage = $_POST['thirdPetImage'];
           $thirdPetImageName = "../pet_images/".$_POST['thirdPetImageName'].".png";
         }
-        $objPetDetails->mapIncomingPetForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo);
+        if($_POST['deviceId'] != ""){
+          $deviceId = $_POST['deviceId'];
+        }
+        $objPetDetails->mapIncomingPetForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth, $ageInYear, $genderOfPet, $descriptionOfPet, $adoptionOfPet, $priceOfPet, $postDate, $email, $alternateNo, $deviceId);
         $response['savePetDetailsResponse'] = $objPetDetails -> savingPetForDesktopDetails();
         deliver_response($_POST['format'], $response, true);
     }
@@ -681,17 +751,17 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $second_image_target_path = "";
         $third_image_tmp = "";
         $third_image_target_path = "";
+        $deviceId = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageInMonth=$_POST['petAgeInMonth'];
         $ageInYear=$_POST['petAgeInYear'];
         $genderOfPet = $_POST['genderOfPet'];
         $email = $_POST['email'];
-		$alternateNo = $_POST['alternateNo'];
+        $alternateNo = $_POST['alternateNo'];
         $descriptionOfPet = $_POST['descriptionOfPet'];
         date_default_timezone_set('Asia/Kolkata');
-        $postDate = date("Y-m-d H:i:s");
-       
+        $postDate = date("Y-m-d H:i:s");       
         if(isset($_FILES['firstPetImage'])){
             $first_image_tmp = $_FILES['firstPetImage']['tmp_name'];
             $first_image_name = $_FILES['firstPetImage']['name'];
@@ -707,7 +777,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
             $third_image_name = $_FILES['thirdPetImage']['name'];
             $third_image_target_path = "../pet_mate_images/".basename($third_image_name);
         }
-        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email,$alternateNo);
+        if($_POST['deviceId'] != ""){
+          $deviceId = $_POST['deviceId'];
+        }
+        $objPetDetails->mapIncomingPetMateDetailsParams($first_image_tmp, $first_image_target_path, $second_image_tmp, $second_image_target_path, $third_image_tmp, $third_image_target_path, $categoryOfPet, $breedOfPet, $ageInMonth ,$ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email, $alternateNo, $deviceId);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateDetails();
         deliver_response($_POST['format'], $response, true);
     }
@@ -721,6 +794,7 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
         $secondPetImageName = "";
         $thirdPetImage = "";
         $thirdPetImageName = "";
+        $deviceId = "";
         $categoryOfPet = $_POST['categoryOfPet'];
         $breedOfPet = $_POST['breedOfPet'];
         $ageInMonth=$_POST['petAgeInMonth'];
@@ -743,7 +817,10 @@ if (isset($_POST['method']) || $checkmethod == 'POST') {
           $thirdPetImage = $_POST['thirdPetImage'];
           $thirdPetImageName = "../pet_mate_images/".$_POST['thirdPetImageName'].".png";
         }
-        $objPetDetails->mapIncomingPetMateForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth , $ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email, $alternateNo);
+        if($_POST['deviceId'] != ""){
+          $deviceId = $_POST['deviceId'];
+        }
+        $objPetDetails->mapIncomingPetMateForDesktopDetailsParams($firstPetImage, $firstPetImageName, $secondPetImage, $secondPetImageName, $thirdPetImage, $thirdPetImageName, $categoryOfPet, $breedOfPet, $ageInMonth , $ageInYear, $genderOfPet, $descriptionOfPet, $postDate, $email, $alternateNo, $deviceId);
         $response['savePetMateDetailsResponse'] = $objPetDetails -> savingPetMateForDesktopDetails();
         deliver_response($_POST['format'], $response, true);
     }

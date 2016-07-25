@@ -8,6 +8,7 @@ class FilterPetListDAO
     private $con;
     private $msg;
     private $data;
+	private $output = null;
     
     // Attempts to initialize the database connection using the supplied info.
     public function FilterPetListDAO() {
@@ -840,7 +841,6 @@ class FilterPetListDAO
         }
         else {
             $cache = new CacheMemcache();
-            $output = null;
             if($cache->memcacheEnabled) {
                 if($email == $cache->getData('filter_pet_list_email')) {
                     $this->data = $cache->getData('filter_pet_list_array_'+$email);

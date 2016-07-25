@@ -5,11 +5,13 @@ class PetDetailsDAO
     private $con;
     private $msg;
     private $data;
+    private $googleAPIKey;
     
     // Attempts to initialize the database connection using the supplied info.
     public function PetDetailsDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
+        $this->googleAPIKey = $baseDAO->getGoogleAPIKey();
     }
     
     public function saveDetail($petDetail) {
@@ -24,7 +26,7 @@ class PetDetailsDAO
 				}            
 				if($status = 1) {
 					$addAlternateNo = $petDetail->getAlternateNo();
-					if($addAlternateNo == ""){
+					if($addAlternateNo == "") {
 						$sql = "SELECT mobileno FROM userDetails WHERE email='".$petDetail->getEmail()."'";
 						$result = mysqli_query($this->con, $sql);  
 							//$rowdata = mysqli_fetch_assoc($result);
@@ -41,7 +43,7 @@ class PetDetailsDAO
 										 '".$petDetail->getAgeInMonth()."',
 										 '".$petDetail->getAgeInYear()."',
 										 '".$petDetail->getGenderOfPet()."',
-										 '".$petDetail->getDescriptionOfPet()."',   
+										 '".$petDetail->getDescriptionOfPet()."',  
 										 '".$petDetail->getAdoptionOfPet()."',
 										 '".$petDetail->getPriceOfPet()."',
 										 '".$petDetail->getPostDate()."',
@@ -61,10 +63,33 @@ class PetDetailsDAO
 									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
 									$isInserted = mysqli_query($this->con, $addBreedSQL);
 								}
+
+								if($petDetail->getAdoptionOfPet() == "For Adoption") {
+						            $setListingType = $petDetail->getAdoptionOfPet();
+						        }
+						        else {
+						            $setListingType = $petDetail->getPriceOfPet();
+						        }
+
+								$this->msg = array
+								(	
+									'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_DETAILS',
+									'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfFirstImage(),
+									'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfSecondImage(),
+									'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfThirdImage(),
+									'PET_BREED' => $petDetail->getBreedOfPet(),
+									'PET_LISTING_TYPE' => $setListingType,
+									'PET_AGE_MONTH'	=> $petDetail->getAgeInMonth(),
+									'PET_AGE_YEAR' => $petDetail->getAgeInYear(),
+									'PET_GENDER' => $petDetail->getGenderOfPet(),
+									'PET_DESCRIPTION' => $petDetail->getDescriptionOfPet(),
+									'POST_OWNER_MOBILENO' => $addAlternateNo,
+								);
+								$this->fetchFirebaseTokenUsers($this->msg, $petDetail->getDeviceId());
 						} else {
 							$this->data = "ERROR";
 						}			
-					} else {									
+					} else {
 						$sql = "INSERT INTO petapp(first_image_path, second_image_path, third_image_path, pet_category, pet_breed, pet_age_inMonth, pet_age_inYear, pet_gender, pet_description, pet_adoption, pet_price, post_date, email,alternateNo)
 										VALUES 
 										('".$petDetail->getTargetPathOfFirstImage()."',
@@ -94,6 +119,29 @@ class PetDetailsDAO
 									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
 									$isInserted = mysqli_query($this->con, $addBreedSQL);
 								}
+
+								if($petDetail->getAdoptionOfPet() == "For Adoption") {
+						            $setListingType = $petDetail->getAdoptionOfPet();
+						        }
+						        else {
+						            $setListingType = $petDetail->getPriceOfPet();
+						        }
+
+								$this->msg = array
+								(	
+									'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_DETAILS',
+									'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfFirstImage(),
+									'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfSecondImage(),
+									'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfThirdImage(),
+									'PET_BREED' => $petDetail->getBreedOfPet(),
+									'PET_LISTING_TYPE' => $setListingType,
+									'PET_AGE_MONTH'	=> $petDetail->getAgeInMonth(),
+									'PET_AGE_YEAR' => $petDetail->getAgeInYear(),
+									'PET_GENDER' => $petDetail->getGenderOfPet(),
+									'PET_DESCRIPTION' => $petDetail->getDescriptionOfPet(),
+									'POST_OWNER_MOBILENO' => $petDetail->getAlternateNo(),
+								);
+								$this->fetchFirebaseTokenUsers($this->msg, $petDetail->getDeviceId());
 						} else {
 							$this->data = "ERROR";
 						}
@@ -160,6 +208,29 @@ class PetDetailsDAO
 									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
 									$isInserted = mysqli_query($this->con, $addBreedSQL);
 								}
+
+								if($petDetail->getAdoptionOfPet() == "For Adoption") {
+						            $setListingType = $petDetail->getAdoptionOfPet();
+						        }
+						        else {
+						            $setListingType = $petDetail->getPriceOfPet();
+						        }
+
+								$this->msg = array
+								(	
+									'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_DETAILS',
+									'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfFirstImage(),
+									'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfSecondImage(),
+									'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfThirdImage(),
+									'PET_BREED' => $petDetail->getBreedOfPet(),
+									'PET_LISTING_TYPE' => $setListingType,
+									'PET_AGE_MONTH'	=> $petDetail->getAgeInMonth(),
+									'PET_AGE_YEAR' => $petDetail->getAgeInYear(),
+									'PET_GENDER' => $petDetail->getGenderOfPet(),
+									'PET_DESCRIPTION' => $petDetail->getDescriptionOfPet(),
+									'POST_OWNER_MOBILENO' => $addAlternateNo,
+								);
+								$this->fetchFirebaseTokenUsers($this->msg, $petDetail->getDeviceId());
 						} else {
 							$this->data = "ERROR";
 						}			
@@ -193,6 +264,29 @@ class PetDetailsDAO
 									VALUES('".$petDetail->getCategoryOfPet()."','".$petDetail->getBreedOfPet()."')";
 									$isInserted = mysqli_query($this->con, $addBreedSQL);
 								}
+
+								if($petDetail->getAdoptionOfPet() == "For Adoption") {
+						            $setListingType = $petDetail->getAdoptionOfPet();
+						        }
+						        else {
+						            $setListingType = $petDetail->getPriceOfPet();
+						        }
+
+								$this->msg = array
+								(	
+									'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_DETAILS',
+									'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfFirstImage(),
+									'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfSecondImage(),
+									'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_images/'.$petDetail->getTargetPathOfThirdImage(),
+									'PET_BREED' => $petDetail->getBreedOfPet(),
+									'PET_LISTING_TYPE' => $setListingType,
+									'PET_AGE_MONTH'	=> $petDetail->getAgeInMonth(),
+									'PET_AGE_YEAR' => $petDetail->getAgeInYear(),
+									'PET_GENDER' => $petDetail->getGenderOfPet(),
+									'PET_DESCRIPTION' => $petDetail->getDescriptionOfPet(),
+									'POST_OWNER_MOBILENO' => $petDetail->getAlternateNo(),
+								);
+								$this->fetchFirebaseTokenUsers($this->msg, $petDetail->getDeviceId());
 						} else {
 							$this->data = "ERROR";
 						}
@@ -287,5 +381,68 @@ class PetDetailsDAO
         }
         return $this->data;
     }
+
+    function fetchFirebaseTokenUsers($message, $deviceId) {       
+    	$query = "SELECT token FROM firebase_tokens";
+    	$fcmRegIds = array();
+	    if($query_run = mysqli_query($this->con, $query)) {	        
+	        while($query_row = mysqli_fetch_assoc($query_run)) {
+	            //$fcmRegIds[] = $query_row['token'];
+	            array_push($fcmRegIds, $query_row['token']);
+	        }
+	    }
+	    
+	    if($deviceId != null) {
+            $query = "SELECT token FROM firebase_tokens WHERE device_id = '$deviceId'";
+            if ($query_run = mysqli_query($this->con, $query)) {
+                while($query_row = mysqli_fetch_array($query_run)) {
+                    $fcmToken = $query_row['token'];
+                    if (($key = array_search($fcmToken, $fcmRegIds)) !== false) {
+                        unset($fcmRegIds[$key]);
+                    }
+                }
+            }            
+        }
+        
+        define('GOOGLE_API_KEY', 'AIzaSyCmwKfKS6M75W814jOQ0r3o8bpVdYCoD8A');
+        
+	    if(isset($fcmRegIds)) {
+	        foreach ($fcmRegIds as $key => $token) {
+				$pushStatus = $this->sendPushNotification($token, $message);
+			}
+	    }
+    }
+
+    function sendPushNotification($registration_id, $message) {
+
+    	ignore_user_abort();
+    	ob_start();
+
+	    $url = 'https://fcm.googleapis.com/fcm/send';
+
+	    $fields = array(
+	        'to' => $registration_id,
+	        'data' => $message,
+	    );	    
+
+	    $headers = array(
+	        'Authorization:key='.$this->googleAPIKey,
+	        'Content-Type: application/json'
+	    );	    
+	    
+	    $ch = curl_init();
+	    curl_setopt($ch, CURLOPT_URL, $url);
+	    curl_setopt($ch, CURLOPT_POST, true);
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+	    $result = curl_exec($ch);
+	    if($result === false)
+	        die('Curl failed ' . curl_error());
+
+	    curl_close($ch);
+	    ob_flush();
+	}
 }
 ?>

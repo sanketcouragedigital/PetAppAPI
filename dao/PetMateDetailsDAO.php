@@ -6,11 +6,13 @@ class PetMateDetailsDAO
     private $con;
     private $msg;
     private $data;
+    private $googleAPIKey;
     
     // Attempts to initialize the database connection using the supplied info.
     public function PetMateDetailsDAO() {
         $baseDAO = new BaseDAO();
         $this->con = $baseDAO->getConnection();
+        $this->googleAPIKey = $baseDAO->getGoogleAPIKey();
     }
     
     public function saveDetail($petMateDetail) {
@@ -51,6 +53,29 @@ class PetMateDetailsDAO
 					$isInserted = mysqli_query($this->con, $sql);
 					if ($isInserted) {
 						$this->data = "PET_DETAILS_SAVED";
+                        $checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
+                        $result = mysqli_query($this->con, $checkSql);
+                        $count=mysqli_num_rows($result);
+                        if($count!=1) {
+                            $addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+                                VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
+                            $isInserted = mysqli_query($this->con, $addBreedSQL);
+                        }
+
+                        $this->msg = array
+                        (   
+                            'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_MATE_DETAILS',
+                            'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfFirstImage(),
+                            'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfSecondImage(),
+                            'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfThirdImage(),
+                            'PET_MATE_BREED' => $petMateDetail->getBreedOfPet(),
+                            'PET_MATE_AGE_MONTH' => $petMateDetail->getAgeInMonth(),
+                            'PET_MATE_AGE_YEAR' => $petMateDetail->getAgeInYear(),
+                            'PET_MATE_GENDER' => $petMateDetail->getGenderOfPet(),
+                            'PET_MATE_DESCRIPTION' => $petMateDetail->getDescriptionOfPet(),
+                            'POST_OWNER_MOBILENO' => $addAlternateNo,
+                        );
+                        $this->fetchFirebaseTokenUsers($this->msg, $petMateDetail->getDeviceId());
 					} else {
 						$this->data = "ERROR";
 					}
@@ -68,12 +93,35 @@ class PetMateDetailsDAO
 							 '".$petMateDetail->getDescriptionOfPet()."',
 							 '".$petMateDetail->getPostDate()."',
 							 '".$petMateDetail->getEmail()."',
-							 '".$petDetail->getAlternateNo()."'
+							 '".$petMateDetail->getAlternateNo()."'
 							)";
 			
 					$isInserted = mysqli_query($this->con, $sql);
 					if ($isInserted) {
 						$this->data = "PET_DETAILS_SAVED";
+                        $checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
+                        $result = mysqli_query($this->con, $checkSql);
+                        $count=mysqli_num_rows($result);
+                        if($count!=1) {
+                            $addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+                                VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
+                            $isInserted = mysqli_query($this->con, $addBreedSQL);
+                        }
+                        
+                        $this->msg = array
+                        (   
+                            'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_MATE_DETAILS',
+                            'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfFirstImage(),
+                            'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfSecondImage(),
+                            'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfThirdImage(),
+                            'PET_MATE_BREED' => $petMateDetail->getBreedOfPet(),
+                            'PET_MATE_AGE_MONTH' => $petMateDetail->getAgeInMonth(),
+                            'PET_MATE_AGE_YEAR' => $petMateDetail->getAgeInYear(),
+                            'PET_MATE_GENDER' => $petMateDetail->getGenderOfPet(),
+                            'PET_MATE_DESCRIPTION' => $petMateDetail->getDescriptionOfPet(),
+                            'POST_OWNER_MOBILENO' => $petMateDetail->getAlternateNo(),
+                        );
+                        $this->fetchFirebaseTokenUsers($this->msg, $petMateDetail->getDeviceId());
 					} else {
 						$this->data = "ERROR";
 					}
@@ -129,6 +177,29 @@ class PetMateDetailsDAO
                     $isInserted = mysqli_query($this->con, $sql);
                     if ($isInserted) {
                         $this->data = "PET_DETAILS_SAVED";
+                        $checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
+                        $result = mysqli_query($this->con, $checkSql);
+                        $count=mysqli_num_rows($result);
+                        if($count!=1) {
+                            $addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+                                VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
+                            $isInserted = mysqli_query($this->con, $addBreedSQL);
+                        }
+                        
+                        $this->msg = array
+                        (   
+                            'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_MATE_DETAILS',
+                            'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfFirstImage(),
+                            'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfSecondImage(),
+                            'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfThirdImage(),
+                            'PET_MATE_BREED' => $petMateDetail->getBreedOfPet(),
+                            'PET_MATE_AGE_MONTH' => $petMateDetail->getAgeInMonth(),
+                            'PET_MATE_AGE_YEAR' => $petMateDetail->getAgeInYear(),
+                            'PET_MATE_GENDER' => $petMateDetail->getGenderOfPet(),
+                            'PET_MATE_DESCRIPTION' => $petMateDetail->getDescriptionOfPet(),
+                            'POST_OWNER_MOBILENO' => $addAlternateNo,
+                        );
+                        $this->fetchFirebaseTokenUsers($this->msg, $petMateDetail->getDeviceId());
                     } else {
                         $this->data = "ERROR";
                     }
@@ -146,12 +217,35 @@ class PetMateDetailsDAO
                              '".$petMateDetail->getDescriptionOfPet()."',
                              '".$petMateDetail->getPostDate()."',
                              '".$petMateDetail->getEmail()."',
-                             '".$petDetail->getAlternateNo()."'
+                             '".$petMateDetail->getAlternateNo()."'
                             )";
             
                     $isInserted = mysqli_query($this->con, $sql);
                     if ($isInserted) {
                         $this->data = "PET_DETAILS_SAVED";
+                        $checkSql= "SELECT pet_breed FROM pet_categories WHERE pet_breed='".$petMateDetail->getBreedOfPet()."'";
+                        $result = mysqli_query($this->con, $checkSql);
+                        $count=mysqli_num_rows($result);
+                        if($count!=1) {
+                            $addBreedSQL = "INSERT INTO pet_categories(pet_category, pet_breed)
+                                VALUES('".$petMateDetail->getCategoryOfPet()."','".$petMateDetail->getBreedOfPet()."')";
+                            $isInserted = mysqli_query($this->con, $addBreedSQL);
+                        }
+                        
+                        $this->msg = array
+                        (   
+                            'PET_NOTIFICATION_TYPE' => 'OPEN_ACTIVITY_PET_MATE_DETAILS',
+                            'PET_FIRST_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfFirstImage(),
+                            'PET_SECOND_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfSecondImage(),
+                            'PET_THIRD_IMAGE' => 'http://petoandme.com/API/pet_mate_images/'.$petMateDetail->getTargetPathOfThirdImage(),
+                            'PET_MATE_BREED' => $petMateDetail->getBreedOfPet(),
+                            'PET_MATE_AGE_MONTH' => $petMateDetail->getAgeInMonth(),
+                            'PET_MATE_AGE_YEAR' => $petMateDetail->getAgeInYear(),
+                            'PET_MATE_GENDER' => $petMateDetail->getGenderOfPet(),
+                            'PET_MATE_DESCRIPTION' => $petMateDetail->getDescriptionOfPet(),
+                            'POST_OWNER_MOBILENO' => $petMateDetail->getAlternateNo(),
+                        );
+                        $this->fetchFirebaseTokenUsers($this->msg, $petMateDetail->getDeviceId());
                     } else {
                         $this->data = "ERROR";
                     }
@@ -231,7 +325,8 @@ class PetMateDetailsDAO
         }
         return $this->data=array();
     }
-	 public function showRefreshListDetail($DateOfPost) {
+    
+	public function showRefreshListDetail($DateOfPost) {
         $sqlAddress="SELECT latitude,longitude FROM userDetails WHERE email='".$DateOfPost->getEmail()."' ";
 		$latlong = mysqli_query($this->con, $sqlAddress);
 		
@@ -254,6 +349,66 @@ class PetMateDetailsDAO
             echo 'SQL Exception: ' .$e->getMessage();
         }
         return $this->data;
+    }
+
+    function fetchFirebaseTokenUsers($message, $deviceId) {
+        $query = "SELECT token FROM firebase_tokens";
+        $fcmRegIds = array();
+        if($query_run = mysqli_query($this->con, $query)) {         
+            while($query_row = mysqli_fetch_assoc($query_run)) {
+                $fcmRegIds[] = $query_row['token'];
+            }
+        }
+        
+        if($deviceId != null) {
+            $query = "SELECT token FROM firebase_tokens WHERE device_id = '$deviceId'";
+            if ($query_run = mysqli_query($this->con, $query)) {
+                while($query_row = mysqli_fetch_array($query_run)) {
+                    $fcmToken = $query_row['token'];
+                    if (($key = array_search($fcmToken, $fcmRegIds)) !== false) {
+                        unset($fcmRegIds[$key]);
+                    }
+                }
+            }            
+        }
+
+        if(isset($fcmRegIds)) {
+            foreach ($fcmRegIds as $key => $token) {
+                $pushStatus = $this->sendPushNotification($token, $message);
+            }
+        }
+    }
+
+    function sendPushNotification($registration_id, $message) {
+
+        ignore_user_abort();
+        ob_start();
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+        $fields = array(
+            'to' => $registration_id,
+            'data' => $message,
+        );
+
+        $headers = array(
+            'Authorization:key='.$this->googleAPIKey,
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        $result = curl_exec($ch);
+        if($result === false)
+            die('Curl failed ' . curl_error());
+
+        curl_close($ch);
+        ob_end_flush();
     }
 }
 ?>
