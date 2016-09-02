@@ -17,16 +17,7 @@ class MyListingDAO
 	public function saveModifiedPetDetail($MyListingPetList) {
 		try {
 			if ($status = 1) {
-				$sql = "UPDATE petapp SET 	pet_category = '" . $MyListingPetList -> getCategoryOfPet() . "',
-			                                pet_breed = '" . $MyListingPetList -> getBreedOfPet() . "',
-			                                pet_age_inMonth = '" . $MyListingPetList -> getPetAgeInMonth() . "' ,  
-			                                pet_age_inYear ='" . $MyListingPetList -> getPetAgeInYear() . "' , 
-			                                pet_gender ='" . $MyListingPetList -> getGenderOfPet() . "',
-			                                pet_description= '" . $MyListingPetList -> getDescriptionOfPet() . "',
-			                                pet_adoption ='" . $MyListingPetList -> getAdoptionOfPet() . "',
-			                                pet_price= '" . $MyListingPetList -> getPriceOfPet() . "'			                                
-			                    		 	WHERE id = '" . $MyListingPetList -> getId() . "'  
-                                            AND  email = '" . $MyListingPetList -> getEmail() . "' ";
+				$sql = "UPDATE petapp SET 	pet_category = '" . $MyListingPetList -> getCategoryOfPet() . "',pet_breed = '" . $MyListingPetList -> getBreedOfPet() . "',pet_age_inMonth = '" . $MyListingPetList -> getPetAgeInMonth() . "' ,pet_age_inYear ='" . $MyListingPetList -> getPetAgeInYear() . "' ,pet_gender ='" . $MyListingPetList -> getGenderOfPet() . "', pet_description= '" . $MyListingPetList -> getDescriptionOfPet() . "',pet_adoption ='" . $MyListingPetList -> getAdoptionOfPet() . "',pet_price= '" . $MyListingPetList -> getPriceOfPet() . "' WHERE id = '" . $MyListingPetList -> getId() . "' AND  email = '" . $MyListingPetList -> getEmail() . "' ";
 
 				$isUpdated = mysqli_query($this -> con, $sql);
 				if ($isUpdated) {
@@ -48,15 +39,7 @@ class MyListingDAO
     public function saveModifiedPetMateDetail($MyListingPetMateList) {
         try {
             if ($status = 1) {
-                $sql = "UPDATE petmate SET  pet_category = '" . $MyListingPetMateList -> getCategoryOfPet() . "',
-                                            pet_breed = '" . $MyListingPetMateList -> getBreedOfPet() . "',
-                                            pet_age_inMonth = '" . $MyListingPetMateList -> getPetAgeInMonth() . "' ,  
-                                            pet_age_inYear ='" . $MyListingPetMateList -> getPetAgeInYear() . "' , 
-                                            pet_gender ='" . $MyListingPetMateList -> getGenderOfPet() . "',
-                                            pet_description= '" . $MyListingPetMateList -> getDescriptionOfPet() . "'
-                                            
-                                            WHERE id = '" . $MyListingPetMateList -> getId() . "'   
-                                            AND email = '". $MyListingPetMateList -> getemail() ."' " ;
+                $sql = "UPDATE petmate SET  pet_category = '" . $MyListingPetMateList -> getCategoryOfPet() . "',pet_breed = '" . $MyListingPetMateList -> getBreedOfPet() . "',pet_age_inMonth = '" . $MyListingPetMateList -> getPetAgeInMonth() . "' ,pet_age_inYear ='" . $MyListingPetMateList -> getPetAgeInYear() . "' ,pet_gender ='" . $MyListingPetMateList -> getGenderOfPet() . "',pet_description= '" . $MyListingPetMateList -> getDescriptionOfPet() . "' WHERE id = '" . $MyListingPetMateList -> getId() . "' AND email = '". $MyListingPetMateList -> getemail() ."' " ;
 
                 $isUpdated = mysqli_query($this -> con, $sql);
                 if ($isUpdated) {

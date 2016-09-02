@@ -1,5 +1,6 @@
 <?php
 require_once 'BaseDAO.php';
+require_once '../model/NewRegistrationEmails.php';
 class UsersDetailsDAO
 {
     
@@ -38,8 +39,7 @@ class UsersDetailsDAO
     
     public function insertUserDetails($UsersDetail, $lat, $long) {
         try {
-            $sql = "SELECT * FROM  userDetails               
-                    WHERE email='".$UsersDetail->getEmail()."'";
+            $sql = "SELECT * FROM  userDetails WHERE email='".$UsersDetail->getEmail()."'";
 
             $isValidating = mysqli_query($this->con, $sql);
             $count=mysqli_num_rows($isValidating);
@@ -50,12 +50,34 @@ class UsersDetailsDAO
                         VALUES ('".$UsersDetail->getName()."', '".$UsersDetail->getBuildingname()."', '".$UsersDetail->getArea()."', '".$UsersDetail->getCity()."', '".$UsersDetail->getMobileno()."', '".$UsersDetail->getEmail()."', '".$UsersDetail->getPassword()."','$lat','$long', '".$UsersDetail->getIsNGO()."', 'No', '".$UsersDetail->getUrlOfNGO()."', '".$UsersDetail->getNGOName()."')";
                 
                 $isInserted = mysqli_query($this->con, $sql);
+				
                 if ($isInserted) {
+					$sqlCount = "SELECT * FROM  userDetails";
+					$userCount = mysqli_query($this->con, $sqlCount);
+					$numOfRows = mysqli_num_rows($userCount);
+					
+					// $firstName= $UsersDetail->getName();
+					// $lastName= $UsersDetail->getLastName();
+					// $email= $UsersDetail->getEmail();
+					// $ngoUrl= $UsersDetail->getUrlOfNGO();
+					// $ngoName= $UsersDetail->getNGOName();
+					
                     if($UsersDetail->getIsNGO() == "Yes") {
-                        $this->data = "NGO_DETAILS_SAVED";
+                        
+						//send email to ngo and peto also for new registration									
+						$objDonationEmailDetails = new NewRegistrationEmails();
+						//$objDonationEmailDetails -> SendNewNGORegistrationEmail($firstName,$lastName,$email,$ngoUrl,$ngoName,$numOfRows);
+						$objDonationEmailDetails -> SendNewNGORegistrationEmail($UsersDetail->getName(),$UsersDetail->getEmail(),$UsersDetail->getUrlOfNGO(),$UsersDetail->getNGOName(),$numOfRows);
+						$this->data = "NGO_DETAILS_SAVED";
                     }
                     else {
-                        $this->data = "USERS_DETAILS_SAVED";
+                        
+						//send email to user and peto also for new registration
+						$objDonationEmailDetails = new NewRegistrationEmails();
+//						$objDonationEmailDetails -> SendNewUserRegistrationEmail($firstName,$lastName,$email,$numOfRows);
+						$objDonationEmailDetails -> SendNewUserRegistrationEmail($UsersDetail->getName(),$UsersDetail->getEmail(),$numOfRows);
+						
+						$this->data = "USERS_DETAILS_SAVED";
                     }                   
                 } else {
                     $this->data = "ERROR";
@@ -106,18 +128,7 @@ class UsersDetailsDAO
                     $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
                     $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
                     
-                    $sql="UPDATE userDetails SET name='".$EditUsersDetail->getName()."' ,
-                                                buildingname='".$EditUsersDetail->getBuildingname()."',
-                                                area='".$EditUsersDetail->getArea()."',
-                                                city='".$EditUsersDetail->getCity()."',
-                                                mobileno='".$EditUsersDetail->getMobileno()."',
-                                                email='".$EditUsersDetail->getEmail()."',
-                                                password='".$EditUsersDetail->getPassword()."',
-												ngo_url='".$EditUsersDetail->getUrlOfNGO()."',
-												ngo_name='".$EditUsersDetail->getNGOName()."',
-                                                latitude='$lat',
-                                                longitude='$long'
-                                                WHERE email='".$EditUsersDetail->getOldEmail()."' ";
+                    $sql="UPDATE userDetails SET name='".$EditUsersDetail->getName()."', buildingname='".$EditUsersDetail->getBuildingname()."',area='".$EditUsersDetail->getArea()."',city='".$EditUsersDetail->getCity()."',mobileno='".$EditUsersDetail->getMobileno()."',email='".$EditUsersDetail->getEmail()."',password='".$EditUsersDetail->getPassword()."',ngo_url='".$EditUsersDetail->getUrlOfNGO()."',ngo_name='".$EditUsersDetail->getNGOName()."',latitude='$lat',longitude='$long' WHERE email='".$EditUsersDetail->getOldEmail()."' ";
 
                 $isEdited = mysqli_query($this->con, $sql);
                 if ($isEdited) {

@@ -30,18 +30,7 @@ class OrderDetailsDAO
 
 				*/	
                 $sql = "INSERT INTO orders(product_Id,quantity,shipping_charges,total_price,customer_name,customer_contact,customer_email,address,area,city,pincode,post_date)
-                        VALUES ('".$OrderDetail->getProductId()."',
-								'".$OrderDetail->getQuantity()."',
-								'".$OrderDetail->getShippingCharges()."',
-								'".$OrderDetail->getProductTotalPrice()."',								
-								'".$OrderDetail->getName()."',
-								'".$OrderDetail->getMobileno()."',
-								'".$OrderDetail->getEmail()."', 
-								'".$OrderDetail->getBuildingname()."',
-								'".$OrderDetail->getArea()."',
-								'".$OrderDetail->getCity()."',
-								'".$OrderDetail->getPincode()."',
-								'".$OrderDetail->getPostDate()."')";
+                        VALUES ('".$OrderDetail->getProductId()."','".$OrderDetail->getQuantity()."','".$OrderDetail->getShippingCharges()."','".$OrderDetail->getProductTotalPrice()."','".$OrderDetail->getName()."','".$OrderDetail->getMobileno()."','".$OrderDetail->getEmail()."','".$OrderDetail->getBuildingname()."','".$OrderDetail->getArea()."','".$OrderDetail->getCity()."','".$OrderDetail->getPincode()."','".$OrderDetail->getPostDate()."')";
         
                 $isInserted = mysqli_query($this->con, $sql);
 				$orderId="";

@@ -1,7 +1,9 @@
 <?php
 
-$con = new mysqli("localhost", "appcom_petuser", "pet@pp2015!", "appcom_petapp");
+//$con = new mysqli("localhost", "appcom_petuser", "pet@pp2015!", "appcom_petapp");
 //$con = new mysqli("103.21.59.166:3306", "appcom_petuser", "pet@pp2015!", "appcom_petapp");
+
+$con = new mysqli("103.21.59.166:3306", "appcom_peto_prod", "peto_prod", "appcom_peto_prod");
 
 
 if ($con->connect_errno) {
@@ -16,7 +18,7 @@ $con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
 	echo $currentDateTime;
 	echo $endDateTime;	
 	
-	$sql = "DELETE FROM petapp WHERE post_date >= DATE_SUB('currentDateTime', INTERVAL 1 MONTH) AND post_date <= DATE_SUB('endDateTime',INTERVAL 1 MONTH)";
+	$sql = "DELETE FROM petapp WHERE post_date >= DATE_SUB('$currentDateTime', INTERVAL 1 MONTH) AND post_date <= DATE_SUB('$endDateTime',INTERVAL 1 MONTH)";
 	$isDeleted = mysqli_query($con,$sql);						
 		if($isDeleted) {
 			echo "Pet List Deleted";
@@ -24,7 +26,7 @@ $con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 500);
 			echo "Error";
 		} 
 		
-	$sql = "DELETE FROM petmate WHERE post_date >= DATE_SUB('currentDateTime', INTERVAL 1 MONTH) AND post_date <= DATE_SUB('endDateTime',INTERVAL 1 MONTH)";
+	$sql = "DELETE FROM petmate WHERE post_date >= DATE_SUB('$currentDateTime', INTERVAL 1 MONTH) AND post_date <= DATE_SUB('$endDateTime',INTERVAL 1 MONTH)";
 	$isDeleted = mysqli_query($con,$sql);						
 		if($isDeleted) {
 			echo "Pet Mate List Deleted";

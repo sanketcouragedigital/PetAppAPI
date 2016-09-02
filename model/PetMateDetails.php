@@ -19,7 +19,25 @@ class PetMateDetails
     private $email;
 	private $alternateNo;
     private $deviceId;
-
+	private $latitude;
+	private $longitude;
+	
+	public function setLatitude($latitude) {
+        $this->latitude = $latitude;
+    }
+    
+    public function getLatitude() {
+        return $this->latitude;
+    }
+    
+    public function setLongitude($longitude) {
+        $this->longitude = $longitude;
+    }
+    
+    public function getLongitude() {
+        return $this->longitude;
+    }
+	
     public function setFirstImageTemporaryName($first_image_tmp) {
         $this->first_image_tmp = $first_image_tmp;
     }
@@ -201,7 +219,21 @@ class PetMateDetails
         return $returnPetMateDetailSaveSuccessMessage;
     }
 	
-   public function showingPetMateDetails($currentPage, $email) {
+	public function showingPetMateDetailsForDesktop($currentPage) {
+        $showPetDetailsDAO = new PetMateDetailsDAO();
+        $this->setCurrentPage($currentPage);
+		//$this->setEmail($email);
+        $returnShowPetMateDetails = $showPetDetailsDAO->showDetailForDesktop($this);
+        return $returnShowPetMateDetails;
+    }
+	public function showingUserWishListForPetMate($email) {
+        $showshowUserWishListDAO = new PetMateDetailsDAO();
+        $this->setEmail($email);
+        $returnShowPetDetails = $showshowUserWishListDAO->showUserWishList($this);
+        return $returnShowPetDetails;
+    }
+	
+	public function showingPetMateDetails($currentPage, $email) {
         $showPetDetailsDAO = new PetMateDetailsDAO();
         $this->setCurrentPage($currentPage);
 		$this->setEmail($email);
@@ -216,11 +248,25 @@ class PetMateDetails
         $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetail($this);
         return $returnShowPetDetails;
     }
-	public function showingUserWishListForPetMate($email) {
-        $showshowUserWishListDAO = new PetMateDetailsDAO();
-        $this->setEmail($email);
-        $returnShowPetDetails = $showshowUserWishListDAO->showUserWishList($this);
-        return $returnShowPetDetails;
-    }
+	// public function showingPetMateDetailsWithNearlyLocated($currentPage, $email,$latitude,$longitude) {
+        // $showPetDetailsDAO = new PetMateDetailsDAO();
+        // $this->setCurrentPage($currentPage);
+		// $this->setEmail($email);
+		// $this->setLatitude($latitude);
+		// $this->setLongitude($longitude);
+        // $returnShowPetMateDetails = $showPetDetailsDAO->showDetailWithNearlyLocated($this);
+        // return $returnShowPetMateDetails;
+    // }
+    
+    // public function showingRefreshPetMateDetailsWithNearlyLocated($date,$email,$latitude,$longitude) {
+        // $showPetRefreshListDetailsDAO = new PetMateDetailsDAO();
+        // $this->setPostDate($date);
+		// $this->setEmail($email);
+		// $this->setLatitude($latitude);
+		// $this->setLongitude($longitude);
+        // $returnShowPetDetails = $showPetRefreshListDetailsDAO->showRefreshListDetailWithNearlyLocated($this);
+        // return $returnShowPetDetails;
+    // }
+	
 }
 ?>

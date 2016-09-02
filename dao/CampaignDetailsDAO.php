@@ -31,18 +31,7 @@ class CampaignDetailsDAO
 						$lastDateOfCampaign =  DateTime::createFromFormat('d-m-Y', $campaignDetail->getLastDate())->format('Y-m-d');
 					}
 					$sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
-							VALUES 
-							('".$campaignDetail->getTargetPathOfFirstImage()."',
-							 '".$campaignDetail->getTargetPathOfSecondImage()."',
-							 '".$campaignDetail->getTargetPathOfThirdImage()."',							 
-							 '".$campaignDetail->getCampaignName()."',
-							 '".$campaignDetail->getDescription()."',
-							 '".$campaignDetail->getActualAmount()."',
-							 '".$campaignDetail->getMinimumAmount()."',
-							 '".$lastDateOfCampaign."',   						 
-							 '".$campaignDetail->getPostDate()."',
-							 '".$campaignDetail->getEmail()."'
-							 )";
+							VALUES('".$campaignDetail->getTargetPathOfFirstImage()."','".$campaignDetail->getTargetPathOfSecondImage()."','".$campaignDetail->getTargetPathOfThirdImage()."','".$campaignDetail->getCampaignName()."','".$campaignDetail->getDescription()."','".$campaignDetail->getActualAmount()."','".$campaignDetail->getMinimumAmount()."','".$lastDateOfCampaign."','".$campaignDetail->getPostDate()."','".$campaignDetail->getEmail()."' )";
 						
 						$isInserted = mysqli_query($this->con, $sql);
 						if ($isInserted) {
@@ -75,18 +64,7 @@ class CampaignDetailsDAO
         }
         if($status = 1) {
           $sql = "INSERT INTO campaign(first_image_path, second_image_path, third_image_path, campaignName, description, actualAmount, minimumAmount, lastDate, postDate, email)
-              VALUES
-              ('".$campaignDetail->getTargetPathOfFirstImage()."',
-               '".$campaignDetail->getTargetPathOfSecondImage()."',
-               '".$campaignDetail->getTargetPathOfThirdImage()."',               
-               '".$campaignDetail->getCampaignName()."',
-               '".$campaignDetail->getDescription()."',
-               '".$campaignDetail->getActualAmount()."',
-               '".$campaignDetail->getMinimumAmount()."',
-               '".$campaignDetail->getLastDate()."',
-               '".$campaignDetail->getPostDate()."',
-               '".$campaignDetail->getEmail()."'
-               )";
+              VALUES('".$campaignDetail->getTargetPathOfFirstImage()."','".$campaignDetail->getTargetPathOfSecondImage()."','".$campaignDetail->getTargetPathOfThirdImage()."','".$campaignDetail->getCampaignName()."','".$campaignDetail->getDescription()."','".$campaignDetail->getActualAmount()."','".$campaignDetail->getMinimumAmount()."','".$campaignDetail->getLastDate()."','".$campaignDetail->getPostDate()."','".$campaignDetail->getEmail()."')";
 
             $isInserted = mysqli_query($this->con, $sql);
             if ($isInserted) {
@@ -109,13 +87,7 @@ class CampaignDetailsDAO
 					if($campaignDetail->getLastDate()!=="") {
 						$lastDateOfCampaign =  DateTime::createFromFormat('d/m/Y', $campaignDetail->getLastDate())->format('Y-m-d');
 					}	*/		
-					$sql = "UPDATE campaign SET							 
-							 campaignName='".$campaignDetail->getCampaignName()."',
-							 description='".$campaignDetail->getDescription()."',
-							 actualAmount='".$campaignDetail->getActualAmount()."',
-							 minimumAmount='".$campaignDetail->getMinimumAmount()."',
-							 lastDate='".$campaignDetail->getLastDate()."' 						 							 
-							 WHERE email='".$campaignDetail->getEmail()."' AND campaign_id='".$campaignDetail->getCampaignId()."'";
+					$sql = "UPDATE campaign SET campaignName='".$campaignDetail->getCampaignName()."',description='".$campaignDetail->getDescription()."',actualAmount='".$campaignDetail->getActualAmount()."',minimumAmount='".$campaignDetail->getMinimumAmount()."',lastDate='".$campaignDetail->getLastDate()."' WHERE email='".$campaignDetail->getEmail()."' AND campaign_id='".$campaignDetail->getCampaignId()."'";
 						
 						$isInserted = mysqli_query($this->con, $sql);
 						if ($isInserted) {
@@ -134,13 +106,7 @@ class CampaignDetailsDAO
 			try {
 					
 					$sql = "INSERT INTO ngo_donation(campaign_id, donationAmount, email,postDate)
-							VALUES 
-							(
-							 '".$donationDetail->getCampaignId()."',
-							 '".$donationDetail->getDonationAmount()."',
-							 '".$donationDetail->getEmail()."',
-							 '".$donationDetail->getDonationPostDate()."'
-							 )";
+							VALUES('".$donationDetail->getCampaignId()."','".$donationDetail->getDonationAmount()."','".$donationDetail->getEmail()."','".$donationDetail->getDonationPostDate()."')";
 						
 						$isInserted = mysqli_query($this->con, $sql);
 						if ($isInserted) {

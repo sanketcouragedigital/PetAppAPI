@@ -35,19 +35,7 @@ class ClinicDetailsDAO
                     $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
                     $sql = "INSERT INTO petclinic(clinic_image, clinic_name, doctor_name, clinic_address, area, city, contact, email, notes, latitude, longitude)
-                            VALUES 
-                            ('".$clinicDetail->getClinicImageName()."',
-                            '".$clinicDetail->getClinicName()."',
-                            '".$clinicDetail->getDoctorName()."',
-                            '".$clinicDetail->getClinicAddress()."',
-                            '".$clinicDetail->getClinicArea()."',
-                            '".$clinicDetail->getClinicCity()."',
-                            '".$clinicDetail->getContactNo()."',
-                            '".$clinicDetail->getEmail()."',
-                            '".$clinicDetail->getNotesOfClinic()."',
-                            '$lat',
-                            '$long'
-                            )";
+                            VALUES('".$clinicDetail->getClinicImageName()."','".$clinicDetail->getClinicName()."','".$clinicDetail->getDoctorName()."','".$clinicDetail->getClinicAddress()."','".$clinicDetail->getClinicArea()."','".$clinicDetail->getClinicCity()."','".$clinicDetail->getContactNo()."','".$clinicDetail->getEmail()."','".$clinicDetail->getNotesOfClinic()."','$lat','$long')";
                         
                     $isInserted = mysqli_query($this->con, $sql);
                     if ($isInserted) {

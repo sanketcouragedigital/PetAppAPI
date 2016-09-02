@@ -9,6 +9,23 @@ class FilterPetList
     private $filterSelectedAge;
     private $filterSelectedGender;
     private $filterSelectedAdoptionAndPrice;
+	private $latitude;
+	private $longitude;
+	
+	public function setLatitude($latitude) {
+        $this->latitude = $latitude;
+    }    
+    public function getLatitude() {
+        return $this->latitude;
+    }
+    
+    public function setLongitude($longitude) {
+        $this->longitude = $longitude;
+    }
+    
+    public function getLongitude() {
+        return $this->longitude;
+    }
     
     public function setEmail($email) {
         $this->email = $email;
@@ -72,8 +89,25 @@ class FilterPetList
         $returnShowPetBreedsCategoryWise = $showfilterCategoryBreedsDAO->showBreedsCategoryWise($this);
         return $returnShowPetBreedsCategoryWise;
     }
-    
-    public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
+    //// location wise 
+    // public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice,$latitude,$longitude) {
+		//public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender,$latitude,$longitude) {
+        // $showFilterPetListDAO = new FilterPetListDAO();
+        // $this->setEmail($email);
+        // $this->setCurrentPage($currentPage);
+        // $this->setFilterSelectedCategories($filterSelectedCategories);
+        // $this->setFilterSelectedBreeds($filterSelectedBreeds);
+        // $this->setFilterSelectedAge($filterSelectedAge);
+        // $this->setFilterSelectedGender($filterSelectedGender);
+        // //$this->setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice);
+		// $this->setLatitude($latitude);
+		// $this->setLongitude($longitude);
+        // $returnShowPetList = $showFilterPetListDAO->showFilteredPetList($this);
+        // return $returnShowPetList;
+    // }
+	
+	//public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender, $filterSelectedAdoptionAndPrice) {
+		public function filterPetLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender) {
         $showFilterPetListDAO = new FilterPetListDAO();
         $this->setEmail($email);
         $this->setCurrentPage($currentPage);
@@ -81,7 +115,7 @@ class FilterPetList
         $this->setFilterSelectedBreeds($filterSelectedBreeds);
         $this->setFilterSelectedAge($filterSelectedAge);
         $this->setFilterSelectedGender($filterSelectedGender);
-        $this->setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice);
+        //$this->setFilterSelectedAdoptionAndPrice($filterSelectedAdoptionAndPrice);
         $returnShowPetList = $showFilterPetListDAO->showFilteredPetList($this);
         return $returnShowPetList;
     }

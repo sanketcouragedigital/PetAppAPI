@@ -149,7 +149,7 @@ class WishListDetailsDAO
 		} catch(Exception $e) {
             echo 'SQL Exception: ' .$e->getMessage();
         }
-        return $this->data;	 		
+        return $this->data;
 	}
 	
 	public function deleteWishListPetMateList($WishListPetmateList) {

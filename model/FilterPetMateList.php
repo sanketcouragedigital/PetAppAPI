@@ -8,6 +8,23 @@ class FilterPetMateList
     private $filterSelectedBreeds;
     private $filterSelectedAge;
     private $filterSelectedGender;
+	private $latitude;
+	private $longitude;
+	
+	public function setLatitude($latitude) {
+        $this->latitude = $latitude;
+    }    
+    public function getLatitude() {
+        return $this->latitude;
+    }
+    
+    public function setLongitude($longitude) {
+        $this->longitude = $longitude;
+    }
+    
+    public function getLongitude() {
+        return $this->longitude;
+    }
 
     public function setEmail($email) {
         $this->email = $email;
@@ -57,7 +74,7 @@ class FilterPetMateList
         return $this->filterSelectedGender;
     }
     
-    public function filterPetMateLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender) {
+    public function filterPetMateLists($email, $currentPage, $filterSelectedCategories, $filterSelectedBreeds, $filterSelectedAge, $filterSelectedGender,$latitude,$longitude) {
         $showFilterPetMateListDAO = new FilterPetMateListDAO();
         $this->setEmail($email);
         $this->setCurrentPage($currentPage);
@@ -65,6 +82,8 @@ class FilterPetMateList
         $this->setFilterSelectedBreeds($filterSelectedBreeds);
         $this->setFilterSelectedAge($filterSelectedAge);
         $this->setFilterSelectedGender($filterSelectedGender);
+		$this->setLatitude($latitude);
+		$this->setLongitude($longitude);
         $returnShowPetMateList = $showFilterPetMateListDAO->showFilteredPetMateList($this);
         return $returnShowPetMateList;
     }
